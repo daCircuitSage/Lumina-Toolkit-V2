@@ -33,6 +33,12 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
     setIsMobileOpen(false);
   };
 
+  // Handle logo click - navigate to homepage
+  const handleLogoClick = () => {
+    onSelect('homepage');
+    setIsMobileOpen(false);
+  };
+
   // Close mobile sidebar on window resize if it was open
   useEffect(() => {
     const handleResize = () => {
@@ -48,7 +54,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
     <>
       {/* Mobile Top Bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-50 flex items-center px-4 justify-between transition-colors">
-        <Logo />
+        <Logo onClick={handleLogoClick} />
         <div className="flex items-center gap-2">
           <button 
             onClick={onSearchOpen}
@@ -95,7 +101,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
             className="fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-900 z-[70] md:hidden flex flex-col shadow-2xl transition-colors"
           >
             <div className="p-6 flex items-center justify-between border-b border-slate-50 dark:border-slate-800">
-              <Logo />
+              <Logo onClick={handleLogoClick} />
               <button onClick={() => setIsMobileOpen(false)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                 <X size={20} />
               </button>
@@ -203,7 +209,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
         )}
       >
         <div className="p-6 flex items-center justify-between shrink-0 h-20">
-          <Logo isCollapsed={!isOpen} />
+              <Logo isCollapsed={!isOpen} onClick={handleLogoClick} />
         </div>
 
         {/* Desktop Search Trigger */}

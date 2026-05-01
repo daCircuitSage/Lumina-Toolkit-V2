@@ -11,6 +11,7 @@ import { TOOLS } from './constants';
 import { ThemeProvider } from './contexts/ThemeContext';
 
 // Lazily load pages
+const Homepage = React.lazy(() => import('./pages/Homepage'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const ResumeBuilder = React.lazy(() => import('./pages/ResumeBuilder'));
 const PdfConverter = React.lazy(() => import('./pages/PdfConverter'));
@@ -26,7 +27,7 @@ const CoverLetter = React.lazy(() => import('./pages/JobToolkit/CoverLetter'));
 const Contact = React.lazy(() => import('./pages/Contact'));
 
 export default function App() {
-  const [activeTool, setActiveTool] = useState('dashboard');
+  const [activeTool, setActiveTool] = useState('homepage');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function App() {
 
   const renderTool = () => {
     switch (activeTool) {
+      case 'homepage': return <Homepage onNavigate={setActiveTool} />;
       case 'dashboard': return <Dashboard onNavigate={setActiveTool} />;
       case 'resume': return <ResumeBuilder />;
       case 'pdf': return <PdfConverter />;

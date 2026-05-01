@@ -15,10 +15,16 @@ import {
 
 export const TOOLS = [
   {
-    id: 'dashboard',
-    name: 'Dashboard',
+    id: 'homepage',
+    name: 'Home',
     icon: LayoutDashboard,
-    description: 'Welcome to your creative suite'
+    description: 'Welcome to Lumina Toolkit'
+  },
+  {
+    id: 'dashboard',
+    name: 'All Tools',
+    icon: LayoutDashboard,
+    description: 'View all available tools'
   },
   {
     id: 'chat',

@@ -5,11 +5,16 @@ import { cn } from '../lib/utils';
 interface LogoProps {
   className?: string;
   isCollapsed?: boolean;
+  onClick?: () => void;
 }
 
-export default function Logo({ className, isCollapsed }: LogoProps) {
+export default function Logo({ className, isCollapsed, onClick }: LogoProps) {
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <button 
+      onClick={onClick}
+      aria-label="Go to homepage"
+      className={cn("flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer focus:outline-none rounded-lg", className)}
+    >
       <div className="relative group shrink-0">
         <div className="w-10 h-10 bg-lumina-blue rounded-xl flex items-center justify-center text-white shadow-lg shadow-lumina-blue/20 transform transition-transform group-hover:scale-105">
           <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -29,6 +34,6 @@ export default function Logo({ className, isCollapsed }: LogoProps) {
           </span>
         </div>
       )}
-    </div>
+    </button>
   );
 }
