@@ -74,8 +74,8 @@ export default async function handler(req: any, res: any) {
     try {
       const { resume, jobDescription } = req.body;
       
-      if (!resume || !jobDescription) {
-        return res.status(400).json({ error: 'Resume and job description are required' });
+      if (!resume) {
+        return res.status(400).json({ error: 'Resume is required' });
       }
 
       const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
@@ -83,7 +83,9 @@ export default async function handler(req: any, res: any) {
         throw new Error('MISTRAL_API_KEY is not configured');
       }
 
-      const prompt = `Please analyze this resume against the job description and provide:
+      let prompt;
+      if (jobDescription && jobDescription.trim()) {
+        prompt = `Please analyze this resume against the job description and provide:
 1. ATS compatibility score (0-100)
 2. Key matching skills
 3. Missing skills
@@ -94,9 +96,19 @@ ${resume}
 
 Job Description:
 ${jobDescription}`;
+      } else {
+        prompt = `Please analyze this resume for ATS compatibility and provide:
+1. ATS compatibility score (0-100)
+2. Key skills and strengths
+3. Areas for improvement
+4. General recommendations to optimize for ATS systems
+
+Resume:
+${resume}`;
+      }
 
       const messages = [
-        { role: 'system', content: 'You are an expert ATS (Applicant Tracking System) analyzer. Provide detailed, actionable analysis with specific scores and recommendations.' },
+        { role: 'system', content: 'You are an expert ATS (Applicant Tracking System) analyzer. Provide detailed, actionable analysis with specific scores and recommendations. Always respond with structured analysis including a numerical score.' },
         { role: 'user', content: prompt }
       ];
 

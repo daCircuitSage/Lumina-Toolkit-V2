@@ -88,10 +88,68 @@ export default function AtsChecker() {
       }
 
       const data = await response.json();
-      setResult({ analysis: data.analysis });
+      
+      // Parse the AI response to extract structured data
+      const analysis = data.analysis;
+      
+      // Try to extract a score from the response
+      let score = 75; // default score
+      const scoreMatch = analysis.match(/(\d{1,3})%?/);
+      if (scoreMatch) {
+        const extractedScore = parseInt(scoreMatch[1]);
+        if (extractedScore >= 0 && extractedScore <= 100) {
+          score = extractedScore;
+        }
+      }
+      
+      // Extract keywords and missing keywords (simplified parsing)
+      const keywordMatch = [];
+      const missingKeywords = [];
+      
+      // Simple keyword extraction - look for common skill words
+      const commonSkills = ['javascript', 'python', 'react', 'nodejs', 'aws', 'docker', 'git', 'sql', 'html', 'css', 'typescript', 'mongodb', 'postgresql'];
+      const resumeText = resume.toLowerCase();
+      
+      commonSkills.forEach(skill => {
+        if (resumeText.includes(skill)) {
+          keywordMatch.push(skill);
+        } else if (jobDescription && jobDescription.toLowerCase().includes(skill)) {
+          missingKeywords.push(skill);
+        }
+      });
+      
+      // Create a summary from the analysis (first 200 chars)
+      const summary = analysis.length > 200 ? analysis.substring(0, 200) + '...' : analysis;
+      
+      setResult({
+        score,
+        summary,
+        keywordMatch: keywordMatch.slice(0, 8), // Limit to 8 items
+        missingKeywords: missingKeywords.slice(0, 8), // Limit to 8 items
+        suggestions: [
+          'Include more specific quantifiable achievements',
+          'Add keywords from the job description',
+          'Use standard section headings',
+          'Remove complex formatting that might confuse ATS'
+        ],
+        fullAnalysis: analysis
+      });
     } catch (error) {
-      console.error(error);
-      alert(error instanceof Error ? error.message : "Analysis failed. Please try again.");
+      console.error('ATS Analysis Error:', error);
+      setIsAnalyzing(false);
+      
+      if (error instanceof Error) {
+        if (error.message.includes('MISTRAL_API_KEY')) {
+          alert('AI service is not configured. Please contact the administrator to set up the API key.');
+        } else {
+          alert(error.message);
+        }
+      } else {
+        alert("Analysis failed. Please try again.");
+      }
+      
+      // Reset result to prevent display errors
+      setResult(null);
     } finally {
       setIsAnalyzing(false);
     }
