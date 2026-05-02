@@ -85,11 +85,13 @@ export default async function handler(req: any, res: any) {
 
       let prompt;
       if (jobDescription && jobDescription.trim()) {
-        prompt = `Please analyze this resume against the job description and provide:
-1. ATS compatibility score (0-100)
-2. Key matching skills
-3. Missing skills
-4. Recommendations for improvement
+        prompt = `Analyze this resume against the job description and provide a concise analysis in this exact format:
+
+ATS Score: [0-100]
+Summary: [One sentence summary of overall compatibility]
+Key Skills Found: [list 3-5 skills found in resume]
+Missing Skills: [list 3-5 skills from job description not in resume]
+Top Recommendations: [list 2-3 specific recommendations]
 
 Resume:
 ${resume}
@@ -97,18 +99,20 @@ ${resume}
 Job Description:
 ${jobDescription}`;
       } else {
-        prompt = `Please analyze this resume for ATS compatibility and provide:
-1. ATS compatibility score (0-100)
-2. Key skills and strengths
-3. Areas for improvement
-4. General recommendations to optimize for ATS systems
+        prompt = `Analyze this resume for ATS compatibility and provide a concise analysis in this exact format:
+
+ATS Score: [0-100]
+Summary: [One sentence summary of overall ATS compatibility]
+Key Skills Found: [list 3-5 skills found in resume]
+Areas to Improve: [list 3-5 areas for improvement]
+Top Recommendations: [list 2-3 specific recommendations]
 
 Resume:
 ${resume}`;
       }
 
       const messages = [
-        { role: 'system', content: 'You are an expert ATS (Applicant Tracking System) analyzer. Provide detailed, actionable analysis with specific scores and recommendations. Always respond with structured analysis including a numerical score.' },
+        { role: 'system', content: 'You are an expert ATS analyzer. Provide concise, structured analysis following the exact format requested. Focus on practical, actionable insights.' },
         { role: 'user', content: prompt }
       ];
 

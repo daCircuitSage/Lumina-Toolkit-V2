@@ -92,41 +92,156 @@ export default function AtsChecker() {
       // Parse the AI response to extract structured data
       const analysis = data.analysis;
       
-      // Try to extract a score from the response
+      // Clean markdown formatting from the analysis
+      const cleanAnalysis = analysis
+        .replace(/#{1,6}\s*/g, '') // Remove markdown headers
+        .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markdown
+        .replace(/\*(.*?)\*/g, '$1') // Remove italic markdown
+        .replace(/`(.*?)`/g, '$1') // Remove inline code
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove links
+        .replace(/\n{3,}/g, '\n\n') // Reduce multiple newlines
+        .trim();
+      
+      // Try to extract a score from the response (look for patterns like "78/100", "78%", "Score: 78")
       let score = 75; // default score
-      const scoreMatch = analysis.match(/(\d{1,3})%?/);
-      if (scoreMatch) {
-        const extractedScore = parseInt(scoreMatch[1]);
-        if (extractedScore >= 0 && extractedScore <= 100) {
-          score = extractedScore;
+      const scorePatterns = [
+        /(\d{1,3})\/100/,
+        /(\d{1,3})%/,
+        /score:\s*(\d{1,3})/i,
+        /compatibility.*?(\d{1,3})/i
+      ];
+      
+      for (const pattern of scorePatterns) {
+        const match = cleanAnalysis.match(pattern);
+        if (match) {
+          const extractedScore = parseInt(match[1]);
+          if (extractedScore >= 0 && extractedScore <= 100) {
+            score = extractedScore;
+            break;
+          }
         }
       }
       
-      // Extract keywords and missing keywords (simplified parsing)
+      // Extract keywords and missing keywords with better parsing
       const keywordMatch = [];
       const missingKeywords = [];
       
-      // Simple keyword extraction - look for common skill words
-      const commonSkills = ['javascript', 'python', 'react', 'nodejs', 'aws', 'docker', 'git', 'sql', 'html', 'css', 'typescript', 'mongodb', 'postgresql'];
+      // Expanded skill list for better matching
+      const commonSkills = [
+        'javascript', 'python', 'react', 'nodejs', 'aws', 'docker', 'git', 'sql', 
+        'html', 'css', 'typescript', 'mongodb', 'postgresql', 'java', 'c++', 'c#',
+        'angular', 'vue', 'express', 'kubernetes', 'jenkins', 'ci/cd', 'rest api',
+        'graphql', 'redis', 'elasticsearch', 'linux', 'ubuntu', 'windows', 'macos',
+        'agile', 'scrum', 'devops', 'microservices', 'testing', 'unit testing',
+        'integration testing', 'ui/ux', 'figma', 'photoshop', 'illustrator'
+      ];
+      
       const resumeText = resume.toLowerCase();
+      const jobDescText = jobDescription ? jobDescription.toLowerCase() : '';
       
       commonSkills.forEach(skill => {
         if (resumeText.includes(skill)) {
           keywordMatch.push(skill);
-        } else if (jobDescription && jobDescription.toLowerCase().includes(skill)) {
+        } else if (jobDescText.includes(skill)) {
           missingKeywords.push(skill);
         }
       });
       
-      // Create a summary from the analysis (first 200 chars)
-      const summary = analysis.length > 200 ? analysis.substring(0, 200) + '...' : analysis;
+      // Parse the structured AI response
+      let summary = '';
+      let aiSuggestions = [];
+      
+      // Extract score from structured format
+      const scoreMatch = cleanAnalysis.match(/ATS Score:\s*(\d{1,3})/i);
+      if (scoreMatch) {
+        score = parseInt(scoreMatch[1]);
+        if (score < 0 || score > 100) score = 75; // fallback
+      }
+      
+      // Extract summary
+      const summaryMatch = cleanAnalysis.match(/Summary:\s*([^\n]+)/i);
+      if (summaryMatch) {
+        summary = summaryMatch[1].trim();
+      }
+      
+      // Extract key skills
+      const skillsMatch = cleanAnalysis.match(/Key Skills Found:\s*([^\n]+)/i);
+      if (skillsMatch) {
+        const aiKeywords = skillsMatch[1]
+          .toLowerCase()
+          .replace(/[^\w\s,]/g, '')
+          .split(/[,]\s*/)
+          .map(k => k.trim())
+          .filter(k => k.length > 2 && k.length < 20);
+        
+        aiKeywords.forEach(keyword => {
+          if (!keywordMatch.includes(keyword)) {
+            keywordMatch.push(keyword);
+          }
+        });
+      }
+      
+      // Extract missing skills or areas to improve
+      const missingMatch = cleanAnalysis.match(/(?:Missing Skills|Areas to Improve):\s*([^\n]+)/i);
+      if (missingMatch) {
+        const aiMissing = missingMatch[1]
+          .toLowerCase()
+          .replace(/[^\w\s,]/g, '')
+          .split(/[,]\s*/)
+          .map(k => k.trim())
+          .filter(k => k.length > 2 && k.length < 20);
+        
+        aiMissing.forEach(keyword => {
+          if (!missingKeywords.includes(keyword) && !keywordMatch.includes(keyword)) {
+            missingKeywords.push(keyword);
+          }
+        });
+      }
+      
+      // Extract recommendations
+      const recommendationsMatch = cleanAnalysis.match(/Top Recommendations:\s*([^\n]+)/i);
+      if (recommendationsMatch) {
+        aiSuggestions = recommendationsMatch[1]
+          .split(/[,]\s*/)
+          .map(r => r.trim())
+          .filter(r => r.length > 5);
+      }
+      
+      // Fallback summary extraction if structured format not found
+      if (!summary) {
+        const summaryPatterns = [
+          /overall[^.]*\./i,
+          /summary[^.]*\./i,
+          /conclusion[^.]*\./i,
+          /recommendation[^.]*\./i
+        ];
+        
+        for (const pattern of summaryPatterns) {
+          const match = cleanAnalysis.match(pattern);
+          if (match) {
+            summary = match[0];
+            break;
+          }
+        }
+        
+        // Final fallback
+        if (!summary) {
+          const sentences = cleanAnalysis.split(/[.!?]/).filter(s => s.trim().length > 20);
+          summary = sentences[0] || cleanAnalysis.substring(0, 200);
+        }
+        
+        summary = summary
+          .replace(/^\d+\.\s*/, '') // Remove numbered list prefixes
+          .replace(/^[–-]\s*/, '') // Remove bullet prefixes
+          .trim();
+      }
       
       setResult({
         score,
         summary,
         keywordMatch: keywordMatch.slice(0, 8), // Limit to 8 items
         missingKeywords: missingKeywords.slice(0, 8), // Limit to 8 items
-        suggestions: [
+        suggestions: aiSuggestions.length > 0 ? aiSuggestions : [
           'Include more specific quantifiable achievements',
           'Add keywords from the job description',
           'Use standard section headings',
