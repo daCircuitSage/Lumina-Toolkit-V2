@@ -85,13 +85,21 @@ export default async function handler(req: any, res: any) {
 
       let prompt;
       if (jobDescription && jobDescription.trim()) {
-        prompt = `Analyze this resume against the job description and provide a concise analysis in this exact format:
+        prompt = `Analyze this resume against the job description and provide a precise ATS compatibility analysis.
+
+Calculate the ATS score based on these criteria:
+- Keyword matching between resume and job description (40% weight)
+- Proper formatting and structure (30% weight) 
+- Action verbs and quantifiable achievements (20% weight)
+- Section organization and clarity (10% weight)
+
+Provide analysis in this exact format:
 
 ATS Score: [0-100]
-Summary: [One sentence summary of overall compatibility]
-Key Skills Found: [list 3-5 skills found in resume]
-Missing Skills: [list 3-5 skills from job description not in resume]
-Top Recommendations: [list 2-3 specific recommendations]
+Summary: [One clear sentence about ATS compatibility and job match]
+Key Skills Found: [list 3-5 skills present in both resume and job description]
+Missing Skills: [list 3-5 skills in job description but missing from resume]
+Top Recommendations: [list 2-3 specific, actionable recommendations]
 
 Resume:
 ${resume}
@@ -99,20 +107,28 @@ ${resume}
 Job Description:
 ${jobDescription}`;
       } else {
-        prompt = `Analyze this resume for ATS compatibility and provide a concise analysis in this exact format:
+        prompt = `Analyze this resume for ATS compatibility and provide a precise analysis.
+
+Calculate the ATS score based on these criteria:
+- Proper formatting and structure (40% weight)
+- Inclusion of relevant keywords and skills (30% weight) 
+- Action verbs and quantifiable achievements (20% weight)
+- Section organization and clarity (10% weight)
+
+Provide analysis in this exact format:
 
 ATS Score: [0-100]
-Summary: [One sentence summary of overall ATS compatibility]
-Key Skills Found: [list 3-5 skills found in resume]
-Areas to Improve: [list 3-5 areas for improvement]
-Top Recommendations: [list 2-3 specific recommendations]
+Summary: [One clear sentence about overall ATS compatibility]
+Key Skills Found: [list 3-5 strongest skills identified in resume]
+Areas to Improve: [list 3-5 specific areas needing improvement]
+Top Recommendations: [list 2-3 actionable recommendations]
 
 Resume:
 ${resume}`;
       }
 
       const messages = [
-        { role: 'system', content: 'You are an expert ATS analyzer. Provide concise, structured analysis following the exact format requested. Focus on practical, actionable insights.' },
+        { role: 'system', content: 'You are an expert ATS (Applicant Tracking System) analyst. Analyze resumes with precision and provide structured, actionable insights. Calculate scores based on specific criteria and justify your reasoning. Focus on practical recommendations that improve ATS compatibility.' },
         { role: 'user', content: prompt }
       ];
 

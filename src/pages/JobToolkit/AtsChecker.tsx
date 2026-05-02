@@ -151,11 +151,35 @@ export default function AtsChecker() {
       let summary = '';
       let aiSuggestions = [];
       
-      // Extract score from structured format
-      const scoreMatch = cleanAnalysis.match(/ATS Score:\s*(\d{1,3})/i);
-      if (scoreMatch) {
-        score = parseInt(scoreMatch[1]);
-        if (score < 0 || score > 100) score = 75; // fallback
+      // Extract score from structured format with multiple patterns
+      let atsScore = 75; // default score
+      const scorePatternList = [
+        /ATS Score:\s*(\d{1,3})/i,
+        /(\d{1,3})\/100/,
+        /(\d{1,3})%/,
+        /score:\s*(\d{1,3})/i,
+        /compatibility.*?(\d{1,3})/i,
+        /(\d{1,3})\s*out of\s*100/i
+      ];
+      
+      for (const pattern of scorePatternList) {
+        const match = cleanAnalysis.match(pattern);
+        if (match) {
+          const extractedScore = parseInt(match[1]);
+          if (extractedScore >= 0 && extractedScore <= 100) {
+            atsScore = extractedScore;
+            break; // Use first valid match
+          }
+        }
+      }
+      
+      // Additional validation: look for score reasoning in AI response
+      const scoreReasoning = cleanAnalysis.match(/(?:score|compatibility|rating).*?(\d{1,3})/i);
+      if (scoreReasoning && !scorePatternList.some(p => cleanAnalysis.match(p))) {
+        const reasoningScore = parseInt(scoreReasoning[1]);
+        if (reasoningScore >= 0 && reasoningScore <= 100) {
+          atsScore = reasoningScore;
+        }
       }
       
       // Extract summary
@@ -237,7 +261,7 @@ export default function AtsChecker() {
       }
       
       setResult({
-        score,
+        score: atsScore,
         summary,
         keywordMatch: keywordMatch.slice(0, 8), // Limit to 8 items
         missingKeywords: missingKeywords.slice(0, 8), // Limit to 8 items
