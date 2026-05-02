@@ -20,6 +20,7 @@ import { cn } from '../../lib/utils';
 import { jsPDF } from 'jspdf';
 import SeoContent from '../../components/SeoContent';
 import * as htmlToImage from 'html-to-image';
+import { analyticsEvents } from '../../lib/analytics';
 
 export default function CoverLetter() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -40,6 +41,9 @@ export default function CoverLetter() {
     if (!formData.role || !formData.company) return;
     setIsGenerating(true);
     setLetter('');
+
+    // Track cover letter generation
+    analyticsEvents.coverLetterGenerated(formData.role);
 
     const prompt = `
       Create a highly professional and tailored cover letter for the following position:

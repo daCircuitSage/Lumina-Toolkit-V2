@@ -28,6 +28,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import SeoContent from '../components/SeoContent';
+import { analyticsEvents } from '../lib/analytics';
 
 type TemplateId = 'modern' | 'ats' | 'minimal' | 'creative' | 'corporate' | 'elegant' | 'techno' | 'executive' | 'designer' | 'hybrid';
 
@@ -207,10 +208,10 @@ export default function ResumeBuilder() {
     if (!componentRef.current || isExporting) return;
     
     setIsExporting(true);
+    
     try {
-      const element = componentRef.current;
-      const dataUrl = await toPng(element, {
-        quality: 1,
+      const dataUrl = await toPng(componentRef.current, {
+        quality: 1.0,
         pixelRatio: 2,
         backgroundColor: '#ffffff',
         width: 794,
@@ -227,6 +228,9 @@ export default function ResumeBuilder() {
       const pdfHeight = pdf.internal.pageSize.getHeight();
       pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save(`${data.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`);
+      
+      // Track PDF download
+      analyticsEvents.resumePdfDownloaded(data.settings.templateId);
     } catch (error) {
       console.error('PDF Export Error:', error);
       alert('Failed to generate PDF.');
@@ -444,7 +448,10 @@ export default function ResumeBuilder() {
                   {templates.map((t) => (
                     <button 
                       key={t.id}
-                      onClick={() => setSelectedTemplate(t.id)}
+                      onClick={() => {
+    setSelectedTemplate(t.id);
+    analyticsEvents.resumeTemplateSelected(t.name);
+  }}
                       className={cn(
                         "flex flex-col text-left p-6 rounded-3xl border-2 transition-all relative overflow-hidden group",
                         selectedTemplate === t.id 

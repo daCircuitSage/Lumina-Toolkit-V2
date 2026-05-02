@@ -9,6 +9,7 @@ import GlobalSearch from './components/GlobalSearch';
 import { motion, AnimatePresence } from 'motion/react';
 import { TOOLS } from './constants';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { Analytics, initializeGA, analyticsEvents } from './lib/analytics';
 
 // Lazily load pages
 const Homepage = React.lazy(() => import('./pages/Homepage'));
@@ -40,6 +41,19 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Initialize Google Analytics
+  useEffect(() => {
+    const gaId = import.meta.env.VITE_GA_ID;
+    if (gaId) {
+      initializeGA(gaId);
+    }
+  }, []);
+
+  // Track page navigation
+  useEffect(() => {
+    analyticsEvents.pageView(activeTool);
+  }, [activeTool]);
 
   const renderTool = () => {
     switch (activeTool) {
@@ -97,6 +111,7 @@ export default function App() {
           </AnimatePresence>
         </main>
       </div>
+      <Analytics />
     </ThemeProvider>
   );
 }

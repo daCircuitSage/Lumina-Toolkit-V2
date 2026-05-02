@@ -10,6 +10,7 @@ import SeoContent from '../../components/SeoContent';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import mammoth from 'mammoth';
+import { analyticsEvents } from '../../lib/analytics';
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
@@ -69,16 +70,16 @@ export default function AtsChecker() {
     setIsAnalyzing(true);
     setResult(null);
 
+    // Track ATS check start
+    analyticsEvents.atsCheckStarted();
+
     try {
       const response = await fetch('/api/ats-check', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          resume: resume,
-          jobDescription: jobDescription || 'N/A'
-        }),
+        body: JSON.stringify({ resume, jobDescription }),
       });
 
       if (!response.ok) {
