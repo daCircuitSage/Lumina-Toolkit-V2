@@ -1,11 +1,19 @@
 User-agent: *
 Allow: /
 
+# Allow Facebook crawler specifically
+User-agent: facebookexternalhit
+Allow: /
+
+# Allow other social media crawlers
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
 # Sitemap
 Sitemap: https://lumina-toolkit.vercel.app/sitemap.xml
-
-# Block unnecessary crawling
-Disallow: /api/
-Disallow: /*.json$
-Disallow: /*.js$
-Disallow: /*.css$
