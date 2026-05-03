@@ -19,8 +19,20 @@
       "dest": "/api/index.ts"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
       "dest": "/dist/$1"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/dist/robots.txt"
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/dist/sitemap.xml"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.html"
     }
   ]
 }
