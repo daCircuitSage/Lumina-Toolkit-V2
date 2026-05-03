@@ -142,12 +142,126 @@ export default async function handler(req: any, res: any) {
 
 
 
+  app.post('/api/ats-analyze', async (req, res) => {
+    try {
+      const { resume, jobDescription, extractedKeywords, experienceLevel } = req.body;
+      
+      if (!resume) {
+        return res.status(400).json({ error: 'Resume is required' });
+      }
+
+      const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
+      if (!MISTRAL_API_KEY) {
+        throw new Error('MISTRAL_API_KEY is not configured');
+      }
+
+      // Enhanced prompt for production-grade analysis
+      let prompt = `You are an expert ATS analyst with deep knowledge of recruitment technology and semantic analysis. Analyze the following resume and job description to provide detailed insights.
+
+RESUME TEXT:
+${resume.substring(0, 2000)}...
+
+EXTRACTED KEYWORDS:
+${extractedKeywords ? extractedKeywords.join(', ') : 'No keywords provided'}
+
+EXPERIENCE LEVEL: ${experienceLevel || 'Not specified'}
+
+`;
+
+      if (jobDescription) {
+        prompt += `JOB DESCRIPTION:
+${jobDescription.substring(0, 1500)}...
+
+`;
+      }
+
+      prompt += `Provide a detailed analysis in the following JSON format:
+
+{
+  "semanticMatches": [
+    {
+      "skill": "skill name",
+      "confidence": 0.95,
+      "context": "brief context where skill was found",
+      "category": "direct|semantic|inferred",
+      "evidence": ["specific evidence from resume"]
+    }
+  ],
+  "skillGapAnalysis": {
+    "missingCritical": ["must-have skills missing"],
+    "missingRecommended": ["nice-to-have skills missing"],
+    "transferableSkills": ["skills that can be applied"],
+    "skillLevelMismatch": ["skills mentioned but at wrong level"]
+  },
+  "experienceAlignment": {
+    "relevanceScore": 0.85,
+    "yearsOfExperience": 5,
+    "seniorityMatch": "under|match|over",
+    "industryAlignment": 0.90,
+    "projectRelevance": 0.80
+  },
+  "contextualRelevance": 0.88,
+  "industrySpecificInsights": ["industry-specific observations"],
+  "recommendations": ["specific, actionable recommendations"],
+  "confidence": 0.92
+}
+
+Focus on:
+1. Semantic understanding beyond keyword matching
+2. Contextual skill validation
+3. Experience level appropriateness
+4. Industry-specific terminology
+5. Transferable skill identification
+6. Actionable improvement recommendations
+
+Be conservative in scoring - prioritize accuracy over optimism. Only claim skills with clear evidence.`;
+
+      const messages = [
+        { role: 'system', content: 'You are an expert ATS analyst with deep knowledge of recruitment technology and semantic analysis. Provide accurate, conservative analysis with clear evidence for all claims.' },
+        { role: 'user', content: prompt }
+      ];
+
+      const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${MISTRAL_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'mistral-large-latest',
+          messages: messages,
+          temperature: 0.1,
+          max_tokens: 2000,
+          response_format: { type: 'json_object' }
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Mistral API error: ${response.status} - ${errorData.error?.message || response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      if (!data.choices || data.choices.length === 0) {
+        throw new Error('No response from Mistral API');
+      }
+
+      const analysisData = JSON.parse(data.choices[0].message.content);
+      res.json({ analysis: analysisData });
+    } catch (error) {
+      console.error('ATS Analysis Error:', error);
+      res.status(500).json({ 
+        error: error instanceof Error ? error.message : 'AI service is temporarily unavailable' 
+      });
+    }
+  });
+
   app.post('/api/ats-check', async (req, res) => {
 
     try {
 
       const { resume, jobDescription } = req.body;
-
       
 
       if (!resume) {
@@ -172,30 +286,49 @@ export default async function handler(req: any, res: any) {
 
       if (jobDescription && jobDescription.trim()) {
 
-        prompt = `You are an expert ATS (Applicant Tracking System) analyst with advanced NLP capabilities. Analyze this resume against the job description using production-grade intelligence.
+        prompt = `You are an expert ATS (Applicant Tracking System) analyst with advanced NLP capabilities and typo-tolerant matching. Analyze this resume against the job description using production-grade intelligence.
 
-ANALYSIS REQUIREMENTS:
-1. Use semantic understanding - "deploy apps" should match Docker/CI/CD
-2. Apply technical keyword validation - ignore generic words like "I", "use", "apps"
-3. Implement conservative scoring - be realistic about skill gaps
-4. Provide explainable breakdown - show WHY score is what it is
+CRITICAL REQUIREMENTS:
+1. IMPLEMENT FUZZY MATCHING - "backed engineer" ≈ "backend engineer"
+2. TYPO TOLERANCE - Minor spelling errors should not cause 0% score
+3. SEMANTIC CLUSTERING - Backend skills: Django, Python, REST API, PostgreSQL, FastAPI
+4. NORMALIZATION - Lowercase, trim whitespace, normalize punctuation
+5. NEVER 0% SCORE - If relevant skills exist, score must reflect that
 
-SCORING CRITERIA:
-- Direct keyword matches (60% weight)
-- Semantic understanding of related concepts (15% weight)
-- Missing required skills (25% penalty)
-- Technical vocabulary validation
+NORMALIZATION PIPELINE:
+- Convert all text to lowercase
+- Remove extra whitespace and normalize punctuation
+- Normalize compound words: "rest api" = "restful api"
+- Normalize common variants: "javascript" = "javascript", "reactjs" = "react js"
 
-TECHNICAL FOCUS:
-- Only count VALID technical skills (Docker, Kubernetes, React, Python, etc.)
-- Ignore resume noise words (experience, team, project, etc.)
-- Apply semantic mapping for related concepts
-- Ensure score reflects REAL job match accuracy
+FUZZY MATCHING RULES:
+- backend ≈ backed
+- javascript ≈ javasript  
+- reactjs ≈ react js
+- nodejs ≈ node js
+- api ≈ apis
+- database ≈ databases
+
+SEMANTIC BACKEND CLUSTER:
+If JD mentions "backend engineer", these resume skills should score positively:
+- Django, Flask, FastAPI, Express, NestJS
+- Python, JavaScript, TypeScript, Go
+- REST API, GraphQL, gRPC
+- PostgreSQL, MySQL, MongoDB, Redis
+- Docker, Kubernetes, CI/CD
+- AWS, Azure, GCP
+
+SCORING ALGORITHM:
+- Direct exact matches: 40% weight
+- Fuzzy/tolerant matches: 20% weight  
+- Semantic cluster matches: 20% weight
+- Missing skills penalty: 20% weight
+- NEVER allow single typo to collapse score to zero
 
 Provide analysis in this exact format:
 
 ATS Score: [0-100]
-Summary: [Explain score with specific skill counts and gaps]
+Summary: [Explain score with specific skill counts and semantic matches]
 Key Skills Found: [list 3-5 VALID technical skills only]
 Missing Skills: [list 3-5 missing technical skills from JD]
 Top Recommendations: [list 2-3 specific, actionable technical improvements]

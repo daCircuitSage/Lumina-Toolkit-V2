@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Environment Test</title>
+</head>
+<body>
+    <h1>Environment Variable Test</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        // Simulate Vite environment access
+        console.log('Available env vars:', Object.keys(import.meta.env));
+        console.log('MISTRAL_API_KEY:', import.meta.env.MISTRAL_API_KEY);
+        console.log('VITE_MISTRAL_API_KEY:', import.meta.env.VITE_MISTRAL_API_KEY);
+        
+        document.getElementById('output').innerHTML = `
+            <h2>Results:</h2>
+            <p><strong>MISTRAL_API_KEY:</strong> ${import.meta.env.MISTRAL_API_KEY ? '✅ Found' : '❌ Not found'}</p>
+            <p><strong>VITE_MISTRAL_API_KEY:</strong> ${import.meta.env.VITE_MISTRAL_API_KEY ? '✅ Found' : '❌ Not found'}</p>
+            <p><strong>Available variables:</strong> ${JSON.stringify(Object.keys(import.meta.env), null, 2)}</p>
+        `;
+    </script>
+</body>
+</html>
