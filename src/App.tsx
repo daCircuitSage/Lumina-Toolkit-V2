@@ -77,7 +77,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <div className="flex flex-col md:flex-row min-h-screen bg-[#F9FAFB] dark:bg-slate-950 transition-colors duration-300">
+      <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
         <Sidebar 
           activeTool={activeTool} 
           onSelect={(id) => setActiveTool(id)} 
@@ -98,14 +98,19 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              className="w-full"
+              className="w-full h-full"
             >
               <Suspense fallback={
                 <div className="flex items-center justify-center h-[calc(100vh-64px)] md:h-screen">
-                  <div className="w-6 h-6 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="relative">
+                    <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 w-8 h-8 border-2 border-indigo-200 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+                  </div>
                 </div>
               }>
-                {renderTool()}
+                <div className="h-full">
+                  {renderTool()}
+                </div>
               </Suspense>
             </motion.div>
           </AnimatePresence>

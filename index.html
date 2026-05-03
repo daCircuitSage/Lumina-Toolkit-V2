@@ -21,6 +21,41 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- Theme Flash Prevention Script -->
+    <script>
+      (function() {
+        try {
+          // Get saved theme or system preference
+          const savedTheme = localStorage.getItem('theme');
+          const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
+          
+          // Apply theme to HTML root before any rendering
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.add('light');
+          }
+          
+          // Set initial background to prevent flash
+          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#f9fafb';
+          document.documentElement.style.color = theme === 'dark' ? '#f1f5f9' : '#111827';
+          
+          // Store theme for React context
+          window.__THEME_INITIALIZED = theme;
+        } catch (e) {
+          // Fallback to system preference if localStorage fails
+          const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = systemPrefersDark ? 'dark' : 'light';
+          document.documentElement.classList.add(theme);
+          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#f9fafb';
+          document.documentElement.style.color = theme === 'dark' ? '#f1f5f9' : '#111827';
+          window.__THEME_INITIALIZED = theme;
+        }
+      })();
+    </script>
+    
     <title>Lumina Toolkit - Professional Productivity Suite</title>
   </head>
   <body>

@@ -141,39 +141,90 @@ export default function ResumeBuilder() {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>('modern');
   const [isExporting, setIsExporting] = useState(false);
   const [scale, setScale] = useState(1);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [currentStep, setCurrentStep] = useState(0);
   const componentRef = useRef<HTMLDivElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Dynamic Scaling Engine
+  // Check if user has seen onboarding before
+  useLayoutEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('resume_onboarding_complete');
+    if (hasSeenOnboarding) {
+      setShowOnboarding(false);
+    }
+  }, []);
+
+  const onboardingSteps = [
+    {
+      title: "Welcome to Resume Builder",
+      description: "Create professional resumes in minutes with our intuitive editor. Let's walk you through the basics.",
+      action: "Start Building"
+    },
+    {
+      title: "Add Your Information",
+      description: "Fill in your personal details, work experience, education, and skills. Use the Content tab to get started.",
+      action: "Got it"
+    },
+    {
+      title: "Choose Your Style",
+      description: "Pick from 10 professional templates and customize colors, fonts, and layout in the Design tab.",
+      action: "Continue"
+    },
+    {
+      title: "Preview & Export",
+      description: "See your resume in real-time and export as PDF when you're ready. Switch between Edit and Preview views.",
+      action: "Start Creating"
+    }
+  ];
+
+  // Dynamic Scaling Engine - Improved
   useLayoutEffect(() => {
     const updateScale = () => {
       if (!previewContainerRef.current) return;
       
       const containerWidth = previewContainerRef.current.offsetWidth;
-      const isMobile = window.innerWidth < 1024;
+      const containerHeight = previewContainerRef.current.offsetHeight;
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
       
-      const horizontalPadding = isMobile ? 32 : 64;
+      const horizontalPadding = isMobile ? 16 : isTablet ? 32 : 64;
+      const verticalPadding = isMobile ? 16 : isTablet ? 32 : 64;
       const availableWidth = containerWidth - horizontalPadding;
-      const resumeA4Width = 794; 
+      const availableHeight = containerHeight - verticalPadding;
       
-      let newScale = availableWidth / resumeA4Width;
+      const resumeA4Width = 794;
+      const resumeA4Height = 1123;
       
-      if (newScale > 1.1) newScale = 1.1;
-      if (newScale < 0.3) newScale = 0.3;
+      let newScale = Math.min(
+        availableWidth / resumeA4Width,
+        availableHeight / resumeA4Height
+      );
+      
+      if (newScale > 1.2) newScale = 1.2;
+      if (newScale < 0.25) newScale = 0.25;
       
       setScale(newScale);
     };
 
     updateScale();
-    const timer = setTimeout(updateScale, 100);
+    const timer = setTimeout(updateScale, 150);
     
     window.addEventListener('resize', updateScale);
     return () => {
       window.removeEventListener('resize', updateScale);
       clearTimeout(timer);
     };
-  }, [viewMode]);
+  }, [viewMode, selectedTemplate]);
+
+  // Auto-save functionality
+  useLayoutEffect(() => {
+    const saveTimeout = setTimeout(() => {
+      localStorage.setItem('resume_draft', JSON.stringify(data));
+    }, 2000); // Auto-save after 2 seconds of inactivity
+
+    return () => clearTimeout(saveTimeout);
+  }, [data]);
 
   // Load draft on mount
   useLayoutEffect(() => {
@@ -201,7 +252,12 @@ export default function ResumeBuilder() {
 
   const handleSaveDraft = () => {
     localStorage.setItem('resume_draft', JSON.stringify(data));
-    alert('Draft saved successfully!');
+    // Show success toast instead of alert
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-pulse';
+    toast.textContent = 'Draft saved successfully!';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
   };
 
   const handleExportPdf = async () => {
@@ -210,30 +266,55 @@ export default function ResumeBuilder() {
     setIsExporting(true);
     
     try {
+      // Show progress indicator
+      const progressToast = document.createElement('div');
+      progressToast.className = 'fixed bottom-4 right-4 bg-blue-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      progressToast.innerHTML = '<div class="flex items-center gap-2"><div class="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>Generating PDF...</div>';
+      document.body.appendChild(progressToast);
+      
       const dataUrl = await toPng(componentRef.current, {
         quality: 1.0,
-        pixelRatio: 2,
+        pixelRatio: 3, // Higher quality for better PDF
         backgroundColor: '#ffffff',
         width: 794,
         height: 1123,
+        skipAutoScale: true,
+        cacheBust: true,
       });
       
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
         format: 'a4',
+        compress: true,
       });
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`${data.personal.fullName.replace(/\s+/g, '_')}_Resume.pdf`);
+      
+      // Generate filename with timestamp
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const filename = `${data.personal.fullName.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_resume_${timestamp}.pdf`;
+      pdf.save(filename);
+      
+      // Update progress toast
+      progressToast.className = 'fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      progressToast.innerHTML = '<div class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>PDF exported successfully!</div>';
+      
+      setTimeout(() => progressToast.remove(), 3000);
       
       // Track PDF download
-      analyticsEvents.resumePdfDownloaded(data.settings.templateId);
+      analyticsEvents.resumePdfDownloaded(selectedTemplate);
     } catch (error) {
       console.error('PDF Export Error:', error);
-      alert('Failed to generate PDF.');
+      
+      // Show error toast
+      const errorToast = document.createElement('div');
+      errorToast.className = 'fixed bottom-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+      errorToast.innerHTML = '<div class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>Failed to generate PDF. Please try again.</div>';
+      document.body.appendChild(errorToast);
+      setTimeout(() => errorToast.remove(), 5000);
     } finally {
       setIsExporting(false);
     }
@@ -371,31 +452,119 @@ export default function ResumeBuilder() {
     { id: 'hybrid', name: 'Hybrid', description: 'Best of both modern and classic styles.' }
   ];
 
+  const handleOnboardingNext = () => {
+    if (currentStep < onboardingSteps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      setShowOnboarding(false);
+      localStorage.setItem('resume_onboarding_complete', 'true');
+      // Guide user to Content tab
+      setActiveTab('content');
+    }
+  };
+
+  const handleOnboardingSkip = () => {
+    setShowOnboarding(false);
+    localStorage.setItem('resume_onboarding_complete', 'true');
+  };
+
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] md:h-screen bg-slate-50 dark:bg-slate-950 transition-colors overflow-hidden">
-      {/* Mobile Sticky Navigation */}
-      <div className="lg:hidden flex border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md sticky top-0 z-40 shrink-0">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] md:h-screen bg-slate-50 dark:bg-slate-950 transition-colors overflow-hidden relative">
+      {/* Onboarding Overlay */}
+      {showOnboarding && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        >
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white dark:bg-slate-900 rounded-3xl p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                    {currentStep + 1}
+                  </div>
+                  <div className="flex gap-1">
+                    {onboardingSteps.map((_, index) => (
+                      <div 
+                        key={index} 
+                        className={cn(
+                          "w-8 h-1 rounded-full transition-all",
+                          index <= currentStep ? "bg-indigo-600" : "bg-slate-200 dark:bg-slate-700"
+                        )}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <button 
+                  onClick={handleOnboardingSkip}
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 text-sm font-medium"
+                >
+                  Skip
+                </button>
+              </div>
+              
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
+                {onboardingSteps[currentStep].title}
+              </h3>
+              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                {onboardingSteps[currentStep].description}
+              </p>
+            </div>
+            
+            <div className="flex gap-3">
+              {currentStep > 0 && (
+                <button 
+                  onClick={() => setCurrentStep(currentStep - 1)}
+                  className="flex-1 px-4 py-3 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                >
+                  Back
+                </button>
+              )}
+              <button 
+                onClick={handleOnboardingNext}
+                className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-all"
+              >
+                {onboardingSteps[currentStep].action}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+      {/* Mobile Sticky Navigation - Improved */}
+      <div className="lg:hidden flex border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg sticky top-0 z-40 shrink-0">
         <button 
           onClick={() => setViewMode('editor')}
           className={cn(
-            "flex-1 py-4 text-xs font-black uppercase tracking-[2px] flex items-center justify-center gap-2 transition-all",
+            "flex-1 py-3 text-xs font-black uppercase tracking-[2px] flex items-center justify-center gap-2 transition-all relative",
             viewMode === 'editor' 
-              ? "text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400" 
-              : "text-slate-400 dark:text-slate-500"
+              ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20" 
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
           )}
         >
           <Edit3 size={14} /> Edit
+          {viewMode === 'editor' && (
+            <motion.div layoutId="mobileTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 dark:bg-indigo-400" />
+          )}
         </button>
         <button 
           onClick={() => setViewMode('preview')}
           className={cn(
-            "flex-1 py-4 text-xs font-black uppercase tracking-[2px] flex items-center justify-center gap-2 transition-all",
+            "flex-1 py-3 text-xs font-black uppercase tracking-[2px] flex items-center justify-center gap-2 transition-all relative",
             viewMode === 'preview' 
-              ? "text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400" 
-              : "text-slate-400 dark:text-slate-500"
+              ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20" 
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
           )}
         >
           <Eye size={14} /> Preview
+          {viewMode === 'preview' && (
+            <motion.div layoutId="mobileTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-600 dark:bg-indigo-400" />
+          )}
         </button>
       </div>
 
@@ -441,35 +610,62 @@ export default function ResumeBuilder() {
                 className="space-y-8"
               >
                 <header className="mb-10">
-                   <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Resume Templates</h2>
-                   <p className="text-slate-500 dark:text-slate-400 text-sm">Choose a foundation for your professional story.</p>
+                   <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-3">Resume Templates</h1>
+                   <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-2xl">Choose from our collection of professionally designed resume templates. Each template is optimized for ATS systems and crafted to help you stand out.</p>
                 </header>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {templates.map((t) => (
                     <button 
                       key={t.id}
                       onClick={() => {
-    setSelectedTemplate(t.id);
-    analyticsEvents.resumeTemplateSelected(t.name);
-  }}
+                        setSelectedTemplate(t.id);
+                        analyticsEvents.resumeTemplateSelected(t.name);
+                      }}
                       className={cn(
-                        "flex flex-col text-left p-6 rounded-3xl border-2 transition-all relative overflow-hidden group",
+                        "flex flex-col text-left p-6 rounded-3xl border-2 transition-all relative overflow-hidden group hover:shadow-lg",
                         selectedTemplate === t.id 
-                          ? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-600 dark:border-indigo-400" 
+                          ? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-600 dark:border-indigo-400 ring-2 ring-indigo-200 dark:ring-indigo-800" 
                           : "bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-900"
                       )}
                     >
+                      {/* Template Preview */}
                       <div className={cn(
-                        "w-full h-32 mb-4 rounded-xl border border-dashed flex items-center justify-center transition-all",
-                        selectedTemplate === t.id ? "bg-white dark:bg-slate-800 border-indigo-200 dark:border-indigo-800" : "bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-800"
+                        "w-full h-32 mb-4 rounded-xl overflow-hidden relative transition-all",
+                        selectedTemplate === t.id ? "ring-2 ring-indigo-200 dark:ring-indigo-800" : ""
                       )}>
-                        <Layout size={32} className={selectedTemplate === t.id ? "text-indigo-600 dark:text-indigo-400" : "text-slate-200 dark:text-slate-800"} />
+                        <div className={cn(
+                          "w-full h-full flex items-center justify-center text-xs font-bold uppercase tracking-widest",
+                          t.id === 'modern' && "bg-gradient-to-br from-indigo-500 to-purple-600 text-white",
+                          t.id === 'ats' && "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400",
+                          t.id === 'minimal' && "bg-white border-2 border-slate-200 text-slate-400",
+                          t.id === 'creative' && "bg-gradient-to-tr from-pink-500 to-orange-400 text-white",
+                          t.id === 'corporate' && "bg-gradient-to-b from-slate-700 to-slate-900 text-white",
+                          t.id === 'elegant' && "bg-gradient-to-r from-amber-50 to-amber-100 text-amber-800",
+                          t.id === 'techno' && "bg-slate-950 text-emerald-400 border border-emerald-500/20",
+                          t.id === 'executive' && "bg-gradient-to-br from-blue-900 to-indigo-900 text-white",
+                          t.id === 'designer' && "bg-gradient-to-t from-purple-600 to-pink-600 text-white",
+                          t.id === 'hybrid' && "bg-gradient-to-bl from-blue-500 to-teal-500 text-white"
+                        )}>
+                          <div className="text-center p-2">
+                            <div className="text-lg mb-1">{t.name.charAt(0)}</div>
+                            <div className="text-[8px] opacity-70">Preview</div>
+                          </div>
+                        </div>
+                        {selectedTemplate === t.id && (
+                          <div className="absolute top-2 right-2 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                          </div>
+                        )}
                       </div>
-                      <span className={cn(
-                        "text-sm font-black uppercase tracking-widest mb-1",
-                        selectedTemplate === t.id ? "text-indigo-600 dark:text-indigo-400" : "text-slate-900 dark:text-white"
-                      )}>{t.name}</span>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">{t.description}</span>
+                      <div className="space-y-1">
+                        <span className={cn(
+                          "text-sm font-black uppercase tracking-widest block",
+                          selectedTemplate === t.id ? "text-indigo-600 dark:text-indigo-400" : "text-slate-900 dark:text-white"
+                        )}>{t.name}</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium line-clamp-2">{t.description}</span>
+                      </div>
                     </button>
                   ))}
                 </div>
@@ -484,9 +680,9 @@ export default function ResumeBuilder() {
                 exit={{ opacity: 0, x: 10 }}
                 className="space-y-12"
               >
-                <header>
-                   <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Design Customization</h2>
-                   <p className="text-slate-500 dark:text-slate-400 text-sm">Fine-tune the aesthetics to match your brand.</p>
+                <header className="mb-8">
+                   <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-3">Design Customization</h1>
+                   <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-2xl">Fine-tune every aspect of your resume's appearance. Match your personal brand with custom colors, fonts, and layout settings.</p>
                 </header>
 
                 <div className="space-y-8">
@@ -614,9 +810,9 @@ export default function ResumeBuilder() {
                 exit={{ opacity: 0, x: 10 }}
                 className="space-y-12"
               >
-                <header className="mb-4">
-                   <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">Content Builder</h2>
-                   <p className="text-slate-500 dark:text-slate-400 text-sm">Write the data for your dynamic resume sections.</p>
+                <header className="mb-8">
+                   <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight mb-3">Content Builder</h1>
+                   <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-2xl">Build your resume section by section. Add your experience, education, skills, and projects with our easy-to-use editor.</p>
                 </header>
 
                 <div className="space-y-10">
@@ -817,21 +1013,31 @@ export default function ResumeBuilder() {
               minHeight: '1123px',
               transform: `scale(${scale})`,
               transformOrigin: 'top center',
-              transition: 'transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)'
+              transition: 'transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1)'
             }}
-            className="bg-white shadow-2xl overflow-hidden shrink-0 my-10 lg:my-10"
+            className="bg-white shadow-2xl overflow-hidden shrink-0 my-4 lg:my-10 rounded-lg"
           >
-            <div ref={componentRef} className="bg-white h-full shadow-2xl transition-all duration-700">
-              {selectedTemplate === 'modern' && <ModernTemplate data={data} />}
-              {selectedTemplate === 'ats' && <ATSTemplate data={data} />}
-              {selectedTemplate === 'minimal' && <MinimalTemplate data={data} />}
-              {selectedTemplate === 'creative' && <CreativeTemplate data={data} />}
-              {selectedTemplate === 'corporate' && <CorporateTemplate data={data} />}
-              {selectedTemplate === 'elegant' && <ElegantTemplate data={data} />}
-              {selectedTemplate === 'techno' && <TechnoTemplate data={data} />}
-              {selectedTemplate === 'hybrid' && <HybridTemplate data={data} />}
-              {selectedTemplate === 'executive' && <ExecutiveTemplate data={data} />}
-              {selectedTemplate === 'designer' && <DesignerTemplate data={data} />}
+            <div ref={componentRef} className="bg-white h-full shadow-2xl transition-all duration-500">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedTemplate}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {selectedTemplate === 'modern' && <ModernTemplate data={data} />}
+                  {selectedTemplate === 'ats' && <ATSTemplate data={data} />}
+                  {selectedTemplate === 'minimal' && <MinimalTemplate data={data} />}
+                  {selectedTemplate === 'creative' && <CreativeTemplate data={data} />}
+                  {selectedTemplate === 'corporate' && <CorporateTemplate data={data} />}
+                  {selectedTemplate === 'elegant' && <ElegantTemplate data={data} />}
+                  {selectedTemplate === 'techno' && <TechnoTemplate data={data} />}
+                  {selectedTemplate === 'hybrid' && <HybridTemplate data={data} />}
+                  {selectedTemplate === 'executive' && <ExecutiveTemplate data={data} />}
+                  {selectedTemplate === 'designer' && <DesignerTemplate data={data} />}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -1086,6 +1292,21 @@ function MinimalTemplate({ data }: { data: ResumeData }) {
                   ))}
                 </div>
               );
+            case 'projects':
+              return (
+                <div key={section.id} className="space-y-8">
+                  <h3 className="text-[10px] uppercase tracking-[5px] text-slate-300 mb-6 pb-2 border-b border-slate-100">Projects</h3>
+                  {data.projects.map(proj => (
+                    <div key={proj.id} className="group flex gap-8">
+                      <div className="flex-1">
+                        <h4 className="text-lg font-medium text-slate-800 mb-1">{proj.name}</h4>
+                        <div className="text-xs uppercase tracking-widest text-slate-400 mb-2">{proj.link}</div>
+                        <p className="text-sm leading-relaxed text-slate-500 whitespace-pre-wrap">{proj.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
             case 'education':
               return (
                 <div key={section.id} className="space-y-6">
@@ -1099,6 +1320,19 @@ function MinimalTemplate({ data }: { data: ResumeData }) {
                       </div>
                     </div>
                   ))}
+                </div>
+              );
+            case 'skills':
+              return (
+                <div key={section.id} className="space-y-6">
+                  <h3 className="text-[10px] uppercase tracking-[5px] text-slate-300 mb-6 pb-2 border-b border-slate-100">Skills</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {data.skills.map((skill, i) => (
+                      <span key={i} className="text-xs font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               );
             default: return null;
@@ -1147,6 +1381,13 @@ function CreativeTemplate({ data }: { data: ResumeData }) {
             {sortedSections.map(section => {
               if (!section.visible) return null;
               switch (section.id) {
+                case 'summary':
+                  return (
+                    <div key={section.id}>
+                      <h3 className="text-[10px] font-black uppercase tracking-[10px] text-slate-300 mb-10 border-b-8 border-indigo-50 pb-4 leading-none">Profile</h3>
+                      <div className="text-lg leading-relaxed text-slate-600 italic mb-8">{data.personal.summary}</div>
+                    </div>
+                  );
                 case 'experience':
                   return (
                     <div key={section.id}>
@@ -1159,6 +1400,37 @@ function CreativeTemplate({ data }: { data: ResumeData }) {
                              <h4 className="text-xl font-black text-slate-900 tracking-tight leading-none mb-1">{exp.role}</h4>
                              <div className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">{exp.company}</div>
                              <p className="text-sm leading-relaxed text-slate-500 whitespace-pre-wrap">{exp.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                case 'projects':
+                  return (
+                    <div key={section.id}>
+                      <h3 className="text-[10px] font-black uppercase tracking-[10px] text-slate-300 mb-10 border-b-8 border-indigo-50 pb-4 leading-none">Projects</h3>
+                      <div className="space-y-8">
+                        {data.projects.map(proj => (
+                          <div key={proj.id} className="relative">
+                             <div className="absolute -left-[35px] top-1 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white"></div>
+                             <h4 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-1">{proj.name}</h4>
+                             <div className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-2">{proj.link}</div>
+                             <p className="text-sm leading-relaxed text-slate-500 whitespace-pre-wrap">{proj.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                case 'education':
+                  return (
+                    <div key={section.id}>
+                      <h3 className="text-[10px] font-black uppercase tracking-[10px] text-slate-300 mb-10 border-b-8 border-indigo-50 pb-4 leading-none">Education</h3>
+                      <div className="space-y-6">
+                        {data.education.map(edu => (
+                          <div key={edu.id} className="relative">
+                             <div className="text-[9px] font-black text-indigo-400 uppercase tracking-[3px] mb-1">{edu.period}</div>
+                             <h4 className="text-lg font-black text-slate-900 tracking-tight leading-none mb-1">{edu.degree}</h4>
+                             <div className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">{edu.school}</div>
                           </div>
                         ))}
                       </div>
@@ -1221,6 +1493,36 @@ function ElegantTemplate({ data }: { data: ResumeData }) {
                   </div>
                 </section>
               );
+            case 'projects':
+              return (
+                <section key={section.id}>
+                  <h2 className="text-[10px] uppercase tracking-[6px] text-slate-300 mb-10 font-black text-center">Portfolio</h2>
+                  <div className="space-y-8">
+                    {data.projects.map(proj => (
+                      <div key={proj.id} className="text-center">
+                        <h4 className="text-lg font-medium text-slate-800 mb-2">{proj.name}</h4>
+                        <div className="text-xs uppercase tracking-widest font-bold mb-3" style={{ color: primaryColor }}>{proj.link}</div>
+                        <p className="text-[13px] leading-relaxed text-slate-500 whitespace-pre-wrap">{proj.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              );
+            case 'education':
+              return (
+                <section key={section.id}>
+                  <h2 className="text-[10px] uppercase tracking-[6px] text-slate-300 mb-10 font-black text-center">Academics</h2>
+                  <div className="space-y-8">
+                    {data.education.map(edu => (
+                      <div key={edu.id} className="text-center">
+                        <div className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mb-2">{edu.period}</div>
+                        <h4 className="text-lg font-medium text-slate-800 mb-1">{edu.degree}</h4>
+                        <div className="text-xs uppercase tracking-widest font-bold" style={{ color: primaryColor }}>{edu.school}</div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              );
             case 'skills':
               return (
                 <section key={section.id} className="text-center">
@@ -1262,6 +1564,15 @@ function TechnoTemplate({ data }: { data: ResumeData }) {
            {sortedSections.map(section => {
              if (!section.visible) return null;
              switch (section.id) {
+               case 'summary':
+                 return (
+                   <section key={section.id} className="relative">
+                      <div className="absolute -left-12 top-0 text-[10px] text-slate-800 rotate-90 origin-left uppercase tracking-widest font-black">Bio // Summary</div>
+                      <div className="p-6 bg-slate-900/50 border border-emerald-500/10 rounded-lg">
+                        <p className="text-sm text-slate-300 leading-relaxed font-mono">{data.personal.summary}</p>
+                      </div>
+                   </section>
+                 );
                case 'experience':
                  return (
                    <section key={section.id} className="relative">
@@ -1292,6 +1603,21 @@ function TechnoTemplate({ data }: { data: ResumeData }) {
                                <span className="text-[10px] text-emerald-800">{proj.link}</span>
                              </div>
                              <p className="text-xs text-slate-500">{proj.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                   </section>
+                 );
+               case 'education':
+                 return (
+                   <section key={section.id}>
+                      <h3 className="text-xs font-black text-emerald-500 uppercase tracking-widest mb-6">$ education</h3>
+                      <div className="space-y-4">
+                        {data.education.map(edu => (
+                          <div key={edu.id} className="p-4 border border-slate-900 rounded bg-slate-900">
+                             <div className="text-sm font-black text-white mb-1">{edu.degree}</div>
+                             <div className="text-xs text-emerald-400 mb-2">{edu.school}</div>
+                             <div className="text-[10px] text-slate-500">{edu.period}</div>
                           </div>
                         ))}
                       </div>

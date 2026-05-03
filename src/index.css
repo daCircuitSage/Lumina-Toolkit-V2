@@ -17,9 +17,30 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Prevent theme flash - set initial styles */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.light {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+html.dark {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
 @layer base {
   body {
-    @apply font-sans bg-[#F9FAFB] text-slate-900 transition-colors duration-300;
+    @apply font-sans transition-colors duration-300;
+  }
+  
+  /* Ensure no flash by setting initial styles */
+  html:not(.light):not(.dark) {
+    background-color: #f9fafb;
+    color: #111827;
   }
   
   .dark body {
@@ -48,11 +69,53 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 dark:bg-slate-800 rounded-full;
+  @apply bg-slate-300 dark:bg-slate-600 rounded-full;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-300 dark:bg-slate-700;
+  @apply bg-slate-400 dark:bg-slate-500;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent;
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: rgb(71 85 105) transparent;
+}
+
+/* Animation delays for loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
+/* Sidebar transitions */
+.sidebar-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Active state animations */
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
