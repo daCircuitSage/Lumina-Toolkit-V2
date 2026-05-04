@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import GlobalSearch from './GlobalSearch';
 import { Analytics, initializeGA, analyticsEvents } from '../lib/analytics';
@@ -91,18 +91,25 @@ export default function Layout({ children }: LayoutProps) {
     navigate(route);
   };
 
+  // SEO-friendly navigation function
+  const getRouteForTool = (toolId: string): string => {
+    return getRouteFromToolId(toolId);
+  };
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 transition-colors duration-300">
       <Sidebar 
         activeTool={activeTool}
         onSelect={handleToolSelect}
         onSearchOpen={() => setIsSearchOpen(true)}
+        getRouteForTool={getRouteForTool}
       />
       
       <GlobalSearch 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
         onSelect={handleToolSelect}
+        getRouteForTool={getRouteForTool}
       />
 
       <main className="flex-1 relative pt-16 md:pt-0 overflow-x-hidden">

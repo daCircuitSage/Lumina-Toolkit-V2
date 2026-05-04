@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Command, X, ArrowRight, Sparkles, Briefcase, Settings } from 'lucide-react';
 import { TOOLS } from '../constants';
@@ -9,9 +10,10 @@ interface GlobalSearchProps {
   isOpen: boolean;
   onClose: () => void;
   onSelect: (id: string) => void;
+  getRouteForTool?: (id: string) => string;
 }
 
-export default function GlobalSearch({ isOpen, onClose, onSelect }: GlobalSearchProps) {
+export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForTool }: GlobalSearchProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -66,6 +68,30 @@ export default function GlobalSearch({ isOpen, onClose, onSelect }: GlobalSearch
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, filteredTools, selectedIndex]);
+
+  // SEO-friendly route getter
+  const getRoute = (toolId: string): string => {
+    if (getRouteForTool) return getRouteForTool(toolId);
+    
+    // Fallback routes
+    const routeMap: { [key: string]: string } = {
+      'homepage': '/',
+      'dashboard': '/all-tools',
+      'chat': '/ai-assistant',
+      'resume': '/resume-builder',
+      'pdf': '/pdf-converter',
+      'age': '/age-calculator',
+      'gpa': '/gpa-calculator',
+      'caption': '/ai-caption-generator',
+      'youtube': '/youtube-title-generator',
+      'ats': '/ats-resume-checker',
+      'tracker': '/job-tracker',
+      'interview': '/interview-prep',
+      'cover-letter': '/cover-letter-generator',
+      'contact': '/contact'
+    };
+    return routeMap[toolId] || '/';
+  };
 
   const handleSelect = (id: string) => {
     // Track search usage
@@ -151,7 +177,7 @@ export default function GlobalSearch({ isOpen, onClose, onSelect }: GlobalSearch
                      <p className="text-[10px] font-black uppercase tracking-[3px] text-slate-400 mb-4 px-2">Popular Tools</p>
                      <div className={cn("gap-2", isMobile ? "space-y-3" : "grid grid-cols-2 gap-2")}>
                        {TOOLS.slice(1, 5).map(tool => (
-                         <QuickActionButton key={tool.id} tool={tool} onClick={() => handleSelect(tool.id)} isMobile={isMobile} />
+                         <QuickActionLink key={tool.id} tool={tool} getRoute={getRoute} onClick={() => handleSelect(tool.id)} isMobile={isMobile} />
                        ))}
                      </div>
                    </div>
@@ -171,8 +197,9 @@ export default function GlobalSearch({ isOpen, onClose, onSelect }: GlobalSearch
                     const Icon = tool.icon;
                     const isActive = index === selectedIndex;
                     return (
-                      <button
+                      <Link
                         key={tool.id}
+                        to={getRoute(tool.id)}
                         onMouseEnter={() => setSelectedIndex(index)}
                         onClick={() => handleSelect(tool.id)}
                         className={cn(
@@ -218,7 +245,7 @@ export default function GlobalSearch({ isOpen, onClose, onSelect }: GlobalSearch
                         {!isMobile && (
                           <ArrowRight size={18} className={cn("transition-transform group-hover:translate-x-1", isActive ? "opacity-100" : "opacity-0")} />
                         )}
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -258,10 +285,11 @@ export default function GlobalSearch({ isOpen, onClose, onSelect }: GlobalSearch
   );
 }
 
-function QuickActionButton({ tool, onClick, isMobile }: any) {
+function QuickActionLink({ tool, getRoute, onClick, isMobile }: any) {
   const Icon = tool.icon;
   return (
-    <button
+    <Link
+      to={getRoute(tool.id)}
       onClick={onClick}
       className={cn(
         "flex items-center gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-lg hover:shadow-indigo-500/5 transition-all text-left group",
@@ -284,6 +312,6 @@ function QuickActionButton({ tool, onClick, isMobile }: any) {
           isMobile ? "text-xs" : "text-[10px]"
         )}>{tool.description}</p>
       </div>
-    </button>
+    </Link>
   );
 }

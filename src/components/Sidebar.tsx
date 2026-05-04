@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { TOOLS } from '../constants';
 import { cn } from '../lib/utils';
 import Logo from './Logo';
@@ -21,9 +22,10 @@ interface SidebarProps {
   activeTool: string;
   onSelect: (id: string) => void;
   onSearchOpen: () => void;
+  getRouteForTool?: (id: string) => string;
 }
 
-export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarProps) {
+export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteForTool }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
@@ -38,6 +40,30 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
   const handleLogoClick = () => {
     onSelect('homepage');
     setIsMobileOpen(false);
+  };
+
+  // SEO-friendly route getter
+  const getRoute = (toolId: string): string => {
+    if (getRouteForTool) return getRouteForTool(toolId);
+    
+    // Fallback routes
+    const routeMap: { [key: string]: string } = {
+      'homepage': '/',
+      'dashboard': '/all-tools',
+      'chat': '/ai-assistant',
+      'resume': '/resume-builder',
+      'pdf': '/pdf-converter',
+      'age': '/age-calculator',
+      'gpa': '/gpa-calculator',
+      'caption': '/ai-caption-generator',
+      'youtube': '/youtube-title-generator',
+      'ats': '/ats-resume-checker',
+      'tracker': '/job-tracker',
+      'interview': '/interview-prep',
+      'cover-letter': '/cover-letter-generator',
+      'contact': '/contact'
+    };
+    return routeMap[toolId] || '/';
   };
 
   // Close mobile sidebar on window resize if it was open
@@ -115,8 +141,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                     const Icon = tool.icon;
                     const isActive = activeTool === tool.id;
                     return (
-                      <button
+                      <Link
                         key={tool.id}
+                        to={getRoute(tool.id)}
                         onClick={() => handleSelect(tool.id)}
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
@@ -127,7 +154,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                       >
                         <Icon size={20} />
                         <span className="text-sm font-heading font-semibold tracking-tight">{tool.name}</span>
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -142,8 +169,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                     const Icon = tool.icon;
                     const isActive = activeTool === tool.id;
                     return (
-                      <button
+                      <Link
                         key={tool.id}
+                        to={getRoute(tool.id)}
                         onClick={() => handleSelect(tool.id)}
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
@@ -154,7 +182,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                       >
                         <Icon size={20} />
                         <span className="text-sm font-heading font-semibold tracking-tight">{tool.name}</span>
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -169,8 +197,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                     const Icon = tool.icon;
                     const isActive = activeTool === tool.id;
                     return (
-                      <button
+                      <Link
                         key={tool.id}
+                        to={getRoute(tool.id)}
                         onClick={() => handleSelect(tool.id)}
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
@@ -181,7 +210,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                       >
                         <Icon size={20} />
                         <span className="text-sm font-heading font-semibold tracking-tight">{tool.name}</span>
-                      </button>
+                      </Link>
                     );
                   })}
                 </div>
@@ -189,12 +218,13 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
             </nav>
 
             <div className="p-4 border-t border-slate-50 dark:border-slate-800">
-               <button 
+               <Link 
+                to={getRoute('contact')}
                 onClick={() => handleSelect('contact')}
                 className="w-full py-3 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
                >
                  <MessageSquare size={14} /> Contact Support
-               </button>
+               </Link>
             </div>
           </motion.aside>
         )}
@@ -274,13 +304,17 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                 const isActive = activeTool === tool.id;
                 
                 return (
-                  <NavButton 
+                  <Link
                     key={tool.id}
-                    tool={tool}
-                    isActive={isActive}
-                    isOpen={isOpen}
+                    to={getRoute(tool.id)}
                     onClick={() => handleSelect(tool.id)}
-                  />
+                  >
+                    <NavButton 
+                      tool={tool}
+                      isActive={isActive}
+                      isOpen={isOpen}
+                    />
+                  </Link>
                 );
               })}
             </div>
@@ -296,13 +330,17 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                  const isActive = activeTool === tool.id;
                  
                  return (
-                   <NavButton 
+                   <Link
                     key={tool.id}
-                    tool={tool}
-                    isActive={isActive}
-                    isOpen={isOpen}
+                    to={getRoute(tool.id)}
                     onClick={() => handleSelect(tool.id)}
-                   />
+                   >
+                     <NavButton 
+                      tool={tool}
+                      isActive={isActive}
+                      isOpen={isOpen}
+                     />
+                   </Link>
                  );
                })}
              </div>
@@ -318,13 +356,17 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                  const isActive = activeTool === tool.id;
                  
                  return (
-                   <NavButton 
+                   <Link
                     key={tool.id}
-                    tool={tool}
-                    isActive={isActive}
-                    isOpen={isOpen}
+                    to={getRoute(tool.id)}
                     onClick={() => handleSelect(tool.id)}
-                   />
+                   >
+                     <NavButton 
+                      tool={tool}
+                      isActive={isActive}
+                      isOpen={isOpen}
+                     />
+                   </Link>
                  );
                })}
              </div>
@@ -354,12 +396,13 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
                 <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 mb-3">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div> System Active
                 </div>
-                <button 
+                <Link 
+                  to={getRoute('contact')}
                   onClick={() => handleSelect('contact')}
                   className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                 >
                   Support
-                </button>
+                </Link>
              </motion.div>
            )}
            <div className={cn(
@@ -397,13 +440,12 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen }: SidebarP
   );
 }
 
-function NavButton({ tool, isActive, isOpen, onClick }: any) {
+function NavButton({ tool, isActive, isOpen }: any) {
   const Icon = tool.icon;
   const { theme } = useTheme();
   
   return (
-    <button
-      onClick={onClick}
+    <div
       className={cn(
         "relative flex items-center transition-all duration-200 group",
         isOpen 
@@ -515,7 +557,7 @@ function NavButton({ tool, isActive, isOpen, onClick }: any) {
           {tool.name}
         </div>
       )}
-    </button>
+    </div>
   );
 }
 

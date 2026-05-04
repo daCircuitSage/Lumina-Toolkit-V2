@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TOOLS } from '../constants';
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles } from 'lucide-react';
@@ -58,12 +58,9 @@ export default function Dashboard() {
         {mainTools.map((tool, index) => {
           const Icon = tool.icon;
           return (
-            <motion.button
+            <Link
               key={tool.id}
-              onClick={() => handleToolClick(tool.id)}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
+              to={getRouteFromToolId(tool.id)}
               className="group p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl hover:border-indigo-200 dark:hover:border-indigo-500 hover:shadow-xl hover:shadow-indigo-500/5 transition-all text-left relative overflow-hidden"
             >
               <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-6 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors">
@@ -81,7 +78,7 @@ export default function Dashboard() {
               
               {/* Subtle background decoration */}
               <div className="absolute -right-4 -bottom-4 w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-full opacity-50 dark:opacity-20 group-hover:bg-indigo-50/50 dark:group-hover:bg-indigo-900/20 transition-colors" />
-            </motion.button>
+            </Link>
           );
         })}
       </div>
@@ -94,9 +91,9 @@ export default function Dashboard() {
             © 2026 Lumina Toolkit. Made for the next generation.
          </div>
          <div className="flex gap-6 text-sm text-slate-400 dark:text-slate-500">
-           <button onClick={() => handleToolClick('contact')} className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Feedback</button>
-           <button onClick={() => handleToolClick('contact')} className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Report Bug</button>
-           <button onClick={() => handleToolClick('contact')} className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Request Feature</button>
+           <Link to="/contact" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Feedback</Link>
+           <Link to="/contact" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Report Bug</Link>
+           <Link to="/contact" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Request Feature</Link>
          </div>
       </footer>
     </div>

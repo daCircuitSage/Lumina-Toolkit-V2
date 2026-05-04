@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { 
   ArrowRight, 
@@ -140,20 +140,20 @@ export default function Homepage() {
               transition={{ delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-              <button
-                onClick={() => handleToolClick('resume')}
+              <Link
+                to="/resume-builder"
                 className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center gap-2"
               >
                 Start Building Resume
                 <ArrowRight size={20} />
-              </button>
-              <button
-                onClick={() => handleToolClick('dashboard')}
+              </Link>
+              <Link
+                to="/all-tools"
                 className="px-8 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition-all flex items-center gap-2"
               >
                 Explore All Tools
                 <Zap size={20} />
-              </button>
+              </Link>
             </motion.div>
           </div>
         </div>
@@ -212,12 +212,9 @@ export default function Homepage() {
             {mainTools.map((tool, index) => {
               const Icon = tool.icon;
               return (
-                <motion.button
+                <Link
                   key={tool.id}
-                  onClick={() => handleToolClick(tool.id)}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  to={getRouteFromToolId(tool.id)}
                   className="group p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-blue-200 dark:hover:border-blue-500 hover:shadow-lg hover:shadow-blue-500/5 transition-all text-left relative overflow-hidden"
                 >
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
@@ -232,7 +229,7 @@ export default function Homepage() {
                   <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
                     Try Now <ArrowRight size={16} />
                   </div>
-                </motion.button>
+                </Link>
               );
             })}
           </div>
@@ -320,12 +317,9 @@ export default function Homepage() {
             {jobTools.map((tool, index) => {
               const Icon = tool.icon;
               return (
-                <motion.button
+                <Link
                   key={tool.id}
-                  onClick={() => handleToolClick(tool.id)}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  to={getRouteFromToolId(tool.id)}
                   className="group p-6 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 rounded-2xl hover:border-purple-200 dark:hover:border-purple-500 hover:shadow-lg hover:shadow-purple-500/5 transition-all text-left"
                 >
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/30 dark:to-pink-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -338,7 +332,7 @@ export default function Homepage() {
                   <div className="text-purple-600 dark:text-purple-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-all">
                     Launch →
                   </div>
-                </motion.button>
+                </Link>
               );
             })}
           </div>
@@ -424,19 +418,19 @@ export default function Homepage() {
             transition={{ delay: 0.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <button
-              onClick={() => handleToolClick('resume')}
+            <Link
+              to="/resume-builder"
               className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
             >
               Get Started Now
               <ArrowRight size={20} />
-            </button>
-            <button
-              onClick={() => handleToolClick('dashboard')}
+            </Link>
+            <Link
+              to="/all-tools"
               className="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white/10 transition-all"
             >
               View All Tools
-            </button>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -462,12 +456,12 @@ export default function Homepage() {
               <ul className="space-y-2">
                 {mainTools.slice(0, 4).map(tool => (
                   <li key={tool.id}>
-                    <button
-                      onClick={() => handleToolClick(tool.id)}
+                    <Link
+                      to={getRouteFromToolId(tool.id)}
                       className="text-slate-400 hover:text-white transition-colors text-sm"
                     >
                       {tool.name}
-                    </button>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -477,12 +471,12 @@ export default function Homepage() {
               <h4 className="font-semibold text-white mb-4">Company</h4>
               <ul className="space-y-2">
                 <li>
-                  <button
-                    onClick={() => handleToolClick('contact')}
+                  <Link
+                    to="/contact"
                     className="text-slate-400 hover:text-white transition-colors text-sm"
                   >
                     Contact
-                  </button>
+                  </Link>
                 </li>
                 <li>
                   <button className="text-slate-400 hover:text-white transition-colors text-sm">
