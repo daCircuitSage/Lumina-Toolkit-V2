@@ -1,7 +1,5 @@
 import express from "express";
 
-import { createServer as createViteServer } from "vite";
-
 import path from "path";
 
 import { fileURLToPath } from "url";
@@ -21,6 +19,16 @@ const __dirname = path.dirname(__filename);
 
 
 export default async function handler(req: any, res: any) {
+
+  // Enable CORS for all origins
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
 
   const app = express();
 
