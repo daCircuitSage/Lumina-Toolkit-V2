@@ -237,7 +237,8 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
         animate={{ width: isOpen ? 288 : 72 }}
         className={cn(
           "hidden md:flex fixed left-0 top-0 h-screen bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-r border-slate-200/60 dark:border-slate-800/60 z-40 flex-col transition-all duration-250 ease-out overflow-hidden shadow-xl",
-          "supports-[backdrop-filter]:bg-white/90 supports-[backdrop-filter]:dark:bg-slate-900/90"
+          "supports-[backdrop-filter]:bg-white/90 supports-[backdrop-filter]:dark:bg-slate-900/90",
+          "lg:block" // Always show on large screens
         )}
       >
         {/* Sidebar Header */}
@@ -267,11 +268,11 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
           <button
             onClick={onSearchOpen}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group border border-slate-200/60 dark:border-slate-700/60 bg-slate-50/60 dark:bg-slate-800/40 hover:border-indigo-300/60 dark:hover:border-indigo-600/60 hover:bg-white dark:hover:bg-slate-800/60 shadow-sm hover:shadow-md",
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group border border-slate-200/60 dark:border-slate-700/60 bg-slate-50/60 dark:bg-slate-800/40 hover:border-indigo-300/60 dark:hover:border-indigo-600/60 hover:bg-white dark:hover:bg-slate-800/60 shadow-sm hover:shadow-md relative",
               isOpen ? "w-full" : "w-12 h-12 justify-center"
             )}
           >
-            <Search size={16} className="text-slate-400/60 group-hover:text-indigo-500 transition-colors duration-200" />
+            <Search size={16} className="text-slate-400/60 group-hover:text-indigo-500 transition-colors duration-200 flex-shrink-0" />
             {isOpen && (
               <div className="flex-1 flex items-center justify-between text-left">
                 <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Search tools...</span>
@@ -291,7 +292,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
         </div>
 
         <nav className={cn(
-          "flex-1 overflow-y-scroll overflow-x-hidden transition-all duration-250",
+          "flex-1 overflow-y-scroll overflow-x-hidden transition-all duration-250 sidebar-scrollbar",
           isOpen ? "px-4 py-6 space-y-6" : "px-2 py-4 space-y-1"
         )}>
           <div>
@@ -434,7 +435,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
       <motion.div 
         initial={false}
         animate={{ width: isOpen ? 288 : 72 }}
-        className="hidden md:block transition-all duration-250 ease-out shrink-0" 
+        className="hidden md:block lg:block transition-all duration-250 ease-out shrink-0" 
       />
     </>
   );

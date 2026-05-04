@@ -112,8 +112,8 @@ export default function Layout({ children }: LayoutProps) {
         getRouteForTool={getRouteForTool}
       />
 
-      <main className="flex-1 relative pt-16 md:pt-0 overflow-x-hidden">
-        <div className="h-full">
+      <main className="flex-1 relative overflow-hidden">
+        <div className="h-full overflow-y-auto md:ml-0 transition-all duration-300">
           {children}
         </div>
       </main>
