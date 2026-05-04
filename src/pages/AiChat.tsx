@@ -12,6 +12,7 @@ import {
   Plus
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import InternalLinks from '../components/InternalLinks';
 
 interface Message {
   id: string;
@@ -112,7 +113,7 @@ export default function AiChat() {
       <header className="px-4 md:px-8 py-4 border-b border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between shrink-0 z-10 sticky top-0">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-            <Bot size={20} md:size={22} />
+            <Bot size={20} className="w-5 h-5 md:w-6 md:h-6" />
           </div>
           <div>
             <h1 className="text-sm md:text-lg font-bold text-slate-900 dark:text-white leading-tight">AI Assistant</h1>
@@ -128,7 +129,7 @@ export default function AiChat() {
           className="p-2 text-slate-400 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all"
           title="Clear session history"
         >
-          <Trash2 size={18} md:size={20} />
+          <Trash2 size={18} className="w-4 h-4 md:w-5 md:h-5" />
         </button>
       </header>
 
@@ -141,7 +142,7 @@ export default function AiChat() {
           {messages.length === 0 ? (
             <div className="min-h-[50vh] flex flex-col items-center justify-center text-center space-y-6 md:space-y-8 px-4 py-10">
               <div className="w-16 h-16 md:w-20 md:h-20 rounded-3xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                <Sparkles size={32} md:size={40} className="animate-pulse" />
+                <Sparkles size={32} className="w-8 h-8 md:w-10 md:h-10 animate-pulse" />
               </div>
               <div className="space-y-3">
                 <h2 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white">What's on your mind?</h2>
@@ -186,7 +187,7 @@ export default function AiChat() {
                         ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900" 
                         : "bg-indigo-600 text-white"
                     )}>
-                      {message.role === 'user' ? <User size={16} md:size={20} /> : <Bot size={16} md:size={20} />}
+                      {message.role === 'user' ? <User size={16} className="w-4 h-4 md:w-5 md:h-5" /> : <Bot size={16} className="w-4 h-4 md:w-5 md:h-5" />}
                     </div>
                     <div className={cn(
                       "flex flex-col space-y-1.5 max-w-[85%] sm:max-w-[80%] md:max-w-[70%]",
@@ -214,7 +215,7 @@ export default function AiChat() {
                   className="flex gap-3 md:gap-4"
                 >
                   <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-indigo-100 dark:shadow-none">
-                    <Bot size={16} md:size={20} />
+                    <Bot size={16} className="w-4 h-4 md:w-5 md:h-5" />
                   </div>
                   <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 px-6 py-4 rounded-3xl rounded-tl-none flex items-center gap-3 shadow-sm">
                     <div className="flex gap-1.5">
@@ -246,13 +247,18 @@ export default function AiChat() {
             disabled={!input.trim() || isLoading}
             className="absolute right-1.5 top-1.5 bottom-1.5 w-10 md:w-16 bg-indigo-600 text-white rounded-lg md:rounded-2xl flex items-center justify-center hover:bg-indigo-700 active:scale-95 transition-all disabled:opacity-50 disabled:active:scale-100 shadow-md shadow-indigo-200 dark:shadow-none"
           >
-            {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} md:size={20} />}
+            {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="w-4 h-4 md:w-5 md:h-5" />}
           </button>
         </div>
         <p className="text-center mt-3 text-[9px] md:text-[10px] text-slate-400 dark:text-slate-600 font-medium uppercase tracking-wider">
           AI generated content • session id: {sessionId.current.split('_')[1]}
         </p>
       </footer>
+      
+      {/* Internal Links for SEO */}
+      <div className="px-4 md:px-6 py-6">
+        <InternalLinks currentToolId="chat" title="Related AI Tools" />
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { Calendar, RefreshCw, Star, Info } from 'lucide-react';
 import { format, differenceInYears, differenceInMonths, differenceInDays, addYears, isAfter, isBefore } from 'date-fns';
 import { motion, AnimatePresence } from 'motion/react';
 import SeoContent from '../components/SeoContent';
+import InternalLinks from '../components/InternalLinks';
 
 export default function AgeCalculator() {
   const [dob, setDob] = useState('');
@@ -179,6 +180,11 @@ export default function AgeCalculator() {
         ]}
         ctaTitle="Celebrate every milestone."
       />
+      
+      {/* Internal Links for SEO */}
+      <div className="mt-12">
+        <InternalLinks currentToolId="age" title="Related Calculator Tools" />
+      </div>
     </div>
   );
 }

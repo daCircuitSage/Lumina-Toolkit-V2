@@ -28,6 +28,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import SeoContent from '../components/SeoContent';
+import InternalLinks from '../components/InternalLinks';
 import { analyticsEvents } from '../lib/analytics';
 
 type TemplateId = 'modern' | 'ats' | 'minimal' | 'creative' | 'corporate' | 'elegant' | 'techno' | 'executive' | 'designer' | 'hybrid';
@@ -1041,6 +1042,11 @@ export default function ResumeBuilder() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Internal Links for SEO */}
+      <div className="px-6 md:px-10 pb-10">
+        <InternalLinks currentToolId="resume" title="Related Career Tools" />
       </div>
     </div>
   );

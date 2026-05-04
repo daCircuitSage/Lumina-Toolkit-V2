@@ -13,6 +13,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import SeoContent from '../components/SeoContent';
+import InternalLinks from '../components/InternalLinks';
 
 interface ImageFile {
   id: string;
@@ -159,7 +160,7 @@ export default function PdfConverter() {
                        onClick={() => removeImage(img.id)}
                        className="p-2 text-slate-300 dark:text-slate-600 hover:text-red-500 transition-colors"
                     >
-                       <Trash2 size={16} md:size={18} />
+                       <Trash2 size={16} className="w-4 h-4 md:w-4 md:h-4" />
                     </button>
                   </motion.div>
                 ))}
@@ -279,6 +280,11 @@ export default function PdfConverter() {
         ]}
         ctaTitle="Forge your documents today."
       />
+      
+      {/* Internal Links for SEO */}
+      <div className="mt-12">
+        <InternalLinks currentToolId="pdf" title="Related Utility Tools" />
+      </div>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import SeoContent from '../../components/SeoContent';
+import InternalLinks from '../../components/InternalLinks';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import mammoth from 'mammoth';
@@ -728,6 +729,11 @@ export default function AtsChecker() {
           ]}
           ctaTitle="Experience production-grade ATS analysis."
         />
+        
+        {/* Internal Links for SEO */}
+        <div className="mt-12">
+          <InternalLinks currentToolId="ats" title="Related Job Search Tools" />
+        </div>
       </div>
     </div>
   );
