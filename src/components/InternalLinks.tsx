@@ -138,14 +138,14 @@ export default function InternalLinks({ currentToolId, title = "Related Tools" }
               (You might also need)
             </span>
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
             {relatedTools.map((tool) => {
               const Icon = tool.icon;
               return (
                 <Link
                   key={tool.id}
                   to={getRouteFromToolId(tool.id)}
-                  className="group p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-indigo-200 dark:hover:border-indigo-500 hover:shadow-md hover:shadow-indigo-500/5 transition-all text-left"
+                  className="group p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-indigo-200 dark:hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition-all text-left"
                   aria-label={`Navigate to ${tool.name}`}
                 >
                   <div className="flex items-start gap-3">
