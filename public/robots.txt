@@ -16,4 +16,4 @@ User-agent: WhatsApp
 Allow: /
 
 # Sitemap
-Sitemap: https://lumina-toolkit.vercel.app/sitemap.xml
+Sitemap: https://lumintoolkit.com/sitemap.xml

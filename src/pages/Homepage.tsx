@@ -66,13 +66,13 @@ export default function Homepage() {
     title: 'Professional Productivity Suite',
     description: 'Create professional resumes, optimize for ATS, generate cover letters, and boost your content with AI. Everything you need to accelerate your career growth.',
     keywords: 'resume builder, ATS checker, PDF converter, AI tools, cover letter generator, job tracker, interview prep',
-    canonicalUrl: 'https://lumina-toolkit.vercel.app',
+    canonicalUrl: 'https://lumintoolkit.com',
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'Lumina Toolkit',
       description: 'Professional productivity suite with resume builder, ATS checker, PDF converter, and AI tools',
-      url: 'https://lumina-toolkit.vercel.app',
+      url: 'https://lumintoolkit.com',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web Browser',
       offers: {

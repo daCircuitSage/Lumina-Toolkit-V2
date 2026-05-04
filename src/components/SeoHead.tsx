@@ -16,9 +16,9 @@ const defaultMeta = {
   title: 'Lumina Toolkit - Professional Productivity Suite',
   description: 'Lumina Toolkit - Professional productivity suite with resume builder, ATS checker, PDF converter, age calculator, GPA calculator, AI tools, and more. Free online tools for career development.',
   keywords: 'resume builder, ATS checker, PDF converter, age calculator, GPA calculator, AI tools, cover letter generator, job tracker, interview prep, productivity tools',
-  ogImage: 'https://lumina-toolkit.vercel.app/og-image.png',
+  ogImage: 'https://lumintoolkit.com/og-image.png',
   ogType: 'website',
-  canonicalUrl: 'https://lumina-toolkit.vercel.app',
+  canonicalUrl: 'https://lumintoolkit.com',
 };
 
 export default function SeoHead({
@@ -63,7 +63,7 @@ export default function SeoHead({
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={finalOgImage} />
-      <meta name="twitter:domain" content="lumina-toolkit.vercel.app" />
+      <meta name="twitter:domain" content="lumintoolkit.com" />
       
       {/* Canonical URL */}
       <link rel="canonical" href={finalCanonicalUrl} />
