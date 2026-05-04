@@ -4,10 +4,12 @@
  */
 
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
+import { AlertTriangle } from 'lucide-react';
 import Layout from '../components/Layout';
 import SeoHead from '../components/SeoHead';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 // Lazily load pages
 const Homepage = React.lazy(() => import('../pages/Homepage'));
@@ -34,6 +36,34 @@ const LoadingFallback = () => (
   </div>
 );
 
+const LazyLoadWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ErrorBoundary fallback={
+    <div className="flex items-center justify-center h-[calc(100vh-64px)] md:h-screen">
+      <div className="text-center">
+        <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-full inline-block mb-4">
+          <AlertTriangle className="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
+        </div>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          Failed to load page
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 mb-4">
+          Please refresh the page or try again later.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
+        >
+          Refresh Page
+        </button>
+      </div>
+    </div>
+  }>
+    <Suspense fallback={<LoadingFallback />}>
+      {children}
+    </Suspense>
+  </ErrorBoundary>
+);
+
 const AnimatedPage = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
@@ -56,9 +86,9 @@ const AppRoutes = () => {
               title="Lumina Toolkit - Free Productivity Tools & AI Assistants"
               description="Access 14+ free AI-powered tools including resume builders, PDF converters, calculators, and job search assistants. Boost your productivity today."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <Homepage />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -70,9 +100,9 @@ const AppRoutes = () => {
               title="All Tools - Lumina Toolkit"
               description="Explore our complete collection of free productivity tools, AI assistants, and utilities for work and study."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <Dashboard />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -84,9 +114,9 @@ const AppRoutes = () => {
               title="AI Assistant - Free Chat & Productivity Help | Lumina Toolkit"
               description="Chat with your personal AI productivity companion for instant help with tasks, writing, and problem-solving."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <AiChat />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -98,9 +128,9 @@ const AppRoutes = () => {
               title="Resume Builder - Create Professional Resumes Free | Lumina Toolkit"
               description="Build professional resumes in minutes with our free resume builder. Multiple templates and AI-powered suggestions."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <ResumeBuilder />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -112,9 +142,9 @@ const AppRoutes = () => {
               title="PDF Converter - Convert Images to PDF Free | Lumina Toolkit"
               description="Convert images and documents to high-quality PDF files instantly. Free, secure, and no registration required."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <PdfConverter />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -126,9 +156,9 @@ const AppRoutes = () => {
               title="Age Calculator - Calculate Exact Age & Birthday | Lumina Toolkit"
               description="Calculate your exact age in years, months, and days. Find out when your next birthday is and more."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <AgeCalculator />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -140,9 +170,9 @@ const AppRoutes = () => {
               title="GPA Calculator - Calculate Grade Point Average Free | Lumina Toolkit"
               description="Calculate your GPA instantly with our free calculator. Supports multiple grading scales and weighted courses."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <GpaCalculator />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -154,9 +184,9 @@ const AppRoutes = () => {
               title="AI Caption Generator - Create Engaging Social Media Captions | Lumina Toolkit"
               description="Generate compelling captions for social media posts using AI. Perfect for Instagram, Facebook, Twitter, and more."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <AiCaption />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -168,9 +198,9 @@ const AppRoutes = () => {
               title="YouTube Title Generator - Optimize Video Titles for CTR | Lumina Toolkit"
               description="Create catchy, SEO-optimized YouTube titles that increase click-through rates and video visibility."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <YoutubeTitles />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -182,9 +212,9 @@ const AppRoutes = () => {
               title="ATS Resume Checker - Optimize Resume for ATS Systems | Lumina Toolkit"
               description="Analyze and optimize your resume for Applicant Tracking Systems (ATS). Increase your chances of getting interviews."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <AtsChecker />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -196,9 +226,9 @@ const AppRoutes = () => {
               title="Job Tracker - Track Job Applications Free | Lumina Toolkit"
               description="Monitor your job applications from submission to interview. Stay organized and never miss an opportunity."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <JobTracker />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -210,9 +240,9 @@ const AppRoutes = () => {
               title="Interview Preparation - Practice Questions & Coaching | Lumina Toolkit"
               description="Prepare for job interviews with AI-powered coaching, practice questions, and personalized feedback."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <InterviewPrep />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -224,9 +254,9 @@ const AppRoutes = () => {
               title="Cover Letter Generator - AI-Powered Cover Letters | Lumina Toolkit"
               description="Create tailored, professional cover letters in minutes with AI. Customize for any job application."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <CoverLetter />
-            </Suspense>
+            </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
       } />
@@ -238,9 +268,51 @@ const AppRoutes = () => {
               title="Contact Us - Support & Feedback | Lumina Toolkit"
               description="Get help, suggest features, or report issues. We're here to improve your toolkit experience."
             />
-            <Suspense fallback={<LoadingFallback />}>
+            <LazyLoadWrapper>
               <Contact />
-            </Suspense>
+            </LazyLoadWrapper>
+          </Layout>
+        </AnimatedPage>
+      } />
+      
+      {/* 404 Catch-all Route */}
+      <Route path="*" element={
+        <AnimatedPage>
+          <Layout>
+            <SeoHead
+              title="Page Not Found | Lumina Toolkit"
+              description="The page you're looking for doesn't exist. Explore our free productivity tools instead."
+            />
+            <div className="flex items-center justify-center h-[calc(100vh-64px)] md:h-screen">
+              <div className="text-center max-w-md mx-auto px-4">
+                <div className="p-3 bg-red-100 dark:bg-red-900/20 rounded-full inline-block mb-6">
+                  <AlertTriangle className="w-12 h-12 text-red-600 dark:text-red-400" />
+                </div>
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  404
+                </h1>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  Page not found
+                </h2>
+                <p className="text-gray-600 dark:text-gray-300 mb-8">
+                  The page you're looking for doesn't exist. Let's get you back to exploring our free productivity tools.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Link
+                    to="/"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium"
+                  >
+                    Go Home
+                  </Link>
+                  <Link
+                    to="/all-tools"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors font-medium"
+                  >
+                    Browse Tools
+                  </Link>
+                </div>
+              </div>
+            </div>
           </Layout>
         </AnimatedPage>
       } />
