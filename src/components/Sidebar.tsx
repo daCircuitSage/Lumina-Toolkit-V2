@@ -125,7 +125,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-slate-900 z-[70] md:hidden flex flex-col shadow-2xl transition-colors"
+            className="fixed left-0 top-0 bottom-0 h-[100vh] max-h-[100vh] w-72 bg-white dark:bg-slate-900 z-[70] md:hidden flex flex-col shadow-2xl transition-colors"
           >
             <div className="p-6 flex items-center justify-between border-b border-slate-50 dark:border-slate-800">
               <Logo onClick={handleLogoClick} />
@@ -133,7 +133,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                 <X size={20} />
               </button>
             </div>
-            <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+            <nav className="flex-1 min-h-0 p-4 space-y-6 overflow-y-auto">
               <div>
                 <p className="px-4 text-[10px] font-black uppercase tracking-[3px] text-slate-400 mb-3">General</p>
                 <div className="space-y-1">
@@ -236,14 +236,19 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
         initial={false}
         animate={{ width: isOpen ? 288 : 72 }}
         className={cn(
-          "hidden md:flex fixed left-0 top-0 h-screen bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-r border-slate-200/60 dark:border-slate-800/60 z-40 flex-col transition-all duration-250 ease-out overflow-hidden shadow-xl",
-          "supports-[backdrop-filter]:bg-white/90 supports-[backdrop-filter]:dark:bg-slate-900/90",
+          "hidden md:flex fixed left-0 top-0 h-screen bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-r border-slate-200/40 dark:border-slate-800/40 z-40 flex-col transition-all duration-300 ease-out shadow-2xl",
+          "supports-[backdrop-filter]:bg-white/85 supports-[backdrop-filter]:dark:bg-slate-900/85",
           "lg:block" // Always show on large screens
         )}
       >
+        {/* Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/10 to-purple-500/5 pointer-events-none z-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-0"></div>
+        
         {/* Sidebar Header */}
-        <div className="relative h-16 shrink-0 border-b border-slate-200/60 dark:border-slate-800/60">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-50/60 via-blue-50/40 to-transparent dark:from-indigo-900/20 dark:via-blue-900/10 dark:to-transparent"></div>
+        <div className="relative h-16 shrink-0 border-b border-slate-200/40 dark:border-slate-800/40 overflow-hidden z-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-blue-500/8 to-purple-500/10 dark:from-indigo-500/20 dark:via-blue-500/15 dark:to-purple-500/20 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent dark:from-white/5 dark:to-transparent"></div>
           <div className={cn(
             "relative h-full flex items-center transition-all duration-250",
             isOpen ? "px-6 justify-between" : "px-0 justify-center"
@@ -262,43 +267,79 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 
         {/* Desktop Search Trigger */}
         <div className={cn(
-          "shrink-0 transition-all duration-250",
+          "shrink-0 transition-all duration-300 relative z-10",
           isOpen ? "px-4 py-4" : "px-3 py-3"
         )}>
-          <button
+          <motion.button
             onClick={onSearchOpen}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group border border-slate-200/60 dark:border-slate-700/60 bg-slate-50/60 dark:bg-slate-800/40 hover:border-indigo-300/60 dark:hover:border-indigo-600/60 hover:bg-white dark:hover:bg-slate-800/60 shadow-sm hover:shadow-md relative",
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group border border-slate-200/40 dark:border-slate-700/40 bg-slate-50/60 dark:bg-slate-800/40 hover:border-indigo-300/60 dark:hover:border-indigo-600/60 hover:bg-white dark:hover:bg-slate-800/60 shadow-sm hover:shadow-lg relative overflow-hidden",
               isOpen ? "w-full" : "w-12 h-12 justify-center"
             )}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <Search size={16} className="text-slate-400/60 group-hover:text-indigo-500 transition-colors duration-200 flex-shrink-0" />
+            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Search size={16} className="text-slate-400/60 group-hover:text-indigo-500 transition-colors duration-300 flex-shrink-0 relative z-10" />
+            </motion.div>
             {isOpen && (
-              <div className="flex-1 flex items-center justify-between text-left">
+              <motion.div 
+                className="flex-1 flex items-center justify-between text-left relative z-10"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3 }}
+              >
                 <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Search tools...</span>
-                <div className="flex items-center gap-1">
-                  <kbd className="px-2 py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] font-semibold text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm">⌘</kbd>
-                  <kbd className="px-2 py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] font-semibold text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm">K</kbd>
-                </div>
-              </div>
+                <motion.div 
+                  className="flex items-center gap-1"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <kbd className="px-2 py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] font-semibold text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-200">⌘</kbd>
+                  <kbd className="px-2 py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] font-semibold text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-200">K</kbd>
+                </motion.div>
+              </motion.div>
             )}
             {!isOpen && (
-               <div className="absolute left-full ml-3 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white text-[11px] rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-[-6px] group-hover:translate-x-0 pointer-events-none z-50 shadow-xl border border-slate-700 dark:border-slate-600 font-semibold uppercase tracking-wider whitespace-nowrap">
+               <motion.div 
+                 className="absolute left-full ml-3 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white text-[11px] rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-[-6px] group-hover:translate-x-0 pointer-events-none z-50 shadow-xl border border-slate-700 dark:border-slate-600 font-semibold uppercase tracking-wider whitespace-nowrap"
+                 initial={{ opacity: 0, scale: 0.8 }}
+                 whileHover={{ opacity: 1, scale: 1 }}
+               >
                 <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-slate-900 dark:bg-slate-800 rotate-45 border-l border-b border-slate-700 dark:border-slate-600"></div>
                 Search (⌘K)
-              </div>
+              </motion.div>
             )}
-          </button>
+          </motion.button>
         </div>
 
-        <nav className={cn(
-          "flex-1 overflow-y-scroll overflow-x-hidden transition-all duration-250 sidebar-scrollbar",
-          isOpen ? "px-4 py-6 space-y-6" : "px-2 py-4 space-y-1"
-        )}>
-          <div>
-            <div className={cn("text-[11px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}>
-              <Sparkles size={12} className="text-indigo-500" /> Utility Tools
-            </div>
+        <div className="flex-1 relative z-10">
+          <div 
+            className="h-full overflow-y-auto overflow-x-hidden sidebar-scrollbar"
+            style={{ 
+              height: 'calc(100vh - 4rem - 5rem - 12rem)', // Header (4rem) + Search (5rem) + Footer (12rem)
+              maxHeight: 'calc(100vh - 4rem - 5rem - 12rem)'
+            }}
+          >
+          <div className={cn("space-y-6", isOpen ? "px-4 py-6" : "px-2 py-4 space-y-1")}>
+            <motion.div 
+              className={cn("text-[11px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles size={12} className="text-indigo-500" />
+              </motion.div>
+              <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Utility Tools</span>
+            </motion.div>
             <div className="space-y-1">
               {TOOLS.filter(t => !t.category).map((tool) => {
                 const Icon = tool.icon;
@@ -322,9 +363,20 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
           </div>
 
           <div>
-             <div className={cn("text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}>
-               <Briefcase size={12} /> Job Toolkit
-             </div>
+             <motion.div 
+               className={cn("text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
+               initial={{ opacity: 0, y: -10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.3, delay: 0.2 }}
+             >
+               <motion.div
+                 animate={{ scale: [1, 1.2, 1] }}
+                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+               >
+                 <Briefcase size={12} className="text-indigo-600 dark:text-indigo-400" />
+               </motion.div>
+               <span className="bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">Job Toolkit</span>
+             </motion.div>
              <div className="space-y-1">
                {TOOLS.filter(t => t.category === 'Job Toolkit').map((tool) => {
                  const Icon = tool.icon;
@@ -348,9 +400,20 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
           </div>
 
           <div>
-             <div className={cn("text-[11px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}>
-               <Settings size={12} /> System
-             </div>
+             <motion.div 
+               className={cn("text-[11px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
+               initial={{ opacity: 0, y: -10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.3, delay: 0.3 }}
+             >
+               <motion.div
+                 animate={{ rotate: [0, 180, 360] }}
+                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+               >
+                 <Settings size={12} className="text-slate-500 dark:text-slate-500" />
+               </motion.div>
+               <span className="bg-gradient-to-r from-slate-500 to-slate-600 bg-clip-text text-transparent">System</span>
+             </motion.div>
              <div className="space-y-1">
                {TOOLS.filter(t => t.category === 'System').map((tool) => {
                  const Icon = tool.icon;
@@ -372,62 +435,118 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                })}
              </div>
           </div>
-        </nav>
+          </div>
+        </div>
 
         {/* Sidebar Footer */}
         <div className={cn(
-          "p-4 border-t border-slate-200/60 dark:border-slate-800/60 shrink-0 transition-all duration-250",
+          "p-4 border-t border-slate-200/40 dark:border-slate-800/40 shrink-0 transition-all duration-300 relative z-10",
           !isOpen && "p-2"
         )}>
            {isOpen && (
              <motion.div 
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
-               className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50 rounded-2xl p-4 mb-4 border border-slate-200/60 dark:border-slate-700/60"
+               transition={{ duration: 0.4, delay: 0.4 }}
+               className="relative bg-gradient-to-br from-slate-50/80 to-slate-100/80 dark:from-slate-800/60 dark:to-slate-900/60 rounded-2xl p-4 mb-4 border border-slate-200/40 dark:border-slate-700/40 backdrop-blur-sm"
+               whileHover={{ scale: 1.02, y: -2 }}
              >
                 <div className="flex items-center justify-between mb-3">
-                   <p className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">Settings</p>
-                   <button 
-                    onClick={toggleTheme}
-                    className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all duration-200 border border-slate-200/60 dark:border-slate-700/60"
+                   <motion.p 
+                     className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider"
+                     animate={{ opacity: [0.7, 1, 0.7] }}
+                     transition={{ duration: 2, repeat: Infinity }}
                    >
-                     {theme === 'light' ? <Moon size={12} /> : <Sun size={12} />}
-                   </button>
+                     Settings
+                   </motion.p>
+                   <motion.button 
+                    onClick={toggleTheme}
+                    className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all duration-300 border border-slate-200/40 dark:border-slate-700/40"
+                    whileHover={{ scale: 1.1, rotate: 180 }}
+                    whileTap={{ scale: 0.9 }}
+                   >
+                     <motion.div
+                       animate={{ rotate: theme === 'light' ? 0 : 360 }}
+                       transition={{ duration: 0.5 }}
+                     >
+                       {theme === 'light' ? <Moon size={12} /> : <Sun size={12} />}
+                     </motion.div>
+                   </motion.button>
                 </div>
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div> System Active
-                </div>
-                <Link 
-                  to={getRoute('contact')}
-                  onClick={() => handleSelect('contact')}
-                  className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
+                <motion.div 
+                  className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 mb-3"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
                 >
-                  Support
-                </Link>
+                  <motion.div 
+                    className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"
+                    animate={{ scale: [1, 1.5, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  ></motion.div> System Active
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link 
+                    to={getRoute('contact')}
+                    onClick={() => handleSelect('contact')}
+                    className="w-full py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] relative overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <motion.div
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
+                        Support
+                      </motion.div>
+                    </span>
+                  </Link>
+                </motion.div>
              </motion.div>
            )}
-           <div className={cn(
-             "flex items-center gap-2",
-             !isOpen && "flex-col gap-2"
-           )}>
-             <button 
+           <motion.div 
+             className={cn(
+               "flex items-center gap-2",
+               !isOpen && "flex-col gap-2"
+             )}
+             initial={{ opacity: 0, y: 10 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.4, delay: 0.5 }}
+           >
+             <motion.button 
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                  "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-all duration-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60",
+                  "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-all duration-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/40 dark:border-slate-700/40",
                   isOpen ? "flex-1 py-3" : "w-12 h-12 flex items-center justify-center"
                 )}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Menu size={16} />
-             </button>
+                <motion.div
+                  animate={{ rotate: isOpen ? 0 : 180 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Menu size={16} />
+                </motion.div>
+             </motion.button>
              {!isOpen && (
-              <button 
+              <motion.button 
                 onClick={toggleTheme}
-                className="w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-all duration-200 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60"
+                className="w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-all duration-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/40 dark:border-slate-700/40"
+                whileHover={{ scale: 1.1, rotate: 180 }}
+                whileTap={{ scale: 0.9 }}
               >
-                {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-              </button>
+                <motion.div
+                  animate={{ rotate: theme === 'light' ? 0 : 360 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+                </motion.div>
+              </motion.button>
              )}
-           </div>
+           </motion.div>
         </div>
       </motion.aside>
       
@@ -444,13 +563,20 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 function NavButton({ tool, isActive, isOpen }: any) {
   const Icon = tool.icon;
   const { theme } = useTheme();
+  const [isHovered, setIsHovered] = useState(false);
   
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
       className={cn(
-        "relative flex items-center transition-all duration-200 group",
+        "relative flex items-center transition-all duration-300 group",
         isOpen 
-          ? "w-full gap-3 px-3 py-2 rounded-xl" 
+          ? "w-full gap-3 px-3 py-2.5 rounded-xl" 
           : "w-12 h-12 mx-auto rounded-xl justify-center"
       )}
       style={{
@@ -475,7 +601,14 @@ function NavButton({ tool, isActive, isOpen }: any) {
           : isOpen
           ? '1px solid transparent'
           : '1px solid transparent',
-        opacity: isActive ? 1 : 0.7,
+        opacity: isActive ? 1 : 0.8,
+        boxShadow: isActive 
+          ? isOpen 
+            ? '0 0 20px rgba(99, 102, 241, 0.3)' 
+            : '0 0 15px rgba(99, 102, 241, 0.4)'
+          : isHovered 
+            ? '0 4px 20px rgba(0, 0, 0, 0.1)' 
+            : 'none',
       }}
       onMouseEnter={(e) => {
         if (!isActive) {
@@ -494,32 +627,43 @@ function NavButton({ tool, isActive, isOpen }: any) {
           e.currentTarget.style.backgroundColor = 'transparent';
           e.currentTarget.style.borderColor = 'transparent';
           e.currentTarget.style.color = theme === 'dark' ? 'rgb(148 163 184)' : 'rgb(71 85 105)';
-          e.currentTarget.style.opacity = '0.7';
+          e.currentTarget.style.opacity = '0.8';
         }
       }}
     >
-      <div className={cn(
-        "flex items-center justify-center transition-all duration-200",
-        isOpen ? "w-10 h-10 rounded-lg" : "w-8 h-8 rounded-lg"
-      )}
-      style={{
-        backgroundColor: isActive 
-          ? isOpen 
-            ? theme === 'dark' ? 'rgb(30 58 138)' : 'rgb(224 231 255)' // indigo-900 dark, indigo-100 light
-            : 'rgba(255, 255, 255, 0.2)'
-          : isOpen
-          ? theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)' // slate-800 dark, slate-100 light
-          : theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)',
-        color: isActive 
-          ? isOpen 
-            ? theme === 'dark' ? 'rgb(165 180 252)' : 'rgb(79 70 229)' // indigo-400 dark, indigo-600 light
-            : 'white'
-          : isOpen
-          ? theme === 'dark' ? 'rgb(100 116 139)' : 'rgb(100 116 139)' // slate-500
-          : theme === 'dark' ? 'rgb(100 116 139)' : 'rgb(100 116 139)',
-      }}>
-        <Icon size={isOpen ? 16 : 14} className="transition-colors duration-200" />
-      </div>
+      <motion.div 
+        className={cn(
+          "flex items-center justify-center transition-all duration-300",
+          isOpen ? "w-10 h-10 rounded-lg" : "w-8 h-8 rounded-lg"
+        )}
+        animate={{
+          rotate: isHovered ? 360 : 0,
+          scale: isHovered ? 1.1 : 1
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        style={{
+          backgroundColor: isActive 
+            ? isOpen 
+              ? theme === 'dark' ? 'rgb(30 58 138)' : 'rgb(224 231 255)' // indigo-900 dark, indigo-100 light
+              : 'rgba(255, 255, 255, 0.2)'
+            : isOpen
+            ? theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)' // slate-800 dark, slate-100 light
+            : theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)',
+          color: isActive 
+            ? isOpen 
+              ? theme === 'dark' ? 'rgb(165 180 252)' : 'rgb(79 70 229)' // indigo-400 dark, indigo-600 light
+              : 'white'
+            : isOpen
+            ? theme === 'dark' ? 'rgb(100 116 139)' : 'rgb(100 116 139)' // slate-500
+            : theme === 'dark' ? 'rgb(100 116 139)' : 'rgb(100 116 139)',
+          boxShadow: isActive 
+            ? '0 0 15px rgba(99, 102, 241, 0.4)' 
+            : isHovered 
+            ? '0 0 10px rgba(99, 102, 241, 0.2)' 
+            : 'none',
+        }}>
+        <Icon size={isOpen ? 16 : 14} className="transition-colors duration-300" />
+      </motion.div>
       {isOpen && (
         <motion.div 
           initial={{ opacity: 0, x: -10 }}
@@ -558,7 +702,7 @@ function NavButton({ tool, isActive, isOpen }: any) {
           {tool.name}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
