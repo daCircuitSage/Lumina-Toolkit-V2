@@ -11,7 +11,7 @@ export default defineConfig(({mode}) => {
     plugins: [react(), tailwindcss()],
     base: isProduction ? '/' : '/',
     define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
+      'process.env.MISTRAL_API_KEY': JSON.stringify(env.MISTRAL_API_KEY),
       // VITE_ variables are automatically exposed by Vite, no manual definition needed
     },
     resolve: {

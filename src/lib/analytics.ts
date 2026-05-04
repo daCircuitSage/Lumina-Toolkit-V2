@@ -84,7 +84,6 @@ export const initializeGA = (gaId: string) => {
 declare global {
   interface Window {
     gtag: (...args: any[]) => void;
-    va: (event: "beforeSend" | "event" | "pageview", properties?: unknown) => void;
     dataLayer: any[];
   }
 }

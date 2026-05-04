@@ -163,7 +163,7 @@ export default function YoutubeTitles() {
                              onClick={() => copyToClipboard(title, idx)}
                              className="p-2 ml-3 md:ml-4 text-slate-300 dark:text-slate-600 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg md:rounded-xl transition-all shrink-0 border border-transparent dark:border-slate-800"
                            >
-                             {copiedIndex === idx ? <Check size={18} /> : <Copy size={16} md:size={18} />}
+                             {copiedIndex === idx ? <Check size={18} /> : <Copy size={16} />}
                            </button>
                         </motion.div>
                       ))}

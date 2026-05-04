@@ -68,13 +68,20 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 
   // Close mobile sidebar on window resize if it was open
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMobileOpen(false);
-      }
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (window.innerWidth >= 768) {
+          setIsMobileOpen(false);
+        }
+      }, 100);
     };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return (
