@@ -19,6 +19,18 @@
       "dest": "/sitemap.xml"
     },
     {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/favicon.svg",
+      "dest": "/favicon.svg"
+    },
+    {
+      "src": "/googlea3b82a96ec7a037f.html",
+      "dest": "/googlea3b82a96ec7a037f.html"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
