@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { 
@@ -31,6 +31,7 @@ import SemanticHeading from '../components/SemanticHeading';
 
 export default function Homepage() {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   // Map tool IDs to routes
   const getRouteFromToolId = (toolId: string): string => {
@@ -95,7 +96,32 @@ export default function Homepage() {
   useSeo(seoData);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-[#F8FAFC] to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div className="min-h-screen bg-gradient-to-b from-white via-[#F8FAFC] to-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 relative overflow-hidden">
+      
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute w-96 h-96 bg-blue-400/10 rounded-full blur-3xl" 
+          style={{
+            left: '10%',
+            top: '20%',
+            animation: 'float 6s ease-in-out infinite'
+          }}
+        />
+        <div className="absolute w-80 h-80 bg-indigo-400/10 rounded-full blur-3xl" 
+          style={{
+            right: '15%',
+            top: '60%',
+            animation: 'float 8s ease-in-out infinite reverse'
+          }}
+        />
+        <div className="absolute w-64 h-64 bg-purple-400/10 rounded-full blur-3xl" 
+          style={{
+            left: '70%',
+            bottom: '20%',
+            animation: 'float 7s ease-in-out infinite'
+          }}
+        />
+      </div>
       
       {/* Hero Section */}
       <section className="relative overflow-hidden">
@@ -115,12 +141,28 @@ export default function Homepage() {
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+                className="inline-block cursor-pointer"
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+                whileHover={{ 
+                  scale: 1.05,
+                  textShadow: "0 0 30px rgba(59, 130, 246, 0.5)"
+                }}
               >
                 Build Your Career with
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+                <motion.span 
+                  className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400"
+                  animate={{
+                    backgroundPosition: isHovered ? "100% 50%" : "0% 50%",
+                  }}
+                  transition={{ duration: 0.5 }}
+                  style={{
+                    backgroundSize: "200% 200%"
+                  }}
+                >
                   Lumina Toolkit
-                </span>
+                </motion.span>
               </motion.span>
             </SemanticHeading>
             
