@@ -49,6 +49,28 @@ export default function MinimalTemplate({ data }: { data: ResumeData }) {
            </div>
         </section>
 
+        {/* Custom Sections */}
+        {data.customSections.length > 0 && (
+          <section className="grid grid-cols-4 gap-8">
+            <span className="col-span-1 text-[10px] font-black uppercase tracking-[0.3em] text-gray-300">Additional</span>
+            <div className="col-span-3 space-y-8">
+              {data.customSections.map(section => (
+                <div key={section.id}>
+                  <h3 className="text-lg font-bold tracking-tight text-black mb-4">{section.title}</h3>
+                  <div className="space-y-3">
+                    {section.items.map(item => (
+                      <div key={item.id} className="grid grid-cols-3 gap-4">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{item.name}</span>
+                        <p className="col-span-2 text-sm text-gray-600 leading-relaxed">{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Footer info Grid */}
         <div className="mt-auto grid grid-cols-2 gap-20 pt-16 border-t border-gray-100">
            <section className="space-y-6">

@@ -110,7 +110,7 @@ export default function ResumeBuilderApp() {
 
       <main className="flex-1 flex overflow-hidden lg:flex-row flex-col min-h-0">
         {/* Sidebar: Template Selection */}
-        <aside className="lg:w-20 w-full lg:h-full h-auto bg-white border-r border-slate-200 flex lg:flex-col flex-row items-center lg:justify-center justify-start lg:py-6 py-2 px-6 lg:px-0 gap-6 lg:gap-6 overflow-x-auto lg:shrink-0 order-2 lg:order-1 custom-scrollbar">
+        <aside className="lg:w-20 w-full lg:h-full h-auto bg-white border-r border-slate-200 flex lg:flex-col flex-row items-center lg:justify-center justify-start lg:py-6 py-2 px-6 lg:px-0 gap-6 lg:gap-6 overflow-x-auto lg:shrink-0 order-2 lg:order-1 resume-scrollbar">
           <TemplateSelector
             activeTemplate={data.activeTemplate}
             onSelect={(id) => updateData({ activeTemplate: id })}
@@ -121,7 +121,7 @@ export default function ResumeBuilderApp() {
         <div className="flex-1 flex lg:flex-row flex-col overflow-hidden order-1 lg:order-2 min-h-0">
           {/* Editor Panel */}
           <div className={cn(
-            "flex-1 overflow-y-auto min-h-0",
+            "flex-1 layout-stable min-h-0 resume-scrollbar",
             view === 'edit' ? "block lg:flex" : "hidden lg:flex"
           )}>
             <Editor data={data} onChange={updateData} />

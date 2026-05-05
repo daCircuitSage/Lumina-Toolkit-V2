@@ -113,7 +113,7 @@ export default function Layout({ children }: LayoutProps) {
       />
 
       <main className="flex-1 relative overflow-hidden">
-        <div className="h-full overflow-y-auto md:ml-0 transition-all duration-300">
+        <div className="h-full layout-stable md:ml-0 transition-all duration-300">
           {children}
         </div>
       </main>

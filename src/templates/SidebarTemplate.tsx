@@ -124,6 +124,31 @@ export default function SidebarTemplate({ data }: { data: ResumeData }) {
             </div>
           </section>
         )}
+
+        {/* Custom Sections */}
+        {data.customSections.length > 0 && (
+          <section>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-3">
+              <div className="w-2 h-2 bg-slate-900 rounded-full" />
+              Additional Information
+            </h2>
+            <div className="space-y-8">
+              {data.customSections.map(section => (
+                <div key={section.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                   <h3 className="font-black text-slate-900 mb-4">{section.title}</h3>
+                   <div className="space-y-3">
+                     {section.items.map(item => (
+                       <div key={item.id} className="grid grid-cols-3 gap-4">
+                         <span className="text-xs font-bold text-cyan-600 uppercase tracking-tighter">{item.name}</span>
+                         <p className="col-span-2 text-xs text-slate-500 leading-relaxed">{item.value}</p>
+                       </div>
+                     ))}
+                   </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -212,6 +212,37 @@ html {
   scrollbar-color: rgba(75, 85, 99, 0.8) transparent;
 }
 
+/* Layout stabilization fixes */
+.layout-stable {
+  scrollbar-gutter: stable both-edges;
+  overflow-y: scroll;
+  /* Fallback for browsers without scrollbar-gutter support */
+  padding-right: 8px;
+  margin-right: -8px;
+}
+
+.stable-height-transition {
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* Prevent layout shift during content changes */
+.layout-stable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.layout-stable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.layout-stable::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+.layout-stable::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
 /* Enhanced hover effects */
 .hover-lift {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

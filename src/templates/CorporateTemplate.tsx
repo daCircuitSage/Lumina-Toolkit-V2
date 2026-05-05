@@ -98,6 +98,31 @@ export default function CorporateTemplate({ data }: { data: ResumeData }) {
           </section>
         </div>
       </div>
+
+      {/* Custom Sections */}
+      {data.customSections.length > 0 && (
+        <section>
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-xs font-bold uppercase tracking-[0.25em] text-gray-900 shrink-0">Additional</h2>
+            <div className="h-px bg-gray-200 w-full" />
+          </div>
+          <div className="space-y-8 px-4">
+            {data.customSections.map(section => (
+              <div key={section.id}>
+                <h3 className="text-sm font-bold text-gray-900 mb-4">{section.title}</h3>
+                <div className="space-y-3">
+                  {section.items.map(item => (
+                    <div key={item.id} className="grid grid-cols-3 gap-4">
+                      <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{item.name}</span>
+                      <p className="col-span-2 text-sm text-gray-700 leading-relaxed">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

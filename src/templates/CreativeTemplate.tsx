@@ -101,6 +101,31 @@ export default function CreativeTemplate({ data }: { data: ResumeData }) {
               ))}
            </div>
         </section>
+
+        {/* Custom Sections */}
+        {data.customSections.length > 0 && (
+          <section>
+             <h2 className="text-5xl font-black tracking-tighter text-gray-200 absolute -top-4 -left-4 opacity-50 select-none">Additional</h2>
+             <div className="relative z-10">
+                <h2 className="text-sm font-black uppercase tracking-[0.2em] text-[#0984E3] mb-6">Custom Sections</h2>
+                <div className="space-y-8">
+                  {data.customSections.map(section => (
+                    <div key={section.id} className="bg-gray-50 p-4 rounded-xl border-l-4 border-[#0984E3]">
+                       <h3 className="font-black text-gray-800 mb-4">{section.title}</h3>
+                       <div className="space-y-3">
+                         {section.items.map(item => (
+                           <div key={item.id} className="grid grid-cols-3 gap-4">
+                             <span className="text-xs font-bold text-[#0984E3] uppercase tracking-wider">{item.name}</span>
+                             <p className="col-span-2 text-sm text-gray-600 leading-relaxed">{item.value}</p>
+                           </div>
+                         ))}
+                       </div>
+                    </div>
+                  ))}
+                </div>
+             </div>
+          </section>
+        )}
       </div>
     </div>
   );
