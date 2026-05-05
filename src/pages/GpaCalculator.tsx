@@ -212,38 +212,53 @@ export default function GpaCalculator() {
       </div>
 
       <SeoContent 
-        title="Free GPA Calculator Online: Track Your Academic Success"
-        description="Monitoring your academic performance starts with a clear understanding of your Grade Point Average. Our Free GPA & CGPA Calculator is a professional-grade tool designed for students who want to track their progress accurately. Whether you're calculating your current semester results or projecting your cumulative GPA across multiple years, our platform provides a simple, high-impact interface to manage your grades. We support the standard 4.0 scale used by most secondary and higher education institutions globally, helping you keep your eyes on the Dean's List."
+        title="GPA Calculator – Calculate College & Cumulative GPA Online Free | Lumina Toolkit"
+        description="Calculate your GPA online with our GPA calculator. Use this college GPA calculator to check semester grades, cumulative GPA, and learn how to calculate GPA quickly and accurately."
         features={[
-          "Semester GPA Calculation: Quickly determine your performance for the current term.",
-          "Cumulative GPA Support: Factor in previous credits and GPA for a total overview.",
-          "Standard 4.0 Scale: Pre-configured with standard academic grade point values (A+, A, etc.).",
-          "Dynamic Course List: Add or remove courses with ease using our fluid interface.",
-          "Real-time Results: Watch your GPA update instantly as you change grades or credits.",
-          "Mobile Optimized: Track your grades on the go with our fully responsive design."
+          "GPA Calculator: Instantly calculate your GPA using a standard 4.0 grading scale.",
+          "College GPA Calculator: Track your semester-wise academic performance with ease.",
+          "Cumulative GPA Calculator: Combine all semesters to calculate your overall CGPA.",
+          "High School GPA Support: Works for both high school and college grading systems.",
+          "Dynamic Course System: Add or remove courses with credits and grades in real time.",
+          "Instant Results: See updated GPA immediately as you enter or change data."
         ]}
         steps={[
-          "Add your courses for the current semester using the 'Add Course' button.",
-          "Select the grade you received and the number of credits for each course.",
-          "Optionally enter your previous Cumulative GPA and completed credits.",
-          "Review your real-time results in the professional 'Result Panel'.",
-          "Use the 'Reset' button to start over for a different academic year."
+          "Add your subjects using the 'Add Course' option.",
+          "Enter your grade and credit hours for each course.",
+          "If needed, input previous GPA and total completed credits for cumulative calculation.",
+          "View your GPA instantly in the results panel.",
+          "Adjust or reset inputs to recalculate anytime."
         ]}
         benefits={[
-          "Eliminate manual calculation errors.",
-          "Keep track of your academic scholarship eligibility.",
-          "Project your final grades before the semester ends.",
-          "Stay organized throughout your college career.",
-          "Free tool with no registration or data tracking."
+          "Quickly calculate GPA without manual formulas.",
+          "Understand your academic standing in real time.",
+          "Useful for college, university, and high school students.",
+          "Helps plan scholarship and academic goals.",
+          "100% free GPA calculator with no login required."
         ]}
         faq={[
-          { q: "How is GPA calculated?", a: "GPA is calculated by dividing the total number of grade points earned (grade value multiplied by credits) by the total number of credits attempted." },
-          { q: "What grade scale do you use?", a: "We use a standard 4.0 scale where an 'A' is worth 4.0 points, a 'B' is worth 3.0, and so on. We also support +/- grades for higher precision." },
-          { q: "Can I use this for university level?", a: "Yes, our calculator is suitable for high school, college, and university level GPA tracking." },
-          { q: "What is the difference between GPA and CGPA?", a: "GPA (Grade Point Average) usually refers to a single semester, while CGPA (Cumulative Grade Point Average) is the average across your entire academic history." },
-          { q: "Do I need to save my data?", a: "The tool works in real-time. For a permanent record, we recommend taking a screenshot or manually saving your results as we do not store your grades on our servers." }
-        ]}
-        ctaTitle="Achieve academic excellence."
+    { 
+      q: "What is a GPA calculator?", 
+      a: "A GPA calculator helps you calculate your Grade Point Average based on your grades and credit hours." 
+    },
+    { 
+      q: "How to calculate GPA?", 
+      a: "GPA is calculated by dividing total grade points by total credit hours." 
+    },
+    { 
+      q: "Can I use this as a college GPA calculator?", 
+      a: "Yes, this tool is fully optimized as a college GPA calculator for semester and cumulative GPA." 
+    },
+    { 
+      q: "Does it support high school GPA calculation?", 
+      a: "Yes, it works as a high school GPA calculator as well using the standard 4.0 scale." 
+    },
+    { 
+      q: "What is cumulative GPA?", 
+      a: "Cumulative GPA is the overall average of all semesters combined." 
+    }
+  ]}
+        ctaTitle="Calculate Your GPA Instantly with Accuracy."
       />
     </div>
   );

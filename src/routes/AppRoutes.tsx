@@ -167,8 +167,8 @@ const AppRoutes = () => {
         <AnimatedPage>
           <Layout>
             <SeoHead
-              title="GPA Calculator - Calculate Grade Point Average Free | Lumina Toolkit"
-              description="Calculate your GPA instantly with our free calculator. Supports multiple grading scales and weighted courses."
+              title="GPA Calculator – College & Cumulative GPA Calculator | Lumina Toolkit"
+              description="Use our GPA calculator to calculate your GPA instantly. This college GPA calculator helps you calculate semester and cumulative GPA quickly, with simple steps to understand how to calculate GPA accurately"
             />
             <LazyLoadWrapper>
               <GpaCalculator />
