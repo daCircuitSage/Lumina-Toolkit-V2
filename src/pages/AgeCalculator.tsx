@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { Calendar, RefreshCw, Star, Info } from 'lucide-react';
+import { Calendar, RefreshCw, Star, Info, ChevronDown } from 'lucide-react';
 import { format, differenceInYears, differenceInMonths, differenceInDays, addYears, isAfter, isBefore } from 'date-fns';
 import { motion, AnimatePresence } from 'motion/react';
 import SeoContent from '../components/SeoContent';
 import InternalLinks from '../components/InternalLinks';
 
 export default function AgeCalculator() {
-  const [dob, setDob] = useState('');
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
   const [result, setResult] = useState<any>(null);
 
   const calculate = () => {
-    if (!dob) return;
-    const birth = new Date(dob);
+    if (!day || !month || !year) return;
+    
+    const birth = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
     const now = new Date();
 
     if (isAfter(birth, now)) {
@@ -53,27 +56,107 @@ export default function AgeCalculator() {
           </div>
 
           <div className="space-y-6">
-            <div className="space-y-3">
-              <label className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[2px] px-1">Birth Date Selection</label>
-              <div className="relative">
-                <input 
-                  type="date" 
-                  value={dob}
-                  onChange={(e) => setDob(e.target.value)}
-                  onBlur={calculate}
-                  className="w-full h-14 md:h-16 px-5 md:px-6 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl text-lg md:text-xl font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-8 focus:ring-indigo-500/5 focus:border-indigo-500 transition-all"
-                />
+            <div className="space-y-4">
+              <label className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[2px] px-1 flex items-center gap-2">
+                <Calendar size={14} />
+                Select Your Birth Date
+              </label>
+              
+              <div className="grid grid-cols-3 gap-3">
+                {/* Day Selector */}
+                <div className="relative">
+                  <select
+                    value={day}
+                    onChange={(e) => setDay(e.target.value)}
+                    className="w-full h-14 md:h-16 px-4 bg-white dark:bg-slate-800 border-2 border-blue-200 dark:border-blue-700 rounded-xl text-lg md:text-xl font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all appearance-none cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  >
+                    <option value="" className="text-slate-400 dark:text-slate-500">Day</option>
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                      <option key={d} value={d} className="bg-white text-slate-900 dark:bg-slate-700 dark:text-slate-100">{d.toString().padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 dark:text-blue-400 pointer-events-none" />
+                </div>
+
+                {/* Month Selector */}
+                <div className="relative">
+                  <select
+                    value={month}
+                    onChange={(e) => setMonth(e.target.value)}
+                    className="w-full h-14 md:h-16 px-4 bg-white dark:bg-slate-800 border-2 border-purple-200 dark:border-purple-700 rounded-xl text-lg md:text-xl font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all appearance-none cursor-pointer hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                  >
+                    <option value="" className="text-slate-400 dark:text-slate-500">Month</option>
+                    {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
+                      <option key={m} value={m} className="bg-white text-slate-900 dark:bg-slate-700 dark:text-slate-100">{format(new Date(2000, m - 1, 1), 'MMM')}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-600 dark:text-purple-400 pointer-events-none" />
+                </div>
+
+                {/* Year Selector */}
+                <div className="relative">
+                  <select
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
+                    className="w-full h-14 md:h-16 px-4 bg-white dark:bg-slate-800 border-2 border-green-200 dark:border-green-700 rounded-xl text-lg md:text-xl font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all appearance-none cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20"
+                  >
+                    <option value="" className="text-slate-400 dark:text-slate-500">Year</option>
+                    {Array.from({ length: 120 }, (_, i) => new Date().getFullYear() - i).map(y => (
+                      <option key={y} value={y} className="bg-white text-slate-900 dark:bg-slate-700 dark:text-slate-100">{y}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 dark:text-green-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Quick Date Selection */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  onClick={() => {
+                    const today = new Date();
+                    setDay(today.getDate().toString());
+                    setMonth((today.getMonth() + 1).toString());
+                    setYear((today.getFullYear() - 25).toString());
+                  }}
+                  className="px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all transform hover:scale-105"
+                >
+                  25 Years Ago
+                </button>
+                <button
+                  onClick={() => {
+                    const today = new Date();
+                    setDay(today.getDate().toString());
+                    setMonth((today.getMonth() + 1).toString());
+                    setYear((today.getFullYear() - 18).toString());
+                  }}
+                  className="px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all transform hover:scale-105"
+                >
+                  18 Years Ago
+                </button>
+                <button
+                  onClick={() => {
+                    const today = new Date();
+                    setDay(today.getDate().toString());
+                    setMonth((today.getMonth() + 1).toString());
+                    setYear((today.getFullYear() - 30).toString());
+                  }}
+                  className="px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-lg hover:from-green-600 hover:to-teal-600 transition-all transform hover:scale-105"
+                >
+                  30 Years Ago
+                </button>
               </div>
             </div>
 
-            <button 
+            <motion.button 
               onClick={calculate}
-              disabled={!dob}
-              className="w-full h-14 md:h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
+              disabled={!day || !month || !year}
+              className="w-full h-14 md:h-16 bg-gradient-to-r from-slate-900 to-slate-800 dark:from-white dark:to-slate-100 text-white dark:text-slate-900 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50 shadow-lg hover:shadow-xl"
+              whileHover={{ scale: day && month && year ? 1.02 : 1 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <RefreshCw size={18} className={!dob ? "" : "animate-spin-slow"} />
+              <RefreshCw size={18} className={day && month && year ? "animate-spin-slow" : ""} />
               Calculate My Age
-            </button>
+            </motion.button>
 
             <AnimatePresence mode="wait">
               {result ? (

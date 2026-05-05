@@ -41,23 +41,18 @@ export default function ResumeBuilderApp() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#F8FAFC] text-slate-800 font-sans overflow-hidden" style={{ colorScheme: 'light' }}>
-      {/* Header Navigation */}
-      <header className="h-16 px-6 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0 z-50">
+    <div className="flex flex-col h-full w-full bg-[#F8FAFC] text-slate-800 font-sans overflow-hidden" style={{ colorScheme: 'light' }}>
+      {/* Mobile Top Bar - Only visible on mobile, integrates with main layout */}
+      <div className="md:hidden h-16 px-4 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0 z-40">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center text-white font-bold">R</div>
           <h1 className="text-lg font-semibold tracking-tight text-slate-900">
-            ResumePro <span className="text-slate-400 font-normal hidden sm:inline">| Builder</span>
+            ResumePro
           </h1>
         </div>
         
-        <div className="flex items-center gap-2 md:gap-4">
-          <div className="hidden md:flex items-center text-xs text-slate-500 mr-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span> 
-            Saved locally
-          </div>
-          
-          <div className="lg:hidden flex bg-slate-100 rounded-md p-1 mr-2">
+        <div className="flex items-center gap-2">
+          <div className="flex bg-slate-100 rounded-md p-1">
             <button
               onClick={() => setView('edit')}
               className={cn(
@@ -81,12 +76,37 @@ export default function ResumeBuilderApp() {
           <button 
             onClick={handleExport}
             disabled={isExporting}
+            className="px-3 py-2 text-sm font-medium bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 transition-all disabled:opacity-50"
+          >
+            {isExporting ? '...' : 'PDF'}
+          </button>
+        </div>
+      </div>
+
+      {/* Desktop Header - Only visible on desktop */}
+      <div className="hidden md:flex h-16 px-6 bg-white border-b border-slate-200 items-center justify-between flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center text-white font-bold">R</div>
+          <h1 className="text-lg font-semibold tracking-tight text-slate-900">
+            ResumePro <span className="text-slate-400 font-normal">| Builder</span>
+          </h1>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <div className="flex items-center text-xs text-slate-500 mr-2">
+            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span> 
+            Saved locally
+          </div>
+          
+          <button 
+            onClick={handleExport}
+            disabled={isExporting}
             className="px-4 py-2 text-sm font-medium bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 transition-all disabled:opacity-50"
           >
             {isExporting ? 'Exporting...' : 'Download PDF'}
           </button>
         </div>
-      </header>
+      </div>
 
       <main className="flex-1 flex overflow-hidden lg:flex-row flex-col">
         {/* Sidebar: Template Selection */}
