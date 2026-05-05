@@ -64,8 +64,8 @@ export default function Homepage() {
 
   // SEO configuration
   const seoData = {
-    title: 'Professional Productivity Suite',
-    description: 'Create professional resumes, optimize for ATS, generate cover letters, and boost your content with AI. Everything you need to accelerate your career growth.',
+    title: 'Free Resume Builder, ATS Checker & AI Career Tools | Lumina Toolkit',
+    description: 'Create ATS-friendly resumes, write cover letters, and optimize your career with free AI tools. Build professional documents and improve job success with Lumina Toolkit.',
     keywords: 'resume builder, ATS checker, PDF converter, AI tools, cover letter generator, job tracker, interview prep',
     canonicalUrl: 'https://lumintoolkit.com',
     structuredData: {

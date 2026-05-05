@@ -97,8 +97,8 @@ const AppRoutes = () => {
         <AnimatedPage>
           <Layout>
             <SeoHead
-              title="All Tools - Lumina Toolkit"
-              description="Explore our complete collection of free productivity tools, AI assistants, and utilities for work and study."
+              title="All Free Tools – AI, Resume, ATS & Productivity Tools | Lumina Toolkit"
+              description="Browse all free AI tools including resume builder, ATS checker, cover letter generator, and productivity utilities. Everything you need in one place at Lumina Toolkit."
             />
             <LazyLoadWrapper>
               <Dashboard />
@@ -111,8 +111,8 @@ const AppRoutes = () => {
         <AnimatedPage>
           <Layout>
             <SeoHead
-              title="AI Assistant - Free Chat & Productivity Help | Lumina Toolkit"
-              description="Chat with your personal AI productivity companion for instant help with tasks, writing, and problem-solving."
+              title="Free AI Chat Assistant for Writing & Productivity | Lumina Toolkit"
+              description="Chat with a free AI assistant for writing, brainstorming, coding help, and productivity tasks. Get instant answers and boost your workflow with Lumina Toolkit."
             />
             <LazyLoadWrapper>
               <AiChat />
