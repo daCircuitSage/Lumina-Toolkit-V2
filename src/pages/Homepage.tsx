@@ -137,9 +137,9 @@ export default function Homepage() {
               All-in-One Career & AI Toolkit
             </motion.div>
             
-            <SemanticHeading level={1} className="text-center leading-tight mb-6">
+            <SemanticHeading level={1} className="text-center leading-tight mb-6 opacity-100">
               <motion.span
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.3 }}
                 className="inline-block cursor-pointer text-slate-900 dark:text-white"
