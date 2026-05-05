@@ -153,8 +153,8 @@ const AppRoutes = () => {
         <AnimatedPage>
           <Layout>
             <SeoHead
-              title="Age Calculator - Calculate Exact Age & Birthday | Lumina Toolkit"
-              description="Calculate your exact age in years, months, and days. Find out when your next birthday is and more."
+              title="Chronological Age Calculator – Calculate Exact Age Online | Lumina Toolkit"
+              description="Use our chronological age calculator to calculate your exact age in years, months, and days. Try this online chronological age calculator to find your next birthday and total age instantly."
             />
             <LazyLoadWrapper>
               <AgeCalculator />

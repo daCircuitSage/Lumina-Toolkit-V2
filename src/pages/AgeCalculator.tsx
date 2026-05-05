@@ -47,8 +47,8 @@ export default function AgeCalculator() {
               <Calendar size={28} />
             </div>
             <div className="flex-1">
-              <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Age Calculator</h1>
-              <p className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400">Precision age & life milestones engine</p>
+              <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tight">Chronological Age Calculator</h1>
+              <p className="text-xs md:text-sm font-medium text-slate-500 dark:text-slate-400">Use this online chronological age calculator to calculate your exact age and key life milestones</p>
             </div>
           </div>
 
@@ -147,38 +147,38 @@ export default function AgeCalculator() {
 
       <SeoContent 
         className="mt-12 md:mt-20 max-w-4xl mx-auto px-4"
-        title="Free Chronological Age Calculator: Exact Age in Years, Months, Days"
-        description="Knowing your exact age shouldn't requires complex mental math. Our Free Chronological Age Calculator provides a fast, precise, and user-friendly way to determine your current age down to the day. Beyond just years, our tool breaks down your biological timeline into months and days, giving you a comprehensive view of your life milestones. We also include a 'Next Birthday' countdown and total days lived, making it the perfect utility for everything from official document filing to birthday planning."
+        title="Chronological Age Calculator: Calculate Exact Age Online"
+        description="Use our chronological age calculator to calculate your exact age in years, months, and days. This online chronological age calculator also shows your next birthday, total days lived, and other useful age details instantly."
         features={[
-          "Precise Calculation: Get your exact age in years, months, and days.",
-          "Birthday Countdown: See exactly how many days are left until your next big celebration.",
-          "Life Stats: Discover the total approximate number of days you have lived since birth.",
-          "Weekday Identification: Find out which day of the week you were born on (e.g., Monday, Friday).",
-          "Future Date Protection: Intelligent validation ensures birth dates cannot be set in the future.",
-          "Responsive Design: Works perfectly on mobile, tablet, and desktop browsers."
-        ]}
+            "Exact Age Calculation: Calculate your precise age in years, months, and days.",
+            "Next Birthday Countdown: See how many days are left until your next birthday.",
+            "Total Days Lived: Find the approximate total number of days since your birth date.",
+            "Birth Day Finder: Discover the day of the week you were born.",
+            "Future Date Validation: Prevents selecting invalid future birth dates.",
+            "Mobile Friendly: Works smoothly on desktop, tablet, and mobile devices."
+          ]}
         steps={[
-          "Select your Year, Month, and Day of birth using the calendar picker.",
-          "Click the 'Calculate Age' button to trigger the precision engine.",
-          "Review the 'Total Age' panel for your years and months breakdown.",
-          "Check the 'Next Birthday' card to start your countdown.",
-          "Explore the 'Life Stats' section for interesting biological milestones."
+          "Select your birth year, month, and day.",
+          "Click the 'Calculate Age' button.",
+          "View your exact age in years, months, and days.",
+          "Check how many days remain until your next birthday.",
+          "See your total days lived and other age details."
         ]}
         benefits={[
-          "Fast and accurate results instantly.",
-          "User-friendly interface with bold, clear typography.",
-          "Great for filling out forms or insurance documents.",
-          "100% free with no sign-ups or hidden trackers.",
-          "Helps you plan your next birthday event perfectly."
+          "Get instant and accurate age calculations.",
+          "Useful for forms, applications, and official documents.",
+          "Simple and easy-to-use interface.",
+          "100% free with no sign-up required.",
+          "Quickly find your next birthday and age milestones."
         ]}
         faq={[
-          { q: "How accurate is the age calculation?", a: "Our calculator uses the 'date-fns' library, which handles leap years and month length variations with high precision." },
-          { q: "Is my birth date saved?", a: "No, your data is processed locally in your browser and is never stored on our servers." },
-          { q: "Can I use this for official purposes?", a: "Yes, this tool provides the standard chronological age used in most legal and official documents." },
-          { q: "What are 'Life Stats'?", a: "They show interesting metrics like the approximate total number of days you've been on Earth." },
-          { q: "Does it work on my phone?", a: "Absolutely. Our Age Calculator is fully responsive and optimized for mobile devices." }
-        ]}
-        ctaTitle="Celebrate every milestone."
+    { q: "What is a chronological age calculator?", a: "A chronological age calculator measures your exact age based on your birth date and the current date." },
+    { q: "How accurate is this age calculator?", a: "This calculator accounts for leap years, month lengths, and date differences to provide accurate results." },
+    { q: "Can I use this for official documents?", a: "Yes. The chronological age shown here is suitable for most standard forms and official age calculations." },
+    { q: "Does this online chronological age calculator save my birth date?", a: "No. Your birth date is processed in your browser and is not stored on our servers." },
+    { q: "Can I use this calculator on mobile?", a: "Yes. This age calculator is fully responsive and works well on phones, tablets, and desktops." }
+  ]}
+        ctaTitle="Calculate Your Exact Age Instantly"
       />
       
       {/* Internal Links for SEO */}
