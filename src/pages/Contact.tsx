@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, MessageSquare, Send, CheckCircle2, Sparkles, Bug, Lightbulb } from 'lucide-react';
+import { Mail, MessageSquare, Send, CheckCircle2, Sparkles, Bug, Lightbulb, AlertCircle } from 'lucide-react';
 import SeoContent from '../components/SeoContent';
+import emailjs from '@emailjs/browser';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -12,20 +13,52 @@ export default function Contact() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsSending(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', type: 'suggestion', message: '' });
+    setError(null);
+
+    try {
+      // Get EmailJS configuration from environment variables
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+
+      if (!publicKey || !serviceId || !templateId) {
+        throw new Error('EmailJS configuration is missing. Please contact the administrator.');
+      }
+
+      // Initialize EmailJS with public key
+      emailjs.init(publicKey);
+
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message_type: formData.type,
+        message: formData.message,
+        to_email: 'hello@jobtoolkit.io' // Your receiving email
+      };
+
+      // Send email using EmailJS
+      const response = await emailjs.send(serviceId, templateId, templateParams);
       
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1500);
+      if (response.status === 200) {
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', type: 'suggestion', message: '' });
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        throw new Error('Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred. Please try again.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const types = [
@@ -191,6 +224,21 @@ export default function Contact() {
                     )}
                   </AnimatePresence>
                 </button>
+
+                {/* Error Message */}
+                <AnimatePresence>
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl"
+                    >
+                      <AlertCircle size={20} className="text-red-500 dark:text-red-400 flex-shrink-0" />
+                      <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </form>
             </motion.div>
           </div>
