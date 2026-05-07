@@ -49,10 +49,23 @@ Based on your `.env` file:
 
 ## Next Steps to Fix
 
-1. **Check Firebase Console Settings**:
+### CRITICAL: Production Domain Authorization
+1. **Add Production Domain to Firebase**:
    - Go to https://console.firebase.google.com/project/luminatoolkit/authentication/providers
-   - Ensure Google provider is enabled
-   - Add `localhost:3001` to authorized domains
+   - Click on Google provider
+   - Under "Authorized domains", add your production domain (e.g., `yourdomain.com`)
+   - Also add: `localhost:3000`, `localhost:3001`, `127.0.0.1:3000`, `127.0.0.1:3001`
+   - Save and wait 5-10 minutes for changes to propagate
+
+2. **Update Firestore Security Rules**:
+   - Go to https://console.firebase.google.com/project/luminatoolkit/firestore/rules
+   - Replace test mode rules with production rules from `firestore-rules.firestore`
+   - Publish the rules
+
+3. **Environment Configuration**:
+   - Copy `.env.example` to `.env` for development
+   - For production, set `VITE_FIREBASE_AUTH_DOMAIN` to your production domain
+   - Ensure all Firebase config variables are set in production environment
 
 2. **Test with Console Logs**:
    - Open browser developer tools
