@@ -343,6 +343,13 @@ async function signInWithGoogle() {
             }
           } else {
             console.log('No redirect result found (normal for popup auth)');
+            
+            // Additional check: maybe user is already authenticated but redirect result is empty
+            const currentUser = auth.currentUser;
+            if (currentUser && !result?.user) {
+              console.log('🔄 Found authenticated user but no redirect result, updating state manually');
+              setCurrentUser(currentUser);
+            }
           }
         } catch (error: any) {
           console.error('Error handling redirect result:', error);
@@ -352,6 +359,8 @@ async function signInWithGoogle() {
             console.error('Domain not authorized for redirect');
           } else if (error.code === 'auth/redirect-cancelled-by-user') {
             console.log('Redirect was cancelled by user');
+          } else {
+            console.log('Redirect result error:', error.message);
           }
         }
       }
@@ -384,25 +393,39 @@ async function signInWithGoogle() {
   useEffect(() => {
     const checkAuthState = async () => {
       if (auth) {
-        // Wait a bit longer for mobile redirect to complete
-        setTimeout(async () => {
-          try {
-            const firebaseUser = auth.currentUser;
-            if (firebaseUser && !currentUser) {
-              console.log('🔄 Mobile fallback: Updating auth state from Firebase');
-              setCurrentUser(firebaseUser);
+        // Multiple checks at different intervals for mobile redirect
+        const checks = [
+          { delay: 1000, name: '1s' },
+          { delay: 3000, name: '3s' },
+          { delay: 5000, name: '5s' }
+        ];
+
+        checks.forEach(({ delay, name }) => {
+          setTimeout(async () => {
+            try {
+              const firebaseUser = auth.currentUser;
+              if (firebaseUser && !currentUser) {
+                console.log(`🔄 Mobile fallback (${name}): Updating auth state from Firebase`);
+                setCurrentUser(firebaseUser);
+                return; // Stop checking once user is set
+              }
+              
+              // Double-check with getRedirectResult in case it was missed
+              const result = await getRedirectResult(auth);
+              if (result && result.user && !currentUser) {
+                console.log(`🔄 Mobile fallback (${name}): Found redirect result, updating state`);
+                setCurrentUser(result.user);
+                return; // Stop checking once user is set
+              }
+              
+              if (!firebaseUser && !currentUser && name === '5s') {
+                console.log('🔄 Mobile fallback: No authentication found after all checks');
+              }
+            } catch (error) {
+              console.log(`Mobile fallback check (${name}) completed:`, error.message);
             }
-            
-            // Double-check with getRedirectResult in case it was missed
-            const result = await getRedirectResult(auth);
-            if (result && result.user && !currentUser) {
-              console.log('🔄 Mobile fallback: Found redirect result, updating state');
-              setCurrentUser(result.user);
-            }
-          } catch (error) {
-            console.log('Mobile fallback check completed (no redirect result)');
-          }
-        }, 3000);
+          }, delay);
+        });
       }
     };
 
