@@ -152,15 +152,19 @@ export default async function handler(req: any, res: any) {
 
   app.post('/api/ats-analyze', async (req, res) => {
     try {
+      console.log('🔍 ATS Analyze Request:', req.body);
       const { resume, jobDescription, extractedKeywords, experienceLevel } = req.body;
       
-      if (!resume) {
-        return res.status(400).json({ error: 'Resume is required' });
+      if (!resume || resume.trim() === '') {
+        console.error('❌ Resume validation failed');
+        return res.status(400).json({ error: 'Resume is required and cannot be empty' });
       }
 
       const MISTRAL_API_KEY = process.env.MISTRAL_API_KEY;
-      if (!MISTRAL_API_KEY) {
-        throw new Error('MISTRAL_API_KEY is not configured');
+      console.log('🔑 MISTRAL_API_KEY exists:', !!MISTRAL_API_KEY);
+      if (!MISTRAL_API_KEY || MISTRAL_API_KEY === 'YOUR_MISTRAL_API_KEY') {
+        console.error('❌ MISTRAL_API_KEY is not configured or is placeholder');
+        return res.status(500).json({ error: 'MISTRAL_API_KEY is not configured. Please add your API key to the .env file.' });
       }
 
       // Enhanced prompt for production-grade analysis
