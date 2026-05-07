@@ -90,15 +90,23 @@ export default function JobTracker() {
     );
 
     // Set up real-time listener
+    console.log('🔍 Setting up jobs query with UID:', currentUser.uid);
     const unsubscribe = onSnapshot(jobsQuery, (snapshot) => {
-      const jobsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Job[];
+      console.log('📊 Snapshot received:', snapshot);
+      console.log('📄 Number of documents:', snapshot.docs.length);
+      const jobsData = snapshot.docs.map(doc => {
+        console.log('📋 Document:', doc.id, doc.data());
+        return {
+          id: doc.id,
+          ...doc.data()
+        };
+      }) as Job[];
+      console.log('💼 Jobs data set:', jobsData);
       setJobs(jobsData);
       setLoading(false);
     }, (error) => {
-      console.error('Error fetching jobs:', error);
+      console.error('❌ Error fetching jobs:', error);
+      console.error('🔍 Error details:', error.code, error.message);
       setLoading(false);
     });
 
