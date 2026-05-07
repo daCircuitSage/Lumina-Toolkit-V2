@@ -29,7 +29,7 @@ if (isFirebaseConfigured()) {
     auth = getAuth(app);
     db = getFirestore(app);
     
-    // Configure auth persistence to keep users logged in
+    // Configure auth persistence to keep users logged in across sessions
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
         console.log('Auth persistence configured successfully');

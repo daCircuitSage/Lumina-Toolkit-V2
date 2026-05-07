@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Auth Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        #log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mobile Firebase Auth Test</h1>
+    
+    <div class="test-section">
+        <h2>Device Detection</h2>
+        <div id="device-info"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Authentication Status</h2>
+        <div id="auth-status"></div>
+        <button onclick="testSignIn()">Test Google Sign-In</button>
+        <button onclick="testSignOut()">Test Sign Out</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Log</h2>
+        <div id="log"></div>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <script type="module">
+        // Import Firebase functions (same as your app)
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Your Firebase config (replace with actual values)
+        const firebaseConfig = {
+            apiKey: "test-api-key",
+            authDomain: "test-auth-domain",
+            projectId: "test-project-id",
+            appId: "test-app-id"
+        };
+
+        let auth, googleProvider;
+
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('auth-status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function detectDevice() {
+            const userAgent = navigator.userAgent;
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            
+            const deviceInfo = document.getElementById('device-info');
+            deviceInfo.innerHTML = `
+                <p><strong>User Agent:</strong> ${userAgent.substring(0, 100)}...</p>
+                <p><strong>Is Mobile:</strong> ${isMobile ? 'Yes' : 'No'}</p>
+                <p><strong>Screen Width:</strong> ${window.innerWidth}px</p>
+                <p><strong>Touch Support:</strong> ${'ontouchstart' in window ? 'Yes' : 'No'}</p>
+            `;
+            
+            log(`Device detected: Mobile=${isMobile}, Width=${window.innerWidth}`);
+            return isMobile;
+        }
+
+        async function initializeFirebase() {
+            try {
+                log('Initializing Firebase...');
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                googleProvider = new GoogleAuthProvider();
+                
+                // Monitor auth state
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        log(`Auth state changed: User logged in as ${user.email}`);
+                        showStatus(`✅ Logged in as: ${user.email}`, 'success');
+                    } else {
+                        log('Auth state changed: User logged out');
+                        showStatus('❌ Not logged in', 'error');
+                    }
+                });
+                
+                log('Firebase initialized successfully');
+            } catch (error) {
+                log(`Firebase initialization failed: ${error.message}`);
+                showStatus(`❌ Firebase error: ${error.message}`, 'error');
+            }
+        }
+
+        window.testSignIn = async function() {
+            if (!auth) {
+                log('Firebase not initialized');
+                return;
+            }
+
+            const isMobile = detectDevice();
+            
+            try {
+                log(`Starting Google sign-in for ${isMobile ? 'mobile' : 'desktop'}...`);
+                
+                if (isMobile) {
+                    log('Using redirect method for mobile...');
+                    await signInWithRedirect(auth, googleProvider);
+                    log('Redirect initiated - page will reload');
+                } else {
+                    log('Desktop detected - would use popup method');
+                    showStatus('ℹ️ Desktop detected. Use your main app for popup testing.', 'info');
+                }
+            } catch (error) {
+                log(`Sign-in error: ${error.message}`);
+                showStatus(`❌ Sign-in failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.testSignOut = async function() {
+            if (!auth) {
+                log('Firebase not initialized');
+                return;
+            }
+
+            try {
+                log('Signing out...');
+                await signOut(auth);
+                log('Sign-out successful');
+                showStatus('✅ Signed out successfully', 'success');
+            } catch (error) {
+                log(`Sign-out error: ${error.message}`);
+                showStatus(`❌ Sign-out failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.clearLog = function() {
+            document.getElementById('log').innerHTML = '';
+        };
+
+        // Check for redirect result on page load
+        async function checkRedirectResult() {
+            if (!auth) return;
+            
+            try {
+                log('Checking for redirect result...');
+                const result = await getRedirectResult(auth);
+                
+                if (result && result.user) {
+                    log(`✅ Redirect sign-in successful: ${result.user.email}`);
+                    showStatus(`✅ Successfully logged in as: ${result.user.email}`, 'success');
+                } else {
+                    log('No redirect result found');
+                }
+            } catch (error) {
+                log(`Redirect result error: ${error.message}`);
+                showStatus(`❌ Redirect error: ${error.message}`, 'error');
+            }
+        };
+
+        // Initialize on page load
+        detectDevice();
+        initializeFirebase().then(() => {
+            setTimeout(checkRedirectResult, 1000);
+        });
+    </script>
+</body>
+</html>
