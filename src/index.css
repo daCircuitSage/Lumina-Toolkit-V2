@@ -26,6 +26,9 @@
 /* Prevent theme flash - set initial styles */
 html {
   transition: background-color 0.3s ease, color 0.3s ease;
+  /* Ensure light background by default */
+  background-color: #f9fafb;
+  color: #111827;
 }
 
 html.light {
@@ -34,8 +37,8 @@ html.light {
 }
 
 html.dark {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: #0f172a;
+  color: #f1f5f9;
 }
 
 @layer base {
@@ -45,12 +48,13 @@ html.dark {
   
   /* Ensure no flash by setting initial styles */
   html:not(.light):not(.dark) {
-    background-color: #f9fafb;
-    color: #111827;
+    background-color: #f9fafb !important;
+    color: #111827 !important;
   }
   
   .dark body {
-    @apply bg-black text-white;
+    background-color: #0f172a;
+    color: #f1f5f9;
   }
 }
 
