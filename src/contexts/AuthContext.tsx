@@ -28,7 +28,7 @@ interface Review {
 interface AuthContextType {
   currentUser: User | null;
   loading: boolean;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: () => Promise<any>;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -55,60 +55,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Handle redirect result for Google sign-in
-  useEffect(() => {
-    const handleRedirectResult = async () => {
-      console.log('🔍 Checking for redirect result...');
-      if (auth) {
-        try {
-          console.log('📡 Getting redirect result...');
-          const result = await getRedirectResult(auth);
-          if (result) {
-            console.log('✅ Google sign in successful via redirect:', result.user);
-            console.log('User details:', {
-              email: result.user.email,
-              uid: result.user.uid,
-              displayName: result.user.displayName,
-              photoURL: result.user.photoURL
-            });
-            
-            // Force update current user state
-            setCurrentUser(result.user);
-            
-            // Save user data to Firestore
-            if (db) {
-              const userDoc = doc(db, 'users', result.user.uid);
-              const userSnapshot = await getDoc(userDoc);
-              
-              if (!userSnapshot.exists()) {
-                console.log('Creating new user document...');
-                await setDoc(userDoc, {
-                  uid: result.user.uid,
-                  email: result.user.email,
-                  displayName: result.user.displayName,
-                  photoURL: result.user.photoURL,
-                  createdAt: new Date().toISOString(),
-                  authProvider: 'google'
-                });
-                console.log('User document created');
-              } else {
-                console.log('User already exists in Firestore');
-              }
-            }
-          } else {
-            console.log('ℹ️ No redirect result found - user may not have completed sign-in');
-          }
-        } catch (error) {
-          console.error('❌ Redirect result error:', error);
-          console.error('Error code:', error.code);
-          console.error('Error message:', error.message);
-        }
-      }
-    };
-
-    handleRedirectResult();
-  }, [auth, db]);
-
+  
   async function signInWithGoogle() {
     console.log('🚀 signInWithGoogle function called');
     if (!auth || !googleProvider) {
@@ -119,7 +66,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
     
     try {
-      console.log('🔍 Starting Google sign in with redirect...');
+      console.log('🔍 Starting Google sign in with popup...');
       console.log('📋 Firebase config:', {
         apiKey: import.meta.env.VITE_FIREBASE_API_KEY ? 'Set' : 'Not set',
         authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -127,10 +74,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
         appId: import.meta.env.VITE_FIREBASE_APP_ID ? 'Set' : 'Not set'
       });
       
-      console.log('📡 Calling signInWithRedirect...');
-      // Use redirect instead of popup to avoid Cross-Origin-Opener-Policy issues
-      await signInWithRedirect(auth, googleProvider);
-      console.log('✅ Redirect initiated successfully');
+      console.log('📡 Calling signInWithPopup...');
+      // Use popup method for immediate feedback
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log('✅ Sign-in successful via popup:', result.user);
+      console.log('User details:', {
+        email: result.user.email,
+        uid: result.user.uid,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL
+      });
+      
+      // Save user data to Firestore
+      if (db) {
+        const userDoc = doc(db, 'users', result.user.uid);
+        const userSnapshot = await getDoc(userDoc);
+        
+        if (!userSnapshot.exists()) {
+          console.log('Creating new user document...');
+          await setDoc(userDoc, {
+            uid: result.user.uid,
+            email: result.user.email,
+            displayName: result.user.displayName,
+            photoURL: result.user.photoURL,
+            createdAt: new Date().toISOString(),
+            authProvider: 'google'
+          });
+          console.log('User document created');
+        } else {
+          console.log('User already exists in Firestore');
+        }
+      }
+      
+      return result;
       
     } catch (error: any) {
       console.error('Error initiating Google sign in:', error);
