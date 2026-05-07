@@ -58,8 +58,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   
   // Helper function to detect mobile devices
 const isMobileDevice = () => {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-         (window.innerWidth <= 768 && 'ontouchstart' in window);
+  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera || '';
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
+  const isMobileSize = window.innerWidth <= 768;
+  const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  console.log('📱 Device detection:', {
+    userAgent: userAgent.substring(0, 50),
+    isMobileUA,
+    isMobileSize,
+    hasTouch,
+    isMobile: isMobileUA || (isMobileSize && hasTouch)
+  });
+  
+  return isMobileUA || (isMobileSize && hasTouch);
 };
 
 async function signInWithGoogle() {
@@ -306,6 +318,9 @@ async function signInWithGoogle() {
               photoURL: result.user.photoURL
             });
             
+            // Manually update the current user state for mobile redirect
+            setCurrentUser(result.user);
+            
             // Save user data to Firestore for mobile sign-in
             if (db) {
               const userDoc = doc(db, 'users', result.user.uid);
@@ -350,11 +365,48 @@ async function signInWithGoogle() {
     const timer = setTimeout(() => {
       if (auth && !currentUser) {
         console.log('Forcing authentication state refresh...');
-        auth.currentUser && setCurrentUser(auth.currentUser);
+        
+        // Check if user is authenticated but state not updated
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser) {
+          console.log('🔄 Found authenticated user, updating state:', firebaseUser.email);
+          setCurrentUser(firebaseUser);
+        } else {
+          console.log('No authenticated user found in Firebase');
+        }
       }
     }, 2000); // Wait 2 seconds after component mount
 
     return () => clearTimeout(timer);
+  }, [auth, currentUser]);
+
+  // Additional fallback for mobile authentication
+  useEffect(() => {
+    const checkAuthState = async () => {
+      if (auth) {
+        // Wait a bit longer for mobile redirect to complete
+        setTimeout(async () => {
+          try {
+            const firebaseUser = auth.currentUser;
+            if (firebaseUser && !currentUser) {
+              console.log('🔄 Mobile fallback: Updating auth state from Firebase');
+              setCurrentUser(firebaseUser);
+            }
+            
+            // Double-check with getRedirectResult in case it was missed
+            const result = await getRedirectResult(auth);
+            if (result && result.user && !currentUser) {
+              console.log('🔄 Mobile fallback: Found redirect result, updating state');
+              setCurrentUser(result.user);
+            }
+          } catch (error) {
+            console.log('Mobile fallback check completed (no redirect result)');
+          }
+        }, 3000);
+      }
+    };
+
+    checkAuthState();
   }, [auth, currentUser]);
 
   const value: AuthContextType = {
