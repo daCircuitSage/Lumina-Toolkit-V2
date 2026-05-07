@@ -75,11 +75,21 @@ export default function JobTracker() {
   });
 
   useEffect(() => {
+    console.log('🔍 JobTracker useEffect triggered');
+    console.log('👤 currentUser:', currentUser ? {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      displayName: currentUser.displayName
+    } : 'Not logged in');
+    console.log('🗄️ db available:', !!db);
+    
     if (!currentUser || !db) {
+      console.log('❌ Missing currentUser or db, skipping query');
       setLoading(false);
       return;
     }
 
+    console.log('✅ Starting jobs query for user:', currentUser.uid);
     setLoading(true);
     
     // Query jobs for the current user
@@ -88,6 +98,8 @@ export default function JobTracker() {
       where('userId', '==', currentUser.uid),
       orderBy('createdAt', 'desc')
     );
+    
+    console.log('📋 Query created:', jobsQuery);
 
     // Set up real-time listener
     console.log('🔍 Setting up jobs query with UID:', currentUser.uid);
@@ -221,19 +233,31 @@ export default function JobTracker() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('🚀 Form submission started');
+    console.log('📋 Form data:', formData);
+    console.log('👤 Current user:', currentUser ? {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      displayName: currentUser.displayName
+    } : 'Not logged in');
+    console.log('🗄️ DB available:', !!db);
+    
+    if (!currentUser) {
+      console.error('❌ Cannot save job - user not authenticated');
+      alert('Please sign in to save jobs.');
+      return;
+    }
+    
     try {
-      console.log('Attempting to save job:', formData);
-      console.log('Current user:', currentUser);
-      console.log('DB available:', !!db);
-      
+      console.log('💾 Attempting to save job...');
       await saveJob(formData);
-      console.log('Job saved successfully');
+      console.log('✅ Job saved successfully');
       closeModal();
     } catch (error: any) {
-      console.error('Error saving job:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
-      console.error('Full error details:', error);
+      console.error('❌ Error saving job:', error);
+      console.error('🔍 Error code:', error.code);
+      console.error('📝 Error message:', error.message);
+      console.error('📊 Full error details:', error);
       
       // Provide more specific error messages
       let errorMessage = 'Failed to save job. Please try again.';
