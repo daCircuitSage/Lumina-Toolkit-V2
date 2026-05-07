@@ -56,7 +56,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   
-  async function signInWithGoogle() {
+  // Helper function to detect mobile devices
+const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+         (window.innerWidth <= 768 && 'ontouchstart' in window);
+};
+
+async function signInWithGoogle() {
     console.log('🚀 signInWithGoogle function called');
     if (!auth || !googleProvider) {
       console.error('❌ Firebase auth or Google provider not available');
@@ -65,8 +71,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       throw new Error('Authentication is not available. Firebase is not configured.');
     }
     
+    const isMobile = isMobileDevice();
+    console.log('� Device type:', isMobile ? 'Mobile' : 'Desktop');
+    
     try {
-      console.log('🔍 Starting Google sign in with popup...');
       console.log('📋 Firebase config:', {
         apiKey: import.meta.env.VITE_FIREBASE_API_KEY ? 'Set' : 'Not set',
         authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -74,19 +82,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
         appId: import.meta.env.VITE_FIREBASE_APP_ID ? 'Set' : 'Not set'
       });
       
-      console.log('📡 Calling signInWithPopup...');
-      // Use popup method for immediate feedback
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log('✅ Sign-in successful via popup:', result.user);
-      console.log('User details:', {
-        email: result.user.email,
-        uid: result.user.uid,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL
-      });
+      let result;
       
-      // Save user data to Firestore
-      if (db) {
+      if (isMobile) {
+        console.log('� Using redirect method for mobile device...');
+        // Use redirect method for mobile devices
+        await signInWithRedirect(auth, googleProvider);
+        console.log('🔄 Redirect initiated, waiting for result...');
+        
+        // The redirect will cause a page reload, so we need to check for result after redirect
+        // This will be handled by the getRedirectResult call in useEffect
+        return null;
+        
+      } else {
+        console.log('🖥️ Using popup method for desktop...');
+        // Use popup method for desktop
+        result = await signInWithPopup(auth, googleProvider);
+        console.log('✅ Sign-in successful via popup:', result.user);
+        console.log('User details:', {
+          email: result.user.email,
+          uid: result.user.uid,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL
+        });
+      }
+      
+      // Save user data to Firestore (only for successful popup sign-in)
+      if (result && result.user && db) {
         const userDoc = doc(db, 'users', result.user.uid);
         const userSnapshot = await getDoc(userDoc);
         
@@ -266,6 +288,62 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return () => {};
     }
   }, []);
+
+  // Handle redirect result for mobile authentication
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      if (auth) {
+        try {
+          console.log('🔄 Checking for redirect result...');
+          const result = await getRedirectResult(auth);
+          
+          if (result && result.user) {
+            console.log('✅ Redirect sign-in successful:', result.user);
+            console.log('User details:', {
+              email: result.user.email,
+              uid: result.user.uid,
+              displayName: result.user.displayName,
+              photoURL: result.user.photoURL
+            });
+            
+            // Save user data to Firestore for mobile sign-in
+            if (db) {
+              const userDoc = doc(db, 'users', result.user.uid);
+              const userSnapshot = await getDoc(userDoc);
+              
+              if (!userSnapshot.exists()) {
+                console.log('Creating new user document from redirect...');
+                await setDoc(userDoc, {
+                  uid: result.user.uid,
+                  email: result.user.email,
+                  displayName: result.user.displayName,
+                  photoURL: result.user.photoURL,
+                  createdAt: new Date().toISOString(),
+                  authProvider: 'google'
+                });
+                console.log('User document created from redirect');
+              } else {
+                console.log('User already exists in Firestore (redirect)');
+              }
+            }
+          } else {
+            console.log('No redirect result found (normal for popup auth)');
+          }
+        } catch (error: any) {
+          console.error('Error handling redirect result:', error);
+          
+          // Handle redirect-specific errors
+          if (error.code === 'auth/unauthorized-domain') {
+            console.error('Domain not authorized for redirect');
+          } else if (error.code === 'auth/redirect-cancelled-by-user') {
+            console.log('Redirect was cancelled by user');
+          }
+        }
+      }
+    };
+
+    handleRedirectResult();
+  }, [auth]);
 
   // Force refresh authentication state after redirect
   useEffect(() => {
