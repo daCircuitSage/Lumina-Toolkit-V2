@@ -1,36 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { runFullAuthTest, checkCurrentUser } from '../utils/full-auth-test';
 import { useNavigate } from 'react-router-dom';
 
 export default function AuthTestPage() {
   const { currentUser, signInWithGoogle, logout } = useAuth();
   const navigate = useNavigate();
   const [testResults, setTestResults] = useState<string[]>([]);
-  const [isRunningTests, setIsRunningTests] = useState(false);
 
   const addResult = (message: string) => {
     setTestResults(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
   };
 
-  const runTests = async () => {
-    setIsRunningTests(true);
-    setTestResults([]);
-    addResult('Starting comprehensive authentication tests...');
-    
-    try {
-      const allPassed = await runFullAuthTest();
-      addResult(allPassed ? '✅ All tests passed!' : '❌ Some tests failed');
-    } catch (error) {
-      addResult(`❌ Test error: ${error}`);
-    } finally {
-      setIsRunningTests(false);
-    }
-  };
-
   const checkAuth = () => {
-    const user = checkCurrentUser();
-    addResult(user ? `✅ Current user: ${user.email}` : '❌ No current user');
+    addResult(`Current user: ${currentUser ? currentUser.email : 'Not logged in'}`);
+    addResult(`User ID: ${currentUser ? currentUser.uid : 'N/A'}`);
+    addResult(`Display Name: ${currentUser ? (currentUser.displayName || 'Not set') : 'N/A'}`);
   };
 
   const testGoogleAuth = async () => {
@@ -64,14 +48,6 @@ export default function AuthTestPage() {
           <h1 className="text-2xl font-bold mb-6">🔍 Authentication System Test</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <button
-              onClick={runTests}
-              disabled={isRunningTests}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
-            >
-              {isRunningTests ? '🔄 Running Tests...' : '🧪 Run All Tests'}
-            </button>
-            
             <button
               onClick={checkAuth}
               className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
