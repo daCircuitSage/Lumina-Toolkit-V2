@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -28,6 +28,15 @@ if (isFirebaseConfigured()) {
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
+    
+    // Configure auth persistence to keep users logged in
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        console.log('Auth persistence configured successfully');
+      })
+      .catch((error) => {
+        console.error('Failed to configure auth persistence:', error);
+      });
     
     // Configure Google Provider with proper settings
     googleProvider = new GoogleAuthProvider();

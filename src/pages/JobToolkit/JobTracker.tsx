@@ -33,6 +33,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import { testFirebaseConnection, testJobsCollection } from '../../utils/firebase-debug';
+import { checkUserDataInDatabase, checkAllUsersInDatabase, checkAuthPersistence } from '../../utils/auth-debug';
 
 type JobStatus = 'applied' | 'interview' | 'rejected' | 'offer';
 
@@ -163,15 +164,29 @@ export default function JobTracker() {
   };
 
   const runDebugTests = async () => {
-    console.log('🔍 Running Firebase Debug Tests...');
+    console.log('🔍 Running Comprehensive Debug Tests...');
     
+    // Test 1: Auth persistence
+    const authTest = await checkAuthPersistence();
+    
+    // Test 2: Firebase connection
     const connectionTest = await testFirebaseConnection();
+    
+    // Test 3: User data in database
+    const userDataTest = await checkUserDataInDatabase();
+    
+    // Test 4: Jobs collection
     const jobsTest = await testJobsCollection();
     
-    if (connectionTest && jobsTest) {
-      alert('✅ All Firebase tests passed! The connection is working properly.');
+    // Test 5: All users in database
+    await checkAllUsersInDatabase();
+    
+    const allTestsPassed = authTest && connectionTest && userDataTest && jobsTest;
+    
+    if (allTestsPassed) {
+      alert('✅ All tests passed! Authentication and database are working properly.');
     } else {
-      alert('❌ Firebase tests failed. Check console for details.');
+      alert('❌ Some tests failed. Check console for detailed information about what\'s wrong.');
     }
   };
 

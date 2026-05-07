@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 import { 
   User,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -53,54 +55,72 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Handle redirect result for Google sign-in
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      if (auth) {
+        try {
+          const result = await getRedirectResult(auth);
+          if (result) {
+            console.log('Google sign in successful via redirect:', result.user);
+            
+            // Save user data to Firestore
+            if (db) {
+              const userDoc = doc(db, 'users', result.user.uid);
+              const userSnapshot = await getDoc(userDoc);
+              
+              if (!userSnapshot.exists()) {
+                console.log('Creating new user document...');
+                await setDoc(userDoc, {
+                  uid: result.user.uid,
+                  email: result.user.email,
+                  displayName: result.user.displayName,
+                  photoURL: result.user.photoURL,
+                  createdAt: new Date().toISOString(),
+                  authProvider: 'google'
+                });
+                console.log('User document created');
+              } else {
+                console.log('User already exists in Firestore');
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Redirect result error:', error);
+        }
+      }
+    };
+
+    handleRedirectResult();
+  }, [db]);
+
   async function signInWithGoogle() {
     if (!auth || !googleProvider) {
       throw new Error('Authentication is not available. Firebase is not configured.');
     }
     
     try {
-      console.log('Starting Google sign in...');
+      console.log('Starting Google sign in with redirect...');
       console.log('Firebase config:', {
         apiKey: import.meta.env.VITE_FIREBASE_API_KEY ? 'Set' : 'Not set',
         authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
         projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID
       });
       
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
+      // Use redirect instead of popup to avoid Cross-Origin-Opener-Policy issues
+      await signInWithRedirect(auth, googleProvider);
+      console.log('Redirect initiated successfully');
       
-      console.log('Google sign in successful:', user);
-      
-      // Save user data to Firestore
-      if (db) {
-        const userDoc = doc(db, 'users', user.uid);
-        const userSnapshot = await getDoc(userDoc);
-        
-        if (!userSnapshot.exists()) {
-          console.log('Creating new user document...');
-          await setDoc(userDoc, {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            createdAt: new Date().toISOString(),
-            authProvider: 'google'
-          });
-          console.log('User document created');
-        } else {
-          console.log('User already exists in Firestore');
-        }
-      }
     } catch (error: any) {
-      console.error('Error signing in with Google:', error);
+      console.error('Error initiating Google sign in:', error);
       
       // Provide more specific error messages
       if (error.code === 'auth/unauthorized-domain') {
-        throw new Error('Domain not authorized. Please add 127.0.0.1 to Firebase Auth → Settings → Authorized domains. See firebase-troubleshooting.md for steps.');
+        throw new Error('Domain not authorized. Please add your domain to Firebase Auth → Settings → Authorized domains. See firebase-troubleshooting.md for steps.');
       } else if (error.code === 'auth/popup-closed-by-user') {
-        throw new Error('Google sign-in popup was closed before authentication was completed.');
+        throw new Error('Google sign-in was cancelled.');
       } else if (error.code === 'auth/popup-blocked') {
-        throw new Error('Google sign-in popup was blocked by the browser. Please allow popups for this site.');
+        throw new Error('Google sign-in was blocked by the browser.');
       } else if (error.code === 'auth/cancelled-popup-request') {
         throw new Error('Google sign-in was cancelled.');
       } else {
