@@ -301,6 +301,25 @@ async function signInWithGoogle() {
     }
   }, []);
 
+  // Aggressive state sync for mobile - force check auth state
+  useEffect(() => {
+    if (auth) {
+      const forceAuthCheck = () => {
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser && !currentUser) {
+          console.log('🔥 FORCE SYNC: Found Firebase user, updating React state');
+          setCurrentUser(firebaseUser);
+        }
+      };
+
+      // Check every 2 seconds for the first 10 seconds
+      const intervals = [2000, 4000, 6000, 8000, 10000];
+      const timers = intervals.map(delay => setTimeout(forceAuthCheck, delay));
+
+      return () => timers.forEach(clearTimeout);
+    }
+  }, [auth, currentUser]);
+
   // Handle redirect result for mobile authentication
   useEffect(() => {
     const handleRedirectResult = async () => {

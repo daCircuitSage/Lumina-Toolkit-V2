@@ -6,6 +6,7 @@ export default function AuthDebug() {
   const { currentUser, loading } = useAuth();
   const [firebaseUser, setFirebaseUser] = useState<any>(null);
   const [redirectResult, setRedirectResult] = useState<any>(null);
+  const { signInWithGoogle } = useAuth();
 
   useEffect(() => {
     // Check Firebase auth state directly
@@ -33,6 +34,18 @@ export default function AuthDebug() {
     return null;
   }
 
+  const forceRefresh = async () => {
+    if (auth) {
+      const user = auth.currentUser;
+      if (user) {
+        console.log('🔄 Manual refresh: Setting user state');
+        setFirebaseUser(user);
+        // Force React to update by calling signInWithGoogle with a flag
+        window.location.reload();
+      }
+    }
+  };
+
   return (
     <div className="fixed bottom-4 right-4 bg-black/90 text-white p-3 rounded-lg text-xs max-w-sm z-50 border border-yellow-500/30">
       <div className="font-bold mb-2 text-yellow-400">🔍 Auth Debug</div>
@@ -47,6 +60,22 @@ export default function AuthDebug() {
           <div className="text-green-400">✅ Context: {currentUser ? 'Set' : 'Not Set'}</div>
           <div className="text-blue-400">🔥 Firebase: {firebaseUser ? 'Set' : 'Not Set'}</div>
           <div className="text-purple-400">🔄 Redirect: {redirectResult?.user ? 'Set' : 'Not Set'}</div>
+        </div>
+        <div className="mt-3 space-y-2">
+          <button 
+            onClick={forceRefresh}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+          >
+            🔄 Force Refresh
+          </button>
+          {firebaseUser && !currentUser && (
+            <button 
+              onClick={() => window.location.reload()}
+              className="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+            >
+              🔄 Reload Page
+            </button>
+          )}
         </div>
       </div>
     </div>
