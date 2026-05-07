@@ -70,21 +70,36 @@ async function signInWithGoogle() {
     
     const isMobile = isMobileDevice();
     console.log('📱 Device type:', isMobile ? 'Mobile' : 'Desktop');
+    console.log('🌐 Current domain:', window.location.origin);
     
     try {
       let result;
       
       if (isMobile) {
-        console.log('📱 Using redirect method for mobile...');
-        await signInWithRedirect(auth, googleProvider);
-        return null; // Redirect will cause page reload
+        console.log('📱 Trying redirect method for mobile first...');
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          return null; // Redirect will cause page reload
+        } catch (redirectError: any) {
+          console.error('❌ Redirect method failed, trying popup fallback:', redirectError);
+          
+          // If redirect fails, try popup as fallback
+          if (redirectError.code === 'auth/unauthorized-domain' || 
+              redirectError.code === 'auth/redirect-cancelled-by-user') {
+            console.log('🔄 Trying popup method as fallback...');
+            result = await signInWithPopup(auth, googleProvider);
+            console.log('✅ Fallback popup sign-in successful:', result.user);
+          } else {
+            throw redirectError;
+          }
+        }
       } else {
         console.log('🖥️ Using popup method for desktop...');
         result = await signInWithPopup(auth, googleProvider);
         console.log('✅ Sign-in successful via popup:', result.user);
       }
       
-      // Save user data to Firestore (only for successful popup sign-in)
+      // Save user data to Firestore (only for successful sign-in)
       if (result && result.user && db) {
         await saveUserToFirestore(result.user);
       }
@@ -93,15 +108,20 @@ async function signInWithGoogle() {
       
     } catch (error: any) {
       console.error('Error initiating Google sign in:', error);
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      console.error('Current domain:', window.location.origin);
       
       if (error.code === 'auth/unauthorized-domain') {
-        throw new Error('Domain not authorized. Please add your domain to Firebase Auth → Settings → Authorized domains.');
+        throw new Error(`Domain ${window.location.origin} not authorized. Please add this domain to Firebase Auth → Settings → Authorized domains.`);
       } else if (error.code === 'auth/popup-closed-by-user') {
         throw new Error('Google sign-in was cancelled.');
       } else if (error.code === 'auth/popup-blocked') {
         throw new Error('Google sign-in was blocked by the browser.');
+      } else if (error.code === 'auth/redirect-cancelled-by-user') {
+        throw new Error('Google sign-in was cancelled.');
       } else {
-        throw new Error(`Google authentication failed: ${error.message || 'Unknown error'}`);
+        throw new Error(`Google authentication failed: ${error.message || 'Unknown error'} (Code: ${error.code})`);
       }
     }
   }
@@ -281,19 +301,47 @@ async function signInWithGoogle() {
     const handleRedirectResult = async () => {
       try {
         console.log('🔄 Checking for redirect result...');
+        console.log('🌐 Current domain after redirect:', window.location.origin);
+        
         const result = await getRedirectResult(auth);
         
         if (result && result.user) {
           console.log('✅ Redirect sign-in successful:', result.user);
+          console.log('User details:', {
+            email: result.user.email,
+            uid: result.user.uid,
+            displayName: result.user.displayName,
+            photoURL: result.user.photoURL
+          });
           // onAuthStateChanged will handle the state update
+        } else {
+          console.log('No redirect result found (normal for popup auth or failed redirect)');
         }
       } catch (error: any) {
         console.error('Error handling redirect result:', error);
+        console.error('Redirect error code:', error.code);
+        console.error('Redirect error message:', error.message);
         
         if (error.code === 'auth/unauthorized-domain') {
-          console.error('Domain not authorized for redirect');
+          console.error(`❌ Domain ${window.location.origin} not authorized for redirect`);
+          showDomainAuthorizationError();
+        } else if (error.code === 'auth/redirect-cancelled-by-user') {
+          console.log('Redirect was cancelled by user');
+        } else {
+          console.log('Redirect result error:', error.message);
         }
       }
+    };
+
+    // Function to show domain authorization error
+    const showDomainAuthorizationError = () => {
+      const currentDomain = window.location.origin;
+      console.error(`🚨 CRITICAL: Domain ${currentDomain} is not authorized in Firebase!`);
+      console.error('To fix this:');
+      console.error('1. Go to https://console.firebase.google.com/project/luminatoolkit/authentication/providers');
+      console.error('2. Click on Google provider');
+      console.error('3. Add this domain to authorized domains:', currentDomain);
+      console.error('4. Save and wait 5-10 minutes for changes to propagate');
     };
 
     handleRedirectResult();
