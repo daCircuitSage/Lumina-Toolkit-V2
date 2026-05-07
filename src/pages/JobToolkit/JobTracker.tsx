@@ -106,51 +106,71 @@ export default function JobTracker() {
   }, [currentUser, db]);
 
   const saveJob = async (jobData: Partial<Job>) => {
-    console.log('saveJob called with:', jobData);
-    console.log('currentUser:', currentUser);
-    console.log('db:', db);
+    console.log('🔍 saveJob called with:', jobData);
+    console.log('👤 currentUser:', currentUser ? `${currentUser.email} (UID: ${currentUser.uid})` : 'Not logged in');
+    console.log('🗄️ db available:', !!db);
     
     if (!currentUser || !db) {
-      console.error('Missing currentUser or db');
+      console.error('❌ Missing currentUser or db');
+      console.error('currentUser exists:', !!currentUser);
+      console.error('db exists:', !!db);
       throw new Error('User must be logged in to save jobs');
     }
 
     // Validate required fields
     if (!jobData.company || !jobData.role || !jobData.status || !jobData.date) {
-      console.error('Missing required fields:', jobData);
+      console.error('❌ Missing required fields:', jobData);
       throw new Error('Please fill in all required fields (company, role, status, date)');
     }
 
     const now = new Date().toISOString();
-    console.log('Timestamp:', now);
+    console.log('⏰ Timestamp:', now);
     
     try {
       if (editingJob) {
         // Update existing job
-        console.log('Updating existing job:', editingJob.id);
+        console.log('📝 Updating existing job:', editingJob.id);
         const jobRef = doc(db, 'jobs', editingJob.id);
         const updateData = {
           ...jobData,
           updatedAt: now
         };
-        console.log('Update data:', updateData);
+        console.log('📋 Update data:', updateData);
+        console.log('🔗 Job reference:', jobRef.path);
         await updateDoc(jobRef, updateData);
-        console.log('Job updated successfully');
+        console.log('✅ Job updated successfully');
       } else {
         // Create new job
-        console.log('Creating new job');
+        console.log('➕ Creating new job');
         const newJobData = {
           ...jobData,
           userId: currentUser.uid,
           createdAt: now,
           updatedAt: now
         };
-        console.log('New job data:', newJobData);
+        console.log('📋 New job data:', newJobData);
+        console.log('🔗 Collection reference:', collection(db, 'jobs').path);
         const docRef = await addDoc(collection(db, 'jobs'), newJobData);
-        console.log('Job created successfully with ID:', docRef.id);
+        console.log('✅ Job created successfully with ID:', docRef.id);
+        console.log('📄 Document path:', docRef.path);
       }
-    } catch (error) {
-      console.error('Firestore operation failed:', error);
+    } catch (error: any) {
+      console.error('❌ Firestore operation failed:', error);
+      console.error('🔍 Error code:', error.code);
+      console.error('📝 Error message:', error.message);
+      console.error('📊 Full error details:', error);
+      
+      // Check for specific Firebase errors
+      if (error.code === 'permission-denied') {
+        console.error('🚫 Permission denied - check Firestore rules');
+      } else if (error.code === 'unauthenticated') {
+        console.error('🔐 Unauthenticated - user not logged in properly');
+      } else if (error.code === 'not-found') {
+        console.error('🔍 Document not found');
+      } else if (error.code === 'unavailable') {
+        console.error('🌐 Firestore service unavailable');
+      }
+      
       throw error;
     }
   };
