@@ -58,11 +58,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Handle redirect result for Google sign-in
   useEffect(() => {
     const handleRedirectResult = async () => {
+      console.log('🔍 Checking for redirect result...');
       if (auth) {
         try {
+          console.log('📡 Getting redirect result...');
           const result = await getRedirectResult(auth);
           if (result) {
-            console.log('Google sign in successful via redirect:', result.user);
+            console.log('✅ Google sign in successful via redirect:', result.user);
+            console.log('User details:', {
+              email: result.user.email,
+              uid: result.user.uid,
+              displayName: result.user.displayName,
+              photoURL: result.user.photoURL
+            });
             
             // Force update current user state
             setCurrentUser(result.user);
@@ -87,9 +95,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 console.log('User already exists in Firestore');
               }
             }
+          } else {
+            console.log('ℹ️ No redirect result found - user may not have completed sign-in');
           }
         } catch (error) {
-          console.error('Redirect result error:', error);
+          console.error('❌ Redirect result error:', error);
+          console.error('Error code:', error.code);
+          console.error('Error message:', error.message);
         }
       }
     };
@@ -98,21 +110,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [auth, db]);
 
   async function signInWithGoogle() {
+    console.log('🚀 signInWithGoogle function called');
     if (!auth || !googleProvider) {
+      console.error('❌ Firebase auth or Google provider not available');
+      console.log('Auth available:', !!auth);
+      console.log('Google provider available:', !!googleProvider);
       throw new Error('Authentication is not available. Firebase is not configured.');
     }
     
     try {
-      console.log('Starting Google sign in with redirect...');
-      console.log('Firebase config:', {
+      console.log('🔍 Starting Google sign in with redirect...');
+      console.log('📋 Firebase config:', {
         apiKey: import.meta.env.VITE_FIREBASE_API_KEY ? 'Set' : 'Not set',
         authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID ? 'Set' : 'Not set'
       });
       
+      console.log('📡 Calling signInWithRedirect...');
       // Use redirect instead of popup to avoid Cross-Origin-Opener-Policy issues
       await signInWithRedirect(auth, googleProvider);
-      console.log('Redirect initiated successfully');
+      console.log('✅ Redirect initiated successfully');
       
     } catch (error: any) {
       console.error('Error initiating Google sign in:', error);
