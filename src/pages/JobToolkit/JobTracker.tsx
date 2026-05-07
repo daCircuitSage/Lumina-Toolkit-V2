@@ -32,6 +32,7 @@ import {
   orderBy 
 } from 'firebase/firestore';
 import { db } from '../../config/firebase';
+import { testFirebaseConnection, testJobsCollection } from '../../utils/firebase-debug';
 
 type JobStatus = 'applied' | 'interview' | 'rejected' | 'offer';
 
@@ -104,28 +105,52 @@ export default function JobTracker() {
   }, [currentUser, db]);
 
   const saveJob = async (jobData: Partial<Job>) => {
+    console.log('saveJob called with:', jobData);
+    console.log('currentUser:', currentUser);
+    console.log('db:', db);
+    
     if (!currentUser || !db) {
+      console.error('Missing currentUser or db');
       throw new Error('User must be logged in to save jobs');
     }
 
+    // Validate required fields
+    if (!jobData.company || !jobData.role || !jobData.status || !jobData.date) {
+      console.error('Missing required fields:', jobData);
+      throw new Error('Please fill in all required fields (company, role, status, date)');
+    }
+
     const now = new Date().toISOString();
+    console.log('Timestamp:', now);
     
-    if (editingJob) {
-      // Update existing job
-      const jobRef = doc(db, 'jobs', editingJob.id);
-      await updateDoc(jobRef, {
-        ...jobData,
-        updatedAt: now
-      });
-    } else {
-      // Create new job
-      const newJobData = {
-        ...jobData,
-        userId: currentUser.uid,
-        createdAt: now,
-        updatedAt: now
-      };
-      await addDoc(collection(db, 'jobs'), newJobData);
+    try {
+      if (editingJob) {
+        // Update existing job
+        console.log('Updating existing job:', editingJob.id);
+        const jobRef = doc(db, 'jobs', editingJob.id);
+        const updateData = {
+          ...jobData,
+          updatedAt: now
+        };
+        console.log('Update data:', updateData);
+        await updateDoc(jobRef, updateData);
+        console.log('Job updated successfully');
+      } else {
+        // Create new job
+        console.log('Creating new job');
+        const newJobData = {
+          ...jobData,
+          userId: currentUser.uid,
+          createdAt: now,
+          updatedAt: now
+        };
+        console.log('New job data:', newJobData);
+        const docRef = await addDoc(collection(db, 'jobs'), newJobData);
+        console.log('Job created successfully with ID:', docRef.id);
+      }
+    } catch (error) {
+      console.error('Firestore operation failed:', error);
+      throw error;
     }
   };
 
@@ -137,15 +162,50 @@ export default function JobTracker() {
     await deleteDoc(doc(db, 'jobs', jobId));
   };
 
+  const runDebugTests = async () => {
+    console.log('🔍 Running Firebase Debug Tests...');
+    
+    const connectionTest = await testFirebaseConnection();
+    const jobsTest = await testJobsCollection();
+    
+    if (connectionTest && jobsTest) {
+      alert('✅ All Firebase tests passed! The connection is working properly.');
+    } else {
+      alert('❌ Firebase tests failed. Check console for details.');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     try {
+      console.log('Attempting to save job:', formData);
+      console.log('Current user:', currentUser);
+      console.log('DB available:', !!db);
+      
       await saveJob(formData);
+      console.log('Job saved successfully');
       closeModal();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving job:', error);
-      alert('Failed to save job. Please try again.');
+      console.error('Error code:', error.code);
+      console.error('Error message:', error.message);
+      console.error('Full error details:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to save job. Please try again.';
+      
+      if (error.code === 'permission-denied') {
+        errorMessage = 'Permission denied. Please check if you are logged in and have proper access.';
+      } else if (error.code === 'unavailable') {
+        errorMessage = 'Firebase service is currently unavailable. Please check your internet connection.';
+      } else if (error.code === 'unauthenticated') {
+        errorMessage = 'You must be logged in to save jobs. Please sign in and try again.';
+      } else if (error.message) {
+        errorMessage = `Failed to save job: ${error.message}`;
+      }
+      
+      alert(errorMessage);
     }
   };
 
@@ -209,12 +269,20 @@ export default function JobTracker() {
           <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">Job Tracker</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-2">Manage your hunt. Track every application from sent to signed.</p>
         </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-xl"
-        >
-          <Plus size={18} /> Log Application
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={runDebugTests}
+            className="bg-amber-500 dark:bg-amber-400 text-white dark:text-slate-900 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all"
+          >
+            🔍 Debug
+          </button>
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-xl"
+          >
+            <Plus size={18} /> Log Application
+          </button>
+        </div>
       </header>
 
       {/* Stats Quick Look */}
