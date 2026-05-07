@@ -62,6 +62,27 @@
     </script>
     
     <title>Lumina Toolkit - Professional Productivity Suite</title>
+    
+    <!-- Suppress Vercel Analytics Errors -->
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.filename && e.filename.includes('_vercel/insights')) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      }, true);
+      
+      // Override fetch to suppress Vercel analytics errors
+      const originalFetch = window.fetch;
+      window.fetch = function(...args) {
+        const url = args[0];
+        if (typeof url === 'string' && url.includes('_vercel/insights')) {
+          return Promise.resolve(new Response('{}', { status: 200 }));
+        }
+        return originalFetch.apply(this, args);
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>
