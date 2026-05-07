@@ -64,6 +64,8 @@ const CoverLetter = React.lazy(() => import('../pages/JobToolkit/CoverLetter'));
 
 const Contact = React.lazy(() => import('../pages/Contact'));
 
+const AuthTestPage = React.lazy(() => import('../pages/AuthTestPage'));
+
 
 
 const LoadingFallback = () => (
@@ -572,6 +574,20 @@ const AppRoutes = () => {
         <ProtectedRoute>
           <AuthDashboard />
         </ProtectedRoute>
+      } />
+      
+      <Route path="/auth-test" element={
+        <AnimatedPage>
+          <Layout>
+            <SeoHead
+              title="Authentication Test | Lumina Toolkit"
+              description="Test and debug authentication system functionality."
+            />
+            <LazyLoadWrapper>
+              <AuthTestPage />
+            </LazyLoadWrapper>
+          </Layout>
+        </AnimatedPage>
       } />
 
       
