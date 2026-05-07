@@ -54,6 +54,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [loading, setLoading] = useState(true);
 
   async function signInWithGoogle() {
+    if (!auth || !googleProvider) {
+      throw new Error('Authentication is not available. Firebase is not configured.');
+    }
+    
     try {
       console.log('Starting Google sign in...');
       console.log('Firebase config:', {
@@ -68,22 +72,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log('Google sign in successful:', user);
       
       // Save user data to Firestore
-      const userDoc = doc(db, 'users', user.uid);
-      const userSnapshot = await getDoc(userDoc);
-      
-      if (!userSnapshot.exists()) {
-        console.log('Creating new user document...');
-        await setDoc(userDoc, {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          createdAt: new Date().toISOString(),
-          authProvider: 'google'
-        });
-        console.log('User document created');
-      } else {
-        console.log('User already exists in Firestore');
+      if (db) {
+        const userDoc = doc(db, 'users', user.uid);
+        const userSnapshot = await getDoc(userDoc);
+        
+        if (!userSnapshot.exists()) {
+          console.log('Creating new user document...');
+          await setDoc(userDoc, {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            createdAt: new Date().toISOString(),
+            authProvider: 'google'
+          });
+          console.log('User document created');
+        } else {
+          console.log('User already exists in Firestore');
+        }
       }
     } catch (error: any) {
       console.error('Error signing in with Google:', error);
@@ -104,6 +110,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function signUp(email: string, password: string, displayName: string) {
+    if (!auth) {
+      throw new Error('Authentication is not available. Firebase is not configured.');
+    }
+    
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       const user = result.user;
@@ -112,15 +122,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await updateProfile(user, { displayName });
       
       // Save user data to Firestore
-      const userDoc = doc(db, 'users', user.uid);
-      await setDoc(userDoc, {
-        uid: user.uid,
-        email: user.email,
-        displayName: displayName,
-        photoURL: null,
-        createdAt: new Date().toISOString(),
-        authProvider: 'email'
-      });
+      if (db) {
+        const userDoc = doc(db, 'users', user.uid);
+        await setDoc(userDoc, {
+          uid: user.uid,
+          email: user.email,
+          displayName: displayName,
+          photoURL: null,
+          createdAt: new Date().toISOString(),
+          authProvider: 'email'
+        });
+      }
     } catch (error) {
       console.error('Error signing up:', error);
       throw error;
@@ -128,6 +140,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function signIn(email: string, password: string) {
+    if (!auth) {
+      throw new Error('Authentication is not available. Firebase is not configured.');
+    }
+    
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -137,6 +153,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function logout() {
+    if (!auth) {
+      throw new Error('Authentication is not available. Firebase is not configured.');
+    }
+    
     try {
       await signOut(auth);
     } catch (error) {
@@ -148,6 +168,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function submitReview(reviewData: Omit<Review, 'id' | 'userId' | 'userEmail' | 'createdAt'>) {
     if (!currentUser) {
       throw new Error('User must be logged in to submit a review');
+    }
+    
+    if (!db) {
+      throw new Error('Database is not available. Firebase is not configured.');
     }
 
     try {
@@ -166,6 +190,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function getFeaturedReviews(): Promise<Review[]> {
+    if (!db) {
+      return [];
+    }
+    
     try {
       const reviewsQuery = query(
         collection(db, 'reviews'),
@@ -185,6 +213,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function getAllReviews(): Promise<Review[]> {
+    if (!db) {
+      return [];
+    }
+    
     try {
       const reviewsQuery = query(
         collection(db, 'reviews'),
@@ -203,12 +235,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setLoading(false);
-    });
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setCurrentUser(user);
+        setLoading(false);
+      });
 
-    return unsubscribe;
+      return unsubscribe;
+    } else {
+      // Firebase is not configured, set loading to false
+      setLoading(false);
+      return () => {};
+    }
   }, []);
 
   const value: AuthContextType = {

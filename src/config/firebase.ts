@@ -11,34 +11,39 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Validate Firebase configuration
-const validateFirebaseConfig = () => {
+// Check if Firebase configuration is complete
+const isFirebaseConfigured = () => {
   const requiredFields = ['apiKey', 'authDomain', 'projectId', 'appId'];
-  const missingFields = requiredFields.filter(field => !firebaseConfig[field as keyof typeof firebaseConfig]);
-  
-  if (missingFields.length > 0) {
-    console.error('Missing Firebase configuration fields:', missingFields);
-    throw new Error(`Firebase configuration is incomplete. Missing: ${missingFields.join(', ')}`);
-  }
-  
-  console.log('Firebase configuration validated successfully');
+  return requiredFields.every(field => firebaseConfig[field as keyof typeof firebaseConfig]);
 };
 
-validateFirebaseConfig();
+let app: any = null;
+let auth: any = null;
+let db: any = null;
+let googleProvider: any = null;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+if (isFirebaseConfigured()) {
+  try {
+    console.log('Firebase configuration found, initializing Firebase...');
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    
+    // Configure Google Provider with proper settings
+    googleProvider = new GoogleAuthProvider();
+    googleProvider.addScope('profile');
+    googleProvider.addScope('email');
+    googleProvider.setCustomParameters({
+      prompt: 'select_account'
+    });
+    
+    console.log('Firebase initialized successfully');
+  } catch (error) {
+    console.error('Failed to initialize Firebase:', error);
+  }
+} else {
+  console.warn('Firebase configuration is incomplete. Authentication features will be disabled.');
+}
 
-// Initialize Firebase services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-
-// Configure Google Provider with proper settings
-export const googleProvider = new GoogleAuthProvider();
-googleProvider.addScope('profile');
-googleProvider.addScope('email');
-googleProvider.setCustomParameters({
-  prompt: 'select_account'
-});
-
+export { app, auth, db, googleProvider };
 export default app;
