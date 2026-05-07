@@ -257,6 +257,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     if (auth) {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log('Auth state changed:', user ? `User logged in: ${user.email}` : 'User logged out');
         setCurrentUser(user);
         setLoading(false);
       });

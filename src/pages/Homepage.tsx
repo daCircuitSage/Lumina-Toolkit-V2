@@ -39,6 +39,11 @@ export default function Homepage() {
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Debug authentication state
+  useEffect(() => {
+    console.log('Homepage - Auth state:', currentUser ? `Logged in as ${currentUser.email}` : 'Not logged in');
+  }, [currentUser]);
+
   useEffect(() => {
     loadReviews();
   }, []);
