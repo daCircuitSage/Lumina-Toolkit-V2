@@ -64,6 +64,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           if (result) {
             console.log('Google sign in successful via redirect:', result.user);
             
+            // Force update current user state
+            setCurrentUser(result.user);
+            
             // Save user data to Firestore
             if (db) {
               const userDoc = doc(db, 'users', result.user.uid);
@@ -92,7 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
 
     handleRedirectResult();
-  }, [db]);
+  }, [auth, db]);
 
   async function signInWithGoogle() {
     if (!auth || !googleProvider) {
@@ -269,6 +272,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
       return () => {};
     }
   }, []);
+
+  // Force refresh authentication state after redirect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (auth && !currentUser) {
+        console.log('Forcing authentication state refresh...');
+        auth.currentUser && setCurrentUser(auth.currentUser);
+      }
+    }, 2000); // Wait 2 seconds after component mount
+
+    return () => clearTimeout(timer);
+  }, [auth, currentUser]);
 
   const value: AuthContextType = {
     currentUser,
