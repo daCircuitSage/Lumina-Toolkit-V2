@@ -19,6 +19,19 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import SeoContent from '../../components/SeoContent';
+import { useAuth } from '../../contexts/AuthContext';
+import { 
+  collection, 
+  query, 
+  where, 
+  onSnapshot, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  doc, 
+  orderBy 
+} from 'firebase/firestore';
+import { db } from '../../config/firebase';
 
 type JobStatus = 'applied' | 'interview' | 'rejected' | 'offer';
 
@@ -29,6 +42,9 @@ interface Job {
   status: JobStatus;
   date: string;
   notes: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const STATUS_CONFIG: Record<JobStatus, { label: string, icon: any, colors: string }> = {
@@ -39,11 +55,13 @@ const STATUS_CONFIG: Record<JobStatus, { label: string, icon: any, colors: strin
 };
 
 export default function JobTracker() {
+  const { currentUser } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [filter, setFilter] = useState<JobStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   // Form State
   const [formData, setFormData] = useState<Partial<Job>>({
@@ -55,28 +73,80 @@ export default function JobTracker() {
   });
 
   useEffect(() => {
-    const savedJobs = localStorage.getItem('career_jobs');
-    if (savedJobs) setJobs(JSON.parse(savedJobs));
-  }, []);
+    if (!currentUser || !db) {
+      setLoading(false);
+      return;
+    }
 
-  const saveJobs = (updatedJobs: Job[]) => {
-    setJobs(updatedJobs);
-    localStorage.setItem('career_jobs', JSON.stringify(updatedJobs));
+    setLoading(true);
+    
+    // Query jobs for the current user
+    const jobsQuery = query(
+      collection(db, 'jobs'),
+      where('userId', '==', currentUser.uid),
+      orderBy('createdAt', 'desc')
+    );
+
+    // Set up real-time listener
+    const unsubscribe = onSnapshot(jobsQuery, (snapshot) => {
+      const jobsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Job[];
+      setJobs(jobsData);
+      setLoading(false);
+    }, (error) => {
+      console.error('Error fetching jobs:', error);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [currentUser, db]);
+
+  const saveJob = async (jobData: Partial<Job>) => {
+    if (!currentUser || !db) {
+      throw new Error('User must be logged in to save jobs');
+    }
+
+    const now = new Date().toISOString();
+    
+    if (editingJob) {
+      // Update existing job
+      const jobRef = doc(db, 'jobs', editingJob.id);
+      await updateDoc(jobRef, {
+        ...jobData,
+        updatedAt: now
+      });
+    } else {
+      // Create new job
+      const newJobData = {
+        ...jobData,
+        userId: currentUser.uid,
+        createdAt: now,
+        updatedAt: now
+      };
+      await addDoc(collection(db, 'jobs'), newJobData);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editingJob) {
-      const updated = jobs.map(j => j.id === editingJob.id ? { ...j, ...formData } as Job : j);
-      saveJobs(updated);
-    } else {
-      const newJob: Job = {
-        id: Math.random().toString(36).substr(2, 9),
-        ...formData as Omit<Job, 'id'>
-      };
-      saveJobs([newJob, ...jobs]);
+  const deleteJobData = async (jobId: string) => {
+    if (!currentUser || !db) {
+      throw new Error('User must be logged in to delete jobs');
     }
-    closeModal();
+    
+    await deleteDoc(doc(db, 'jobs', jobId));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      await saveJob(formData);
+      closeModal();
+    } catch (error) {
+      console.error('Error saving job:', error);
+      alert('Failed to save job. Please try again.');
+    }
   };
 
   const closeModal = () => {
@@ -91,15 +161,43 @@ export default function JobTracker() {
     setIsModalOpen(true);
   };
 
-  const deleteJob = (id: string) => {
+  const deleteJob = async (id: string) => {
     if (confirm('Verify: Remove this application from tracking?')) {
-      saveJobs(jobs.filter(j => j.id !== id));
+      try {
+        await deleteJobData(id);
+      } catch (error) {
+        console.error('Error deleting job:', error);
+        alert('Failed to delete job. Please try again.');
+      }
     }
   };
 
   const filteredJobs = jobs
     .filter(j => filter === 'all' || j.status === filter)
     .filter(j => j.company.toLowerCase().includes(searchQuery.toLowerCase()) || j.role.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  if (!currentUser) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10 text-center">
+        <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
+          <Briefcase size={32} />
+        </div>
+        <h3 className="text-lg font-black text-slate-400 uppercase tracking-widest mb-2">Authentication Required</h3>
+        <p className="text-sm text-slate-400 mb-6">Please sign in to sync your job data across all devices.</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-10 text-center">
+        <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300 animate-pulse">
+          <Briefcase size={32} />
+        </div>
+        <h3 className="text-lg font-black text-slate-400 uppercase tracking-widest">Loading Jobs...</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
@@ -332,7 +430,7 @@ export default function JobTracker() {
           "Real-time Stats: Get a bird's-eye view of your hunt with our visual dashboard.",
           "Detailed Records: Save company names, roles, application dates, and personal notes.",
           "Search & Filter: Quickly find specific applications or filter by status like 'Offer'.",
-          "Local Storage: Your data stays on your machine, ensuring 100% privacy and accessibility.",
+          "Cloud Storage: Your job data is securely stored and synced across all your devices when you're logged in.",
           "Mobile Ready: Manage your job hunt anytime, anywhere with our fully responsive UI."
         ]}
         steps={[
@@ -350,9 +448,9 @@ export default function JobTracker() {
           "Free tool with no account creation or monthly fees."
         ]}
         faq={[
-          { q: "Is my data private?", a: "Yes, our tracker uses browser 'localStorage'. This means your job data is saved exclusively on your own device and never touches our servers." },
+          { q: "Is my data private and secure?", a: "Yes, your job data is stored securely in Firebase with user-based isolation. Only you can access your own job data when logged in." },
           { q: "How many jobs can I track?", a: "There is no limit. You can track hundreds of applications without any performance issues." },
-          { q: "Can I use this on multiple devices?", a: "Because we use local storage for privacy, data is currently specific to the device and browser you are using." },
+          { q: "Can I use this on multiple devices?", a: "Yes! When you're logged in, your job data automatically syncs across all your devices in real-time." },
           { q: "What should I put in the notes?", a: "We recommend adding the link to the original job description, names of recruiters, and any specific questions they asked during interviews." },
           { q: "Is it free to use forever?", a: "Yes, the Job Tracker is a core part of our free tool suite and will always be available without a subscription." }
         ]}
