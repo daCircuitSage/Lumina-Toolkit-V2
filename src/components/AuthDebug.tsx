@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../config/firebase';
-import { remoteLogger } from '../utils/remote-logger';
+import { remoteLogger, logAuthEvent } from '../utils/remote-logger';
 
 export default function AuthDebug() {
   const { currentUser, loading } = useAuth();
@@ -28,6 +28,11 @@ export default function AuthDebug() {
       // Get remote logs for debugging
       const logs = remoteLogger.getLogs();
       setRemoteLogs(logs);
+      
+      // Add test log if no logs exist
+      if (logs.length === 0) {
+        logAuthEvent('AuthDebug component initialized - testing logging system');
+      }
     };
 
     checkFirebaseAuth();
@@ -55,6 +60,13 @@ export default function AuthDebug() {
   const clearLogs = () => {
     remoteLogger.clearLogs();
     setRemoteLogs([]);
+  };
+
+  const testLogging = () => {
+    logAuthEvent('Test log triggered manually', { timestamp: new Date().toISOString() });
+    // Force refresh logs
+    const logs = remoteLogger.getLogs();
+    setRemoteLogs(logs);
   };
 
   return (
@@ -110,6 +122,12 @@ export default function AuthDebug() {
             🔄 Reload Page
           </button>
         )}
+        <button 
+          onClick={testLogging}
+          className="w-full bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded text-xs"
+        >
+          🧪 Test Logging
+        </button>
         <button 
           onClick={clearLogs}
           className="w-full bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
