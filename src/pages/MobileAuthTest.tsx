@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-diagnostic';
 import { checkFirebaseDomainConfig, getFirebaseAuthInstructions, createMobileAuthTest } from '../utils/firebase-domain-check';
 import { simpleMobileDebug } from '../utils/simple-mobile-debug';
+import { checkFirebaseOAuthConfig, generateOAuthSetupInstructions } from '../utils/firebase-oauth-check';
 
 export default function MobileAuthTest() {
   const { currentUser, signInWithGoogle, logout } = useAuth();
@@ -25,17 +26,21 @@ export default function MobileAuthTest() {
     // 3. Check Firebase domain configuration
     const domainTest = checkFirebaseDomainConfig();
     
-    // 4. Get setup instructions if needed
-    const instructions = domainTest.issues.length > 0 ? getFirebaseAuthInstructions(domainTest.domain) : null;
+    // 4. Check Firebase OAuth configuration
+    const oauthCheck = await checkFirebaseOAuthConfig();
     
-    // 5. Check current auth state
+    // 5. Get setup instructions if needed
+    const instructions = domainTest.issues.length > 0 ? getFirebaseAuthInstructions(domainTest.domain) : null;
+    const oauthInstructions = oauthCheck.issues.length > 0 ? generateOAuthSetupInstructions(domainTest.domain) : null;
+    
+    // 6. Check current auth state
     const authState = {
       currentUser: !!currentUser,
       userEmail: currentUser?.email,
       userId: currentUser?.uid
     };
     
-    // 6. Check URL parameters (for redirect results)
+    // 7. Check URL parameters (for redirect results)
     const urlParams = new URLSearchParams(window.location.search);
     const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('access_token');
     
@@ -43,6 +48,7 @@ export default function MobileAuthTest() {
       diagnostic,
       firebaseTest,
       domainTest,
+      oauthCheck,
       authState,
       urlParams: {
         hasAuthParams,
@@ -50,6 +56,7 @@ export default function MobileAuthTest() {
         hash: window.location.hash
       },
       instructions,
+      oauthInstructions,
       timestamp: new Date().toISOString()
     };
     
@@ -226,6 +233,30 @@ export default function MobileAuthTest() {
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* OAuth Configuration Check */}
+              {testResults.oauthCheck && (
+                <div className="border rounded p-4 bg-red-50">
+                  <h3 className="font-semibold mb-2 text-red-800">OAuth Configuration Issues</h3>
+                  <div className="text-sm space-y-2">
+                    {testResults.oauthCheck.issues.map((issue: string, index: number) => (
+                      <p key={index} className="text-red-700">• {issue}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* OAuth Setup Instructions */}
+              {testResults.oauthInstructions && (
+                <div className="border rounded p-4 bg-orange-50">
+                  <h3 className="font-semibold mb-2 text-orange-800">{testResults.oauthInstructions.title}</h3>
+                  <ol className="text-sm space-y-1 text-orange-700 list-decimal list-inside">
+                    {testResults.oauthInstructions.steps.map((step: string, index: number) => (
+                      <li key={index}>{step}</li>
+                    ))}
+                  </ol>
                 </div>
               )}
             </div>
