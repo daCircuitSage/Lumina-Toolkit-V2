@@ -41,19 +41,21 @@ export const checkFirebaseOAuthConfig = async () => {
     const currentDomain = window.location.origin;
     const authDomain = config.authDomain;
     
-    if (authDomain && !currentDomain.includes(authDomain)) {
-      results.issues.push(`Domain mismatch: app configured for ${authDomain} but running on ${currentDomain}`);
-      results.recommendations.push(`Update authDomain in Firebase config to match ${currentDomain}`);
+    if (!authDomain) {
+      results.issues.push('Firebase authDomain is not configured in the auth object');
+      results.recommendations.push('Check Firebase initialization and environment variables');
     }
     
-    // Check for common OAuth issues
+    // Only warn about missing OAuth params if a redirect-like URL is present
     const urlParams = new URLSearchParams(window.location.search);
-    const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('access_token');
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const hasAnyUrlParams = window.location.search.length > 0 || window.location.hash.length > 0;
+    const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('access_token') || hashParams.has('code') || hashParams.has('state') || hashParams.has('access_token');
     
-    if (!hasAuthParams) {
+    if (hasAnyUrlParams && !hasAuthParams) {
       results.issues.push('No OAuth parameters in URL - Google redirect not working');
       results.recommendations.push('Check Firebase OAuth consent screen configuration');
-      results.recommendations.push('Verify authorized redirect URIs in Firebase Console');
+      results.recommendations.push('Verify authorized redirect URIs in Google Cloud OAuth client');
     }
     
     console.log('📊 OAuth check results:', results);
@@ -67,20 +69,23 @@ export const checkFirebaseOAuthConfig = async () => {
 };
 
 export const generateOAuthSetupInstructions = (domain: string) => {
+  const origin = domain.replace(/^https?:\/\//, '');
   return {
     title: 'Firebase OAuth Configuration Required',
     steps: [
       '1. Go to Firebase Console → Authentication → Settings',
-      '2. Click "OAuth consent screen" tab',
-      '3. Under "Authorized redirect URIs", add:',
-      `   - ${domain}`,
-      `   - ${domain}/`,
-      '4. Under "Authorized domains", add:',
-      `   - ${domain}`,
-      '5. Under "Authorized JavaScript origins", add:',
-      `   - ${domain}`,
-      '6. Save settings and test authentication again',
-      '7. Clear browser cache and cookies before testing'
+      '2. Under "Authorized domains", add these domains without protocol:',
+      '   - luminatoolkit.com',
+      '   - www.lumintoolkit.com',
+      '3. Go to Google Cloud Console → APIs & Services → Credentials',
+      '4. Edit your OAuth 2.0 Client ID',
+      '5. Under "Authorized redirect URIs", add:',
+      '   - https://luminatoolkit.firebaseapp.com/__/auth/handler',
+      '6. Under "Authorized JavaScript origins", add:',
+      `   - https://${origin}`,
+      `   - https://www.${origin.replace(/^www\./, '')}`,
+      '7. Save settings and test authentication again',
+      '8. Clear browser cache and cookies before testing'
     ]
   };
 };

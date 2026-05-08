@@ -76,11 +76,10 @@ export class MobileAuthFinalFix {
       const mobileAuthTimestamp = sessionStorage.getItem('mobileAuthTimestamp');
       
       if (!mobileAuthInProgress) {
-        console.log('ℹ️ No mobile auth in progress detected');
-        return { success: false, error: 'No mobile auth in progress' };
+        console.log('ℹ️ No mobile auth session flag found; still checking redirect result');
+      } else {
+        console.log('📱 Mobile auth detected, processing redirect...');
       }
-      
-      console.log('📱 Mobile auth detected, processing redirect...');
       
       // Get redirect result
       const result = await getRedirectResult(this.auth);
