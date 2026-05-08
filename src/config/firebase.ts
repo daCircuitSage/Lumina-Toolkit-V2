@@ -35,14 +35,7 @@ if (isFirebaseConfigured()) {
     console.log('Firebase auth initialized:', !!auth);
     console.log('Firebase db initialized:', !!db);
     
-    // Configure auth persistence to keep users logged in across sessions
-    setPersistence(auth, browserLocalPersistence)
-      .then(() => {
-        console.log('Auth persistence configured successfully');
-      })
-      .catch((error) => {
-        console.error('Failed to configure auth persistence:', error);
-      });
+    // Auth persistence is handled in AuthContext
     
     // Configure Google Provider with proper settings for mobile compatibility
     googleProvider = new GoogleAuthProvider();

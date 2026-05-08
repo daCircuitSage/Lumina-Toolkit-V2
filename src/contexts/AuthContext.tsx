@@ -86,6 +86,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (isMobile) {
         logAuthEvent('Starting Google redirect auth for mobile');
         console.log('🔁 Calling signInWithRedirect for mobile');
+        
+        // Clear any existing redirect state to avoid conflicts
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
         await signInWithRedirect(auth, googleProvider);
         return { redirectInitiated: true };
       }
@@ -106,6 +110,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
           popupError.code === 'auth/cancelled-popup-request'
         ) {
           logAuthEvent('Fallback to redirect after popup failure');
+          
+          // Clear any existing redirect state before fallback
+          window.history.replaceState({}, document.title, window.location.pathname);
+          
           await signInWithRedirect(auth, googleProvider);
           return { redirectInitiated: true };
         }
@@ -291,6 +299,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.warn('Failed to set auth persistence:', error);
       }
 
+      // First, check for redirect result (critical for mobile)
       let redirectUser: User | null = null;
       try {
         console.log('🔄 Checking redirect result on app load');
@@ -306,6 +315,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
           console.log('✅ Redirect result user detected:', redirectResult.user.email);
           logAuthEvent('Mobile redirect sign-in succeeded', { email: redirectResult.user.email });
           window.history.replaceState({}, document.title, window.location.pathname);
+          
+          // Save user to Firestore immediately for redirect users
+          if (db) {
+            await saveUserToFirestore(redirectUser);
+          }
         } else {
           console.log('ℹ️ getRedirectResult returned no user');
           logAuthEvent('Mobile redirect sign-in returned no user', { currentUser: !!auth.currentUser });
@@ -320,13 +334,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       }
 
+      // Now set up auth state listener, but handle redirect user first
       unsubscribe = onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          setCurrentUser(user);
-          if (db) {
-            await saveUserToFirestore(user);
+        console.log('👤 onAuthStateChanged called with user:', !!user);
+        
+        // If we have a redirect user, prioritize it over the auth state user
+        // This prevents race condition on mobile
+        const finalUser = redirectUser || user || auth.currentUser;
+        
+        if (finalUser) {
+          console.log('✅ Setting authenticated user:', finalUser.email);
+          setCurrentUser(finalUser);
+          
+          // Only save to Firestore if we haven't already saved the redirect user
+          if (db && !redirectUser) {
+            await saveUserToFirestore(finalUser);
           }
         } else {
+          console.log('👤 No authenticated user found');
           setCurrentUser(null);
         }
 
@@ -335,13 +360,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       });
 
+      // Set initial state immediately if we have redirect user or current user
       if (redirectUser) {
+        console.log('🔄 Setting redirect user immediately:', redirectUser.email);
         setCurrentUser(redirectUser);
       } else if (auth.currentUser) {
+        console.log('🔄 Setting current user immediately:', auth.currentUser.email);
         setCurrentUser(auth.currentUser);
       }
 
-      if (!didCancel) {
+      // Only set loading to false if we don't have a redirect result pending
+      if (!redirectUser && !didCancel) {
         setLoading(false);
       }
     };
@@ -354,7 +383,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         unsubscribe();
       }
     };
-  }, [auth]);
+  }, [auth, db]);
 
   const value: AuthContextType = {
     currentUser,
