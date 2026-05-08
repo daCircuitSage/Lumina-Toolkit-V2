@@ -291,6 +291,35 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.warn('Failed to set auth persistence:', error);
       }
 
+      let redirectUser: User | null = null;
+      try {
+        console.log('🔄 Checking redirect result on app load');
+        console.log('🌐 Redirect URL search:', window.location.search);
+        console.log('🌐 Redirect URL hash:', window.location.hash);
+        console.log('📱 User agent on redirect return:', navigator.userAgent);
+
+        const redirectResult = await getRedirectResult(auth);
+        console.log('🔄 getRedirectResult result:', redirectResult);
+
+        if (redirectResult?.user) {
+          redirectUser = redirectResult.user;
+          console.log('✅ Redirect result user detected:', redirectResult.user.email);
+          logAuthEvent('Mobile redirect sign-in succeeded', { email: redirectResult.user.email });
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } else {
+          console.log('ℹ️ getRedirectResult returned no user');
+          logAuthEvent('Mobile redirect sign-in returned no user', { currentUser: !!auth.currentUser });
+        }
+      } catch (error: any) {
+        if (error.code === 'auth/unauthorized-domain') {
+          logAuthError('Unauthorized domain during redirect callback', { domain: window.location.origin });
+        } else if (error.code === 'auth/no-current-user') {
+          console.log('ℹ️ getRedirectResult returned no current user after redirect');
+        } else {
+          console.warn('getRedirectResult returned an error:', error);
+        }
+      }
+
       unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
           setCurrentUser(user);
@@ -306,37 +335,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
       });
 
-      try {
-        console.log('🔄 Checking redirect result after app load');
-        console.log('🌐 Redirect URL search:', window.location.search);
-        console.log('🌐 Redirect URL hash:', window.location.hash);
-        console.log('📱 User agent on redirect return:', navigator.userAgent);
-        console.log('👤 current auth.currentUser before getRedirectResult:', auth.currentUser);
+      if (redirectUser) {
+        setCurrentUser(redirectUser);
+      } else if (auth.currentUser) {
+        setCurrentUser(auth.currentUser);
+      }
 
-        const redirectResult = await getRedirectResult(auth);
-        console.log('🔄 getRedirectResult result:', redirectResult);
-
-        if (redirectResult?.user) {
-          console.log('✅ Redirect result user detected:', redirectResult.user.email);
-          setCurrentUser(redirectResult.user);
-        } else if (auth.currentUser) {
-          console.log('✅ No redirect result user, but auth.currentUser exists:', auth.currentUser.email);
-          setCurrentUser(auth.currentUser);
-        } else {
-          console.log('ℹ️ No redirect result user and no currentUser after redirect');
-        }
-      } catch (error: any) {
-        if (error.code === 'auth/unauthorized-domain') {
-          logAuthError('Unauthorized domain during redirect callback', { domain: window.location.origin });
-        } else if (error.code === 'auth/no-current-user') {
-          console.log('ℹ️ getRedirectResult returned no current user after redirect');
-        } else {
-          console.warn('getRedirectResult returned an error:', error);
-        }
-      } finally {
-        if (!didCancel) {
-          setLoading(false);
-        }
+      if (!didCancel) {
+        setLoading(false);
       }
     };
 
