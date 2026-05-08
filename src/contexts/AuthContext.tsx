@@ -316,15 +316,24 @@ async function signInWithGoogle() {
     // Handle redirect result first, before setting up auth state listener
     const handleRedirectResult = async () => {
       try {
-        console.log('🔄 Checking for redirect result...');
-        console.log('🌐 Current domain after redirect:', window.location.origin);
-        console.log('📱 User agent:', navigator.userAgent);
+        console.log('🔄 [MOBILE DEBUG] Checking for redirect result...');
+        console.log('🌐 [MOBILE DEBUG] Current domain after redirect:', window.location.origin);
+        console.log('📱 [MOBILE DEBUG] User agent:', navigator.userAgent);
+        console.log('🔍 [MOBILE DEBUG] Full URL:', window.location.href);
+        console.log('🔍 [MOBILE DEBUG] Search params:', window.location.search);
+        console.log('🔍 [MOBILE DEBUG] Hash:', window.location.hash);
+        
+        // Check URL for auth-related parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('session_state');
+        console.log('🔍 [MOBILE DEBUG] Has auth parameters in URL:', hasAuthParams);
         
         const result = await getRedirectResult(auth);
+        console.log('🔍 [MOBILE DEBUG] getRedirectResult completed');
         
         if (result && result.user) {
-          console.log('✅ Redirect sign-in successful:', result.user);
-          console.log('User details:', {
+          console.log('✅ [MOBILE DEBUG] Redirect sign-in successful:', result.user);
+          console.log('👤 [MOBILE DEBUG] User details:', {
             email: result.user.email,
             uid: result.user.uid,
             displayName: result.user.displayName,
@@ -333,31 +342,36 @@ async function signInWithGoogle() {
           
           // Save user to Firestore immediately after redirect
           if (db) {
+            console.log('💾 [MOBILE DEBUG] Saving user to Firestore...');
             await saveUserToFirestore(result.user);
           }
           
           // Set user state immediately
+          console.log('🔄 [MOBILE DEBUG] Setting user state...');
           setCurrentUser(result.user);
           setLoading(false);
+          console.log('✅ [MOBILE DEBUG] Mobile redirect flow completed successfully');
           return true; // Indicate successful redirect handling
         } else {
-          console.log('ℹ️ No redirect result found (normal for popup auth or first load)');
+          console.log('ℹ️ [MOBILE DEBUG] No redirect result found (normal for popup auth or first load)');
+          console.log('🔍 [MOBILE DEBUG] Result value:', result);
           return false;
         }
       } catch (error: any) {
-        console.error('❌ Error handling redirect result:', error);
-        console.error('Redirect error code:', error.code);
-        console.error('Redirect error message:', error.message);
+        console.error('❌ [MOBILE DEBUG] Error handling redirect result:', error);
+        console.error('🔍 [MOBILE DEBUG] Redirect error code:', error.code);
+        console.error('🔍 [MOBILE DEBUG] Redirect error message:', error.message);
+        console.error('🔍 [MOBILE DEBUG] Full error object:', error);
         
         if (error.code === 'auth/unauthorized-domain') {
-          console.error(`❌ Domain ${window.location.origin} not authorized for redirect`);
+          console.error(`❌ [MOBILE DEBUG] Domain ${window.location.origin} not authorized for redirect`);
           showDomainAuthorizationError();
         } else if (error.code === 'auth/redirect-cancelled-by-user') {
-          console.log('ℹ️ Redirect was cancelled by user');
+          console.log('ℹ️ [MOBILE DEBUG] Redirect was cancelled by user');
         } else if (error.code === 'auth/redirect-pending') {
-          console.log('ℹ️ Redirect is pending, continuing...');
+          console.log('ℹ️ [MOBILE DEBUG] Redirect is pending, continuing...');
         } else {
-          console.error('❌ Unexpected redirect error:', error.message);
+          console.error('❌ [MOBILE DEBUG] Unexpected redirect error:', error.message);
         }
         return false;
       }
@@ -373,16 +387,21 @@ async function signInWithGoogle() {
 
     const setupAuthStateListener = () => {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        console.log('🔄 Auth state changed:', user ? `User logged in: ${user.email}` : 'User logged out');
+        console.log('🔄 [MOBILE DEBUG] Auth state changed:', user ? `User logged in: ${user.email}` : 'User logged out');
+        console.log('👤 [MOBILE DEBUG] Auth state user object:', user);
+        console.log('🔍 [MOBILE DEBUG] Current user state before update:', currentUser);
         
         if (user) {
+          console.log('✅ [MOBILE DEBUG] Setting current user in auth state listener...');
           setCurrentUser(user);
           
           // Save user to Firestore if not already exists
           if (db) {
+            console.log('💾 [MOBILE DEBUG] Saving user to Firestore from auth state listener...');
             await saveUserToFirestore(user);
           }
         } else {
+          console.log('❌ [MOBILE DEBUG] Setting current user to null...');
           setCurrentUser(null);
         }
         
