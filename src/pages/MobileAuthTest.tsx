@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-diagnostic';
 import { checkFirebaseDomainConfig, getFirebaseAuthInstructions, createMobileAuthTest } from '../utils/firebase-domain-check';
+import { mobileRedirectDebug } from '../utils/mobile-redirect-debug';
 
 export default function MobileAuthTest() {
   const { currentUser, signInWithGoogle, logout } = useAuth();
@@ -77,6 +78,26 @@ export default function MobileAuthTest() {
       }
     } catch (error: any) {
       console.error('❌ Mobile sign-in failed:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleRedirectDebug = async () => {
+    setIsLoading(true);
+    try {
+      console.log('🔍 Running redirect debug...');
+      const debugResult = await mobileRedirectDebug.debugRedirectFlow();
+      console.log('📊 Redirect debug result:', debugResult);
+      
+      // Update test results with debug info
+      setTestResults(prev => ({
+        ...prev,
+        redirectDebug: debugResult
+      }));
+      
+      setIsLoading(false);
+    } catch (error: any) {
+      console.error('❌ Redirect debug failed:', error);
       setIsLoading(false);
     }
   };
@@ -166,6 +187,37 @@ export default function MobileAuthTest() {
                   </ol>
                 </div>
               )}
+
+              {/* Redirect Debug Results */}
+              {testResults.redirectDebug && (
+                <div className="border rounded p-4 bg-purple-50">
+                  <h3 className="font-semibold mb-2 text-purple-800">Redirect Debug Results</h3>
+                  <div className="text-sm space-y-2">
+                    <p><strong>Success:</strong> {testResults.redirectDebug.success ? 'Yes' : 'No'}</p>
+                    {testResults.redirectDebug.error && (
+                      <p><strong>Error:</strong> {testResults.redirectDebug.error}</p>
+                    )}
+                    {testResults.redirectDebug.details?.analysis && (
+                      <div className="mt-2">
+                        <p><strong>Issue:</strong> {testResults.redirectDebug.details.analysis.issue}</p>
+                        <p><strong>Recommendation:</strong> {testResults.redirectDebug.details.analysis.recommendation}</p>
+                      </div>
+                    )}
+                    {testResults.redirectDebug.details?.authState && (
+                      <div className="mt-2">
+                        <p><strong>Auth State Before:</strong> {testResults.redirectDebug.details.authState.currentUser ? 'Logged in' : 'Not logged in'}</p>
+                        <p><strong>Auth State After:</strong> {testResults.redirectDebug.details.finalAuthState?.currentUser ? 'Logged in' : 'Not logged in'}</p>
+                      </div>
+                    )}
+                    {testResults.redirectDebug.details?.redirectResult && (
+                      <div className="mt-2">
+                        <p><strong>Redirect Result:</strong> {testResults.redirectDebug.details.redirectResult.hasUser ? 'User found' : 'No user'}</p>
+                        <p><strong>URL Auth Params:</strong> {testResults.redirectDebug.details.hasAuthParams ? 'Yes' : 'No'}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -180,6 +232,14 @@ export default function MobileAuthTest() {
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
             >
               🔄 Run Diagnostic Test
+            </button>
+            
+            <button
+              onClick={handleRedirectDebug}
+              disabled={isLoading}
+              className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+            >
+              {isLoading ? '🔍 Debugging...' : '🔍 Debug Redirect Flow'}
             </button>
             
             <button
