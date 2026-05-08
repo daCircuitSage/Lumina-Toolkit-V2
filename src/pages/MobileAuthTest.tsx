@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-diagnostic';
 import { checkFirebaseDomainConfig, getFirebaseAuthInstructions, createMobileAuthTest } from '../utils/firebase-domain-check';
-import { mobileRedirectDebug } from '../utils/mobile-redirect-debug';
+import { simpleMobileDebug } from '../utils/simple-mobile-debug';
 
 export default function MobileAuthTest() {
   const { currentUser, signInWithGoogle, logout } = useAuth();
@@ -85,19 +85,19 @@ export default function MobileAuthTest() {
   const handleRedirectDebug = async () => {
     setIsLoading(true);
     try {
-      console.log('🔍 Running redirect debug...');
-      const debugResult = await mobileRedirectDebug.debugRedirectFlow();
-      console.log('📊 Redirect debug result:', debugResult);
+      console.log('🔍 Running simple mobile debug...');
+      const debugResult = await simpleMobileDebug();
+      console.log('📊 Simple debug result:', debugResult);
       
       // Update test results with debug info
       setTestResults(prev => ({
         ...prev,
-        redirectDebug: debugResult
+        simpleDebug: debugResult
       }));
       
       setIsLoading(false);
     } catch (error: any) {
-      console.error('❌ Redirect debug failed:', error);
+      console.error('❌ Simple debug failed:', error);
       setIsLoading(false);
     }
   };
@@ -188,31 +188,41 @@ export default function MobileAuthTest() {
                 </div>
               )}
 
-              {/* Redirect Debug Results */}
-              {testResults.redirectDebug && (
+              {/* Simple Debug Results */}
+              {testResults.simpleDebug && (
                 <div className="border rounded p-4 bg-purple-50">
-                  <h3 className="font-semibold mb-2 text-purple-800">Redirect Debug Results</h3>
+                  <h3 className="font-semibold mb-2 text-purple-800">Simple Debug Results</h3>
                   <div className="text-sm space-y-2">
-                    <p><strong>Success:</strong> {testResults.redirectDebug.success ? 'Yes' : 'No'}</p>
-                    {testResults.redirectDebug.error && (
-                      <p><strong>Error:</strong> {testResults.redirectDebug.error}</p>
-                    )}
-                    {testResults.redirectDebug.details?.analysis && (
+                    <p><strong>Device:</strong> {testResults.simpleDebug.isMobile ? 'Mobile' : 'Desktop'}</p>
+                    <p><strong>Cookies:</strong> {testResults.simpleDebug.cookies ? 'Enabled' : 'Disabled'}</p>
+                    <p><strong>localStorage:</strong> {testResults.simpleDebug.localStorage ? 'Available' : 'Not Available'}</p>
+                    <p><strong>URL Auth Params:</strong> {testResults.simpleDebug.hasAuthParams ? 'Yes' : 'No'}</p>
+                    
+                    {testResults.simpleDebug.firebase && (
                       <div className="mt-2">
-                        <p><strong>Issue:</strong> {testResults.redirectDebug.details.analysis.issue}</p>
-                        <p><strong>Recommendation:</strong> {testResults.redirectDebug.details.analysis.recommendation}</p>
+                        <p><strong>Firebase Initialized:</strong> {testResults.simpleDebug.firebase.initialized ? 'Yes' : 'No'}</p>
+                        <p><strong>Current User:</strong> {testResults.simpleDebug.firebase.currentUser ? testResults.simpleDebug.firebase.email : 'Not logged in'}</p>
                       </div>
                     )}
-                    {testResults.redirectDebug.details?.authState && (
+                    
+                    {testResults.simpleDebug.redirectResult && (
                       <div className="mt-2">
-                        <p><strong>Auth State Before:</strong> {testResults.redirectDebug.details.authState.currentUser ? 'Logged in' : 'Not logged in'}</p>
-                        <p><strong>Auth State After:</strong> {testResults.redirectDebug.details.finalAuthState?.currentUser ? 'Logged in' : 'Not logged in'}</p>
+                        <p><strong>Redirect Result:</strong> {testResults.simpleDebug.redirectResult.hasUser ? 'User found' : 'No user'}</p>
+                        <p><strong>Redirect Email:</strong> {testResults.simpleDebug.redirectResult.email || 'None'}</p>
                       </div>
                     )}
-                    {testResults.redirectDebug.details?.redirectResult && (
+                    
+                    {testResults.simpleDebug.redirectError && (
                       <div className="mt-2">
-                        <p><strong>Redirect Result:</strong> {testResults.redirectDebug.details.redirectResult.hasUser ? 'User found' : 'No user'}</p>
-                        <p><strong>URL Auth Params:</strong> {testResults.redirectDebug.details.hasAuthParams ? 'Yes' : 'No'}</p>
+                        <p><strong>Redirect Error:</strong> {testResults.simpleDebug.redirectError.code}</p>
+                        <p><strong>Error Message:</strong> {testResults.simpleDebug.redirectError.message}</p>
+                      </div>
+                    )}
+                    
+                    {testResults.simpleDebug.firebaseError && (
+                      <div className="mt-2">
+                        <p><strong>Firebase Error:</strong> {testResults.simpleDebug.firebaseError.code}</p>
+                        <p><strong>Error Message:</strong> {testResults.simpleDebug.firebaseError.message}</p>
                       </div>
                     )}
                   </div>
