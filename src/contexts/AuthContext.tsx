@@ -116,7 +116,7 @@ async function signInWithGoogle() {
         logAuthEvent('Trying redirect method for mobile first...');
         try {
           await signInWithRedirect(auth, googleProvider);
-          return null; // Redirect will cause page reload
+          return { redirectInitiated: true }; // Redirect will cause page reload
         } catch (redirectError: any) {
           logAuthError('Redirect method failed, trying popup fallback', redirectError);
           
@@ -143,7 +143,7 @@ async function signInWithGoogle() {
           if (isMobile && popupError.code === 'auth/popup-closed-by-user') {
             logAuthEvent('Mobile popup blocked, trying redirect method...');
             await signInWithRedirect(auth, googleProvider);
-            return null; // Redirect will cause page reload
+            return { redirectInitiated: true }; // Redirect will cause page reload
           } else {
             throw popupError;
           }

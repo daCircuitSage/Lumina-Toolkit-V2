@@ -31,7 +31,11 @@ export default function Login() {
       setError('');
       setLoading(true);
       console.log('Attempting Google sign in from Login component...');
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      if (result?.redirectInitiated) {
+        console.log('Google sign-in redirect initiated, waiting for auth return');
+        return;
+      }
       console.log('Google sign in successful, navigating to dashboard...');
       navigate('/all-tools');
     } catch (error: any) {
