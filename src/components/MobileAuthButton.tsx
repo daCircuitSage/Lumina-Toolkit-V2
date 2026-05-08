@@ -32,7 +32,11 @@ export default function MobileAuthButton({ className = "", children }: MobileAut
     }
     
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      if (result?.redirectInitiated) {
+        logAuthEvent('Mobile sign-in redirect initiated, awaiting return');
+        return;
+      }
     } catch (error: any) {
       logAuthEvent('Mobile auth failed', { error: error.message });
       

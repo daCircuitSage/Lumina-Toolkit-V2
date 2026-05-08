@@ -14,8 +14,7 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../config/firebase';
-import { testMobileAuth } from '../utils/mobile-auth-test';
-import { logAuthError, logAuthWarning, logAuthEvent, remoteLogger } from '../utils/remote-logger';
+import { logAuthError, logAuthEvent, remoteLogger } from '../utils/remote-logger';
 
 interface Review {
   id: string;
@@ -59,150 +58,85 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  
-  // Enhanced mobile detection including tablets and mobile browsers
-const isMobileDevice = () => {
-  const userAgent = navigator.userAgent;
-  
-  // Check for mobile devices
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-  
-  // Check for tablet devices that should use redirect
-  const isTablet = /iPad|Android(?!.*Mobile)|Tablet/i.test(userAgent);
-  
-  // Check for mobile browsers or touch-enabled devices
-  const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-  const isSmallScreen = window.innerWidth <= 1024; // Tablets and below
-  
-  // Use redirect for mobile, tablets, and touch-enabled small screens
-  return isMobile || isTablet || (hasTouchScreen && isSmallScreen);
-};
+  interface GoogleSignInResult {
+    redirectInitiated?: boolean;
+    user?: User | null;
+  }
 
-async function signInWithGoogle() {
-    console.log('🔥 signInWithGoogle function called');
-    try {
-      logAuthEvent('signInWithGoogle called');
-      console.log('🔥 logAuthEvent succeeded');
-    } catch (error) {
-      console.error('❌ logAuthEvent failed:', error);
-    }
-    
-    // Run mobile auth test for debugging
-    const authTest = testMobileAuth();
-    console.log('🔥 Mobile auth test completed:', authTest);
-    try {
-      logAuthEvent('Mobile auth test results', authTest);
-    } catch (error) {
-      console.error('❌ Mobile auth test logging failed:', error);
-    }
-    
+  const isMobileDevice = () => {
+    const userAgent = navigator.userAgent || '';
+    const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+    const isTablet = /iPad|Android(?!.*Mobile)|Tablet/i.test(userAgent);
+    const hasTouchScreen = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    const isSmallScreen = typeof window !== 'undefined' && window.innerWidth <= 1024;
+
+    return isMobile || isTablet || (hasTouchScreen && isSmallScreen);
+  };
+
+  async function signInWithGoogle(): Promise<GoogleSignInResult> {
     if (!auth || !googleProvider) {
-      const error = '❌ Firebase auth or Google provider not available';
-      logAuthError(error);
+      logAuthError('Firebase auth or Google provider is not initialized');
       throw new Error('Authentication is not available. Firebase is not configured.');
     }
-    
+
     const isMobile = isMobileDevice();
-    logAuthEvent('Device detection', { isMobile, shouldUseRedirect: authTest.shouldUseRedirect });
-    logAuthEvent('Current domain', window.location.origin);
-    
-    // ENHANCED: Use popup for mobile first, redirect only as fallback
-    const forcePopupForMobile = true;
-    
+    logAuthEvent('Google sign-in requested', { isMobile, domain: window.location.origin });
+
     try {
-      let result;
-      
-      if (isMobile && forcePopupForMobile) {
-        const method = 'Mobile (popup)';
-        logAuthEvent(`Using ${method} method`);
-        try {
-          result = await signInWithPopup(auth, googleProvider);
-          logAuthEvent('Sign-in successful via popup', { user: result.user?.email });
-        } catch (popupError: any) {
-          logAuthError('Popup method failed, trying redirect fallback', popupError);
-          if (popupError.code === 'auth/popup-closed-by-user' || popupError.code === 'auth/popup-blocked') {
-            logAuthEvent('Mobile popup blocked, trying redirect method...');
-            await signInWithRedirect(auth, googleProvider);
-            return { redirectInitiated: true }; // Redirect will cause page reload
-          } else {
-            throw popupError;
-          }
+      if (isMobile) {
+        logAuthEvent('Starting Google redirect auth for mobile');
+        await signInWithRedirect(auth, googleProvider);
+        return { redirectInitiated: true };
+      }
+
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        if (result?.user && db) {
+          await saveUserToFirestore(result.user);
         }
-      } else if (isMobile && !forcePopupForMobile) {
-        logAuthEvent('Trying redirect method for mobile first...');
-        try {
+        return result;
+      } catch (popupError: any) {
+        logAuthError('Popup sign-in failed, falling back to redirect', popupError);
+
+        if (
+          popupError.code === 'auth/popup-closed-by-user' ||
+          popupError.code === 'auth/popup-blocked' ||
+          popupError.code === 'auth/operation-not-supported-in-this-environment' ||
+          popupError.code === 'auth/cancelled-popup-request'
+        ) {
+          logAuthEvent('Fallback to redirect after popup failure');
           await signInWithRedirect(auth, googleProvider);
-          return { redirectInitiated: true }; // Redirect will cause page reload
-        } catch (redirectError: any) {
-          logAuthError('Redirect method failed, trying popup fallback', redirectError);
-          
-          // ENHANCED: More comprehensive error handling for mobile
-          if (redirectError.code === 'auth/unauthorized-domain' || 
-              redirectError.code === 'auth/redirect-cancelled-by-user' ||
-              redirectError.code === 'auth/redirect-pending' ||
-              redirectError.code === 'auth/network-request-failed') {
-            logAuthEvent('Trying popup method as fallback for mobile...');
-            result = await signInWithPopup(auth, googleProvider);
-            logAuthEvent('Fallback popup sign-in successful', { user: result.user?.email });
-          } else {
-            throw redirectError;
-          }
+          return { redirectInitiated: true };
         }
-      } else {
-        const method = isMobile ? 'Mobile (forced popup)' : 'Desktop (popup)';
-        logAuthEvent(`Using ${method} method`);
-        try {
-          result = await signInWithPopup(auth, googleProvider);
-          logAuthEvent('Sign-in successful via popup', { user: result.user?.email });
-        } catch (popupError: any) {
-          logAuthError('Popup method failed, trying redirect fallback', popupError);
-          if (isMobile && popupError.code === 'auth/popup-closed-by-user') {
-            logAuthEvent('Mobile popup blocked, trying redirect method...');
-            await signInWithRedirect(auth, googleProvider);
-            return { redirectInitiated: true }; // Redirect will cause page reload
-          } else {
-            throw popupError;
-          }
-        }
+
+        throw popupError;
       }
-      
-      // Save user data to Firestore (only for successful sign-in)
-      if (result && result.user && db) {
-        await saveUserToFirestore(result.user);
-      }
-      
-      return result;
-      
     } catch (error: any) {
-      logAuthError('Error initiating Google sign in', {
-        code: error.code,
-        message: error.message,
-        domain: window.location.origin
-      });
-      
+      logAuthError('Google sign-in failed', { code: error?.code, message: error?.message });
+
       if (error.code === 'auth/unauthorized-domain') {
-        throw new Error(`Domain ${window.location.origin} not authorized. Please add this domain to Firebase Auth → Settings → Authorized domains.`);
-      } else if (error.code === 'auth/popup-closed-by-user') {
-        throw new Error('Google sign-in was cancelled.');
-      } else if (error.code === 'auth/popup-blocked') {
-        throw new Error('Google sign-in was blocked by the browser.');
-      } else if (error.code === 'auth/redirect-cancelled-by-user') {
-        throw new Error('Google sign-in was cancelled.');
-      } else {
-        throw new Error(`Google authentication failed: ${error.message || 'Unknown error'} (Code: ${error.code})`);
+        throw new Error(`Domain ${window.location.origin} is not authorized. Add it to Firebase Auth authorized domains.`);
       }
+
+      if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/redirect-cancelled-by-user') {
+        throw new Error('Google sign-in was cancelled.');
+      }
+
+      if (error.code === 'auth/popup-blocked') {
+        throw new Error('Google sign-in popup was blocked. Please allow popups or use a supported browser.');
+      }
+
+      throw new Error(error?.message || 'Google authentication failed.');
     }
   }
 
-  // Helper function to save user to Firestore
   async function saveUserToFirestore(user: any) {
     if (!db) return;
-    
+
     const userDoc = doc(db, 'users', user.uid);
     const userSnapshot = await getDoc(userDoc);
-    
+
     if (!userSnapshot.exists()) {
-      console.log('Creating new user document...');
       await setDoc(userDoc, {
         uid: user.uid,
         email: user.email,
@@ -211,9 +145,6 @@ async function signInWithGoogle() {
         createdAt: new Date().toISOString(),
         authProvider: 'google'
       });
-      console.log('User document created');
-    } else {
-      console.log('User already exists in Firestore');
     }
   }
 
@@ -343,150 +274,59 @@ async function signInWithGoogle() {
   }
 
   useEffect(() => {
-    // Check if Firebase is initialized before setting up auth
     if (!auth) {
-      console.error('❌ Firebase auth not available - waiting for initialization...');
+      console.error('Firebase auth is not initialized');
       setLoading(false);
-      return () => {};
+      return;
     }
 
-    // Ensure persistence is set before any auth operations
-    const setupAuth = async () => {
+    let didCancel = false;
+    let unsubscribe = () => {};
+
+    const initializeAuth = async () => {
       try {
         await setPersistence(auth, browserLocalPersistence);
-        console.log('✅ Auth persistence set to browserLocalPersistence');
       } catch (error) {
-        console.error('❌ Failed to set auth persistence:', error);
+        console.warn('Failed to set auth persistence:', error);
       }
-    };
 
-    setupAuth();
-
-    // ENHANCED: Handle redirect result with better timing and error recovery
-    const handleRedirectResult = async () => {
-      try {
-        console.log('🔄 [MOBILE DEBUG] Checking for redirect result...');
-        console.log('🌐 [MOBILE DEBUG] Current domain after redirect:', window.location.origin);
-        console.log('📱 [MOBILE DEBUG] User agent:', navigator.userAgent);
-        console.log('🔍 [MOBILE DEBUG] Full URL:', window.location.href);
-        console.log('🔍 [MOBILE DEBUG] Search params:', window.location.search);
-        console.log('🔍 [MOBILE DEBUG] Hash:', window.location.hash);
-        
-        // Check URL for auth-related parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('session_state');
-        console.log('🔍 [MOBILE DEBUG] Has auth parameters in URL:', hasAuthParams);
-        
-        // ENHANCED: Add delay for mobile browsers to settle and check URL params
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Check if we have auth parameters in URL (indicates redirect just happened)
-        if (hasAuthParams) {
-          logAuthEvent('Auth parameters detected in URL, processing redirect...');
-        }
-        
-        const result = await getRedirectResult(auth);
-        logAuthEvent('getRedirectResult completed', { hasResult: !!result });
-        
-        if (result && result.user) {
-          console.log('✅ [MOBILE DEBUG] Redirect sign-in successful:', result.user);
-          console.log('👤 [MOBILE DEBUG] User details:', {
-            email: result.user.email,
-            uid: result.user.uid,
-            displayName: result.user.displayName,
-            photoURL: result.user.photoURL
-          });
-          
-          // Save user to Firestore immediately after redirect
-          if (db) {
-            console.log('💾 [MOBILE DEBUG] Saving user to Firestore...');
-            await saveUserToFirestore(result.user);
-          }
-          
-          // Set user state immediately
-          console.log('🔄 [MOBILE DEBUG] Setting user state...');
-          setCurrentUser(result.user);
-          setLoading(false);
-          console.log('✅ [MOBILE DEBUG] Mobile redirect flow completed successfully');
-          return true; // Indicate successful redirect handling
-        } else {
-          console.log('ℹ️ [MOBILE DEBUG] No redirect result found (normal for popup auth or first load)');
-          console.log('🔍 [MOBILE DEBUG] Result value:', result);
-          return false;
-        }
-      } catch (error: any) {
-        console.error('❌ [MOBILE DEBUG] Error handling redirect result:', error);
-        console.error('🔍 [MOBILE DEBUG] Redirect error code:', error.code);
-        console.error('🔍 [MOBILE DEBUG] Redirect error message:', error.message);
-        console.error('🔍 [MOBILE DEBUG] Full error object:', error);
-        
-        if (error.code === 'auth/unauthorized-domain') {
-          console.error(`❌ [MOBILE DEBUG] Domain ${window.location.origin} not authorized for redirect`);
-          showDomainAuthorizationError();
-        } else if (error.code === 'auth/redirect-cancelled-by-user') {
-          console.log('ℹ️ [MOBILE DEBUG] Redirect was cancelled by user');
-        } else if (error.code === 'auth/redirect-pending') {
-          console.log('ℹ️ [MOBILE DEBUG] Redirect is pending, continuing...');
-        } else if (error.code === 'auth/network-request-failed') {
-          console.log('ℹ️ [MOBILE DEBUG] Network failed, will retry with popup fallback');
-          // ENHANCED: Try popup fallback for network errors
-          return { fallbackToPopup: true };
-        } else {
-          console.error('❌ [MOBILE DEBUG] Unexpected redirect error:', error.message);
-        }
-        return false;
-      }
-    };
-
-    // Handle redirect result before setting up auth state listener
-    handleRedirectResult().then((redirectHandled) => {
-      // Always set up auth state listener, regardless of redirect handling
-      setupAuthStateListener();
-    });
-
-    const setupAuthStateListener = () => {
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
-        console.log('🔄 [MOBILE DEBUG] Auth state changed:', user ? `User logged in: ${user.email}` : 'User logged out');
-        console.log('👤 [MOBILE DEBUG] Auth state user object:', user);
-        console.log('🔍 [MOBILE DEBUG] Current user state before update:', currentUser);
-        
+      unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
-          console.log('✅ [MOBILE DEBUG] Setting current user in auth state listener...');
           setCurrentUser(user);
-          
-          // Save user to Firestore if not already exists
           if (db) {
-            console.log('💾 [MOBILE DEBUG] Saving user to Firestore from auth state listener...');
             await saveUserToFirestore(user);
           }
         } else {
-          console.log('❌ [MOBILE DEBUG] Setting current user to null...');
           setCurrentUser(null);
         }
-        
-        setLoading(false);
+
+        if (!didCancel) {
+          setLoading(false);
+        }
       });
 
-      return unsubscribe;
+      try {
+        const redirectResult = await getRedirectResult(auth);
+        if (redirectResult?.user) {
+          setCurrentUser(redirectResult.user);
+        }
+      } catch (error: any) {
+        if (error.code === 'auth/unauthorized-domain') {
+          logAuthError('Unauthorized domain during redirect callback', { domain: window.location.origin });
+        } else if (error.code !== 'auth/no-current-user') {
+          console.warn('getRedirectResult returned an error:', error);
+        }
+      } finally {
+        if (!didCancel) {
+          setLoading(false);
+        }
+      }
     };
 
-    // Function to show domain authorization error
-    const showDomainAuthorizationError = () => {
-      const currentDomain = window.location.origin;
-      console.error(`🚨 CRITICAL: Domain ${currentDomain} is not authorized in Firebase!`);
-      console.error('To fix this:');
-      console.error('1. Go to https://console.firebase.google.com/project/luminatoolkit/authentication/providers');
-      console.error('2. Click on Google provider');
-      console.error('3. Add these domains to authorized domains:');
-      console.error('   - https://lumintoolkit.com');
-      console.error('   - https://www.lumintoolkit.com');
-      console.error('   - http://localhost:5173 (for development)');
-      console.error('4. Save and wait 5-10 minutes for changes to propagate');
-    };
+    initializeAuth();
 
     return () => {
-      // Cleanup function
-      const unsubscribe = setupAuthStateListener();
+      didCancel = true;
       if (unsubscribe) {
         unsubscribe();
       }

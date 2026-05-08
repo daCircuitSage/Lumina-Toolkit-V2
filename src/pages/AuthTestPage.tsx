@@ -20,8 +20,12 @@ export default function AuthTestPage() {
   const testGoogleAuth = async () => {
     try {
       addResult('Starting Google sign-in test...');
-      await signInWithGoogle();
-      addResult('✅ Google sign-in initiated');
+      const result = await signInWithGoogle();
+      if (result?.redirectInitiated) {
+        addResult('🔄 Redirect initiated for mobile sign-in. Complete auth in the returned window/tab.');
+        return;
+      }
+      addResult('✅ Google sign-in completed successfully');
     } catch (error: any) {
       addResult(`❌ Google sign-in failed: ${error.message}`);
     }

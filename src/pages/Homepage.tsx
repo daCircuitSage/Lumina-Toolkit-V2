@@ -136,7 +136,10 @@ export default function Homepage() {
               ) : (
                 <button
                   onClick={async () => {
-                    await signInWithGoogle();
+                    const result = await signInWithGoogle();
+                    if (result?.redirectInitiated) {
+                      return;
+                    }
                     navigate('/');
                   }}
                   className="px-4 py-2.5 bg-accent hover:bg-accent/90 text-black font-semibold rounded-xl transition-all duration-200 flex items-center gap-2 shadow-lg shadow-accent/30"
@@ -247,7 +250,10 @@ export default function Homepage() {
                 <>
                   <motion.button 
                     onClick={async () => {
-                      await signInWithGoogle();
+                      const result = await signInWithGoogle();
+                      if (result?.redirectInitiated) {
+                        return;
+                      }
                       navigate('/');
                     }}
                     whileHover={{ scale: 1.05 }}
@@ -590,7 +596,10 @@ export default function Homepage() {
                 <>
                   <motion.button 
                     onClick={async () => {
-                      await signInWithGoogle();
+                      const result = await signInWithGoogle();
+                      if (result?.redirectInitiated) {
+                        return;
+                      }
                       navigate('/');
                     }}
                     whileHover={{ scale: 1.05 }}
@@ -689,3 +698,4 @@ export default function Homepage() {
     </div>
   );
 }
+

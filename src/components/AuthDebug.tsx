@@ -88,7 +88,12 @@ export default function AuthDebug() {
       console.log('🔥 About to call signInWithGoogle...');
       logAuthEvent('About to call signInWithGoogle');
       
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      if (result?.redirectInitiated) {
+        console.log('🔄 Redirect auth initiated; waiting for return to app.');
+        logAuthEvent('Redirect auth initiated from AuthDebug');
+        return;
+      }
       
       console.log('🔥 signInWithGoogle completed successfully');
       logAuthEvent('signInWithGoogle completed successfully');
