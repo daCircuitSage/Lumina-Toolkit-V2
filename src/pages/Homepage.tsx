@@ -32,6 +32,7 @@ import ReviewDisplay from '../components/reviews/ReviewDisplay';
 import ReviewSubmission from '../components/reviews/ReviewSubmission';
 import { TOOLS } from '../constants';
 import { testCurrentAuthState, checkFirebaseConfig } from '../utils/auth-test';
+import { runMobileAuthDiagnostic } from '../utils/mobile-auth-diagnostic';
 
 export default function Homepage() {
   const navigate = useNavigate();
@@ -131,6 +132,14 @@ export default function Homepage() {
                     className="p-2.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-xl transition-all duration-200"
                   >
                     🔍 Test Auth
+                  </button>
+                  <button
+                    onClick={() => {
+                      runMobileAuthDiagnostic();
+                    }}
+                    className="p-2.5 bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold rounded-xl transition-all duration-200"
+                  >
+                    📱 Mobile Debug
                   </button>
                 </div>
               ) : (

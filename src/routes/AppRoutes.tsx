@@ -66,6 +66,8 @@ const Contact = React.lazy(() => import('../pages/Contact'));
 
 const AuthTestPage = React.lazy(() => import('../pages/AuthTestPage'));
 
+const MobileAuthTest = React.lazy(() => import('../pages/MobileAuthTest'));
+
 
 
 const LoadingFallback = () => (
@@ -585,6 +587,20 @@ const AppRoutes = () => {
             />
             <LazyLoadWrapper>
               <AuthTestPage />
+            </LazyLoadWrapper>
+          </Layout>
+        </AnimatedPage>
+      } />
+      
+      <Route path="/mobile-auth-test" element={
+        <AnimatedPage>
+          <Layout>
+            <SeoHead
+              title="Mobile Authentication Test | Lumina Toolkit"
+              description="Test mobile authentication and debug issues."
+            />
+            <LazyLoadWrapper>
+              <MobileAuthTest />
             </LazyLoadWrapper>
           </Layout>
         </AnimatedPage>
