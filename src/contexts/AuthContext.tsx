@@ -327,7 +327,9 @@ async function signInWithGoogle() {
   }
 
   useEffect(() => {
+    // Check if Firebase is initialized before setting up auth
     if (!auth) {
+      console.error('❌ Firebase auth not available - waiting for initialization...');
       setLoading(false);
       return () => {};
     }

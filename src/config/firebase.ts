@@ -25,9 +25,18 @@ let googleProvider: any = null;
 if (isFirebaseConfigured()) {
   try {
     console.log('Firebase configuration found, initializing Firebase...');
+    
+    // Enhanced initialization for mobile browsers
     app = initializeApp(firebaseConfig);
     auth = getAuth(app);
     db = getFirestore(app);
+    
+    // Wait for Firebase to be fully initialized
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    console.log('Firebase app initialized:', !!app);
+    console.log('Firebase auth initialized:', !!auth);
+    console.log('Firebase db initialized:', !!db);
     
     // Configure auth persistence to keep users logged in across sessions
     setPersistence(auth, browserLocalPersistence)
