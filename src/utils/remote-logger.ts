@@ -38,12 +38,30 @@ class RemoteLogger {
 
     // Also log to console for desktop
     console.log(`🔐 [REMOTE-LOG] ${level.toUpperCase()}: ${message}`, data || '');
+    
+    // Force immediate save to prevent loss during redirect
+    this.forceSave();
+  }
+
+  forceSave() {
+    try {
+      const logsToSave = JSON.stringify(this.logs);
+      localStorage.setItem('auth_logs', logsToSave);
+      // Also save to sessionStorage as backup
+      sessionStorage.setItem('auth_logs_backup', logsToSave);
+    } catch (e) {
+      console.error('Failed to save logs:', e);
+    }
   }
 
   getLogs(): LogEntry[] {
-    // Try to get from localStorage first
+    // Try to get from localStorage first, then sessionStorage as backup
     try {
-      const stored = localStorage.getItem('auth_logs');
+      let stored = localStorage.getItem('auth_logs');
+      if (!stored) {
+        // Try sessionStorage backup
+        stored = sessionStorage.getItem('auth_logs_backup');
+      }
       if (stored) {
         this.logs = JSON.parse(stored);
       }
