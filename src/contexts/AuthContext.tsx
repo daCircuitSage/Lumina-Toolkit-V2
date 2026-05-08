@@ -15,6 +15,7 @@ import {
 import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../config/firebase';
 import { logAuthError, logAuthEvent, remoteLogger } from '../utils/remote-logger';
+import { mobileAuthFinalFix } from '../utils/mobile-auth-final-fix';
 
 interface Review {
   id: string;
@@ -85,13 +86,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       if (isMobile) {
         logAuthEvent('Starting Google redirect auth for mobile');
-        console.log('🔁 Calling signInWithRedirect for mobile');
+        console.log('� Using final mobile auth fix...');
         
-        // Clear any existing redirect state to avoid conflicts
-        window.history.replaceState({}, document.title, window.location.pathname);
+        // Use the final mobile auth fix
+        const result = await mobileAuthFinalFix.signInMobile();
         
-        await signInWithRedirect(auth, googleProvider);
-        return { redirectInitiated: true };
+        if (result.success) {
+          return { redirectInitiated: true };
+        } else {
+          throw new Error(result.error || 'Mobile authentication failed');
+        }
       }
 
       try {
@@ -111,11 +115,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         ) {
           logAuthEvent('Fallback to redirect after popup failure');
           
-          // Clear any existing redirect state before fallback
-          window.history.replaceState({}, document.title, window.location.pathname);
+          // Use final mobile auth fix for fallback
+          const result = await mobileAuthFinalFix.signInMobile();
           
-          await signInWithRedirect(auth, googleProvider);
-          return { redirectInitiated: true };
+          if (result.success) {
+            return { redirectInitiated: true };
+          } else {
+            throw new Error(result.error || 'Redirect authentication failed');
+          }
         }
 
         throw popupError;
@@ -299,21 +306,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
         console.warn('Failed to set auth persistence:', error);
       }
 
-      // First, check for redirect result (critical for mobile)
+      // First, check for redirect result using final mobile auth fix
       let redirectUser: User | null = null;
       try {
-        console.log('🔄 Checking redirect result on app load');
+        console.log('🔄 Checking redirect result with final mobile auth fix...');
         console.log('🌐 Redirect URL search:', window.location.search);
         console.log('🌐 Redirect URL hash:', window.location.hash);
         console.log('📱 User agent on redirect return:', navigator.userAgent);
 
-        const redirectResult = await getRedirectResult(auth);
-        console.log('🔄 getRedirectResult result:', redirectResult);
+        // Use final mobile auth fix to handle redirect result
+        const redirectResult = await mobileAuthFinalFix.handleRedirectResult();
+        console.log('🔄 Final mobile auth fix result:', redirectResult);
 
-        if (redirectResult?.user) {
+        if (redirectResult.success && redirectResult.user) {
           redirectUser = redirectResult.user;
-          console.log('✅ Redirect result user detected:', redirectResult.user.email);
-          logAuthEvent('Mobile redirect sign-in succeeded', { email: redirectResult.user.email });
+          console.log('✅ Final mobile auth fix user detected:', redirectUser.email);
+          logAuthEvent('Mobile redirect sign-in succeeded', { email: redirectUser.email });
           window.history.replaceState({}, document.title, window.location.pathname);
           
           // Save user to Firestore immediately for redirect users
@@ -321,10 +329,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
             await saveUserToFirestore(redirectUser);
           }
         } else {
-          console.log('ℹ️ getRedirectResult returned no user');
+          console.log('ℹ️ Final mobile auth fix returned no user');
+          if (redirectResult.error) {
+            console.log('ℹ️ Final mobile auth fix error:', redirectResult.error);
+          }
           logAuthEvent('Mobile redirect sign-in returned no user', { currentUser: !!auth.currentUser });
         }
       } catch (error: any) {
+        console.warn('Final mobile auth fix returned an error:', error);
         if (error.code === 'auth/unauthorized-domain') {
           logAuthError('Unauthorized domain during redirect callback', { domain: window.location.origin });
         } else if (error.code === 'auth/no-current-user') {

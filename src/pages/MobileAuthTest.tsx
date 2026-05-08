@@ -4,6 +4,7 @@ import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-
 import { checkFirebaseDomainConfig, getFirebaseAuthInstructions, createMobileAuthTest } from '../utils/firebase-domain-check';
 import { simpleMobileDebug } from '../utils/simple-mobile-debug';
 import { checkFirebaseOAuthConfig, generateOAuthSetupInstructions } from '../utils/firebase-oauth-check';
+import { mobileAuthFinalFix } from '../utils/mobile-auth-final-fix';
 
 export default function MobileAuthTest() {
   const { currentUser, signInWithGoogle, logout } = useAuth();
@@ -105,6 +106,26 @@ export default function MobileAuthTest() {
       setIsLoading(false);
     } catch (error: any) {
       console.error('❌ Simple debug failed:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleFinalFixTest = async () => {
+    setIsLoading(true);
+    try {
+      console.log('🚀 Running final mobile auth fix test...');
+      const testResult = await mobileAuthFinalFix.runMobileAuthTest();
+      console.log('📊 Final fix test result:', testResult);
+      
+      // Update test results with final fix info
+      setTestResults(prev => ({
+        ...prev,
+        finalFixTest: testResult.results
+      }));
+      
+      setIsLoading(false);
+    } catch (error: any) {
+      console.error('❌ Final fix test failed:', error);
       setIsLoading(false);
     }
   };
@@ -259,6 +280,45 @@ export default function MobileAuthTest() {
                   </ol>
                 </div>
               )}
+
+              {/* Final Fix Test Results */}
+              {testResults.finalFixTest && (
+                <div className="border rounded p-4 bg-green-50">
+                  <h3 className="font-semibold mb-2 text-green-800">Final Mobile Auth Fix Results</h3>
+                  <div className="text-sm space-y-2">
+                    <p><strong>Device:</strong> {testResults.finalFixTest.isMobile ? 'Mobile' : 'Desktop'}</p>
+                    <p><strong>Auth Ready:</strong> {testResults.finalFixTest.authReady ? 'Yes' : 'No'}</p>
+                    <p><strong>Current User:</strong> {testResults.finalFixTest.currentUser ? testResults.finalFixTest.currentUser.email : 'Not logged in'}</p>
+                    <p><strong>Mobile Auth In Progress:</strong> {testResults.finalFixTest.mobileAuthInProgress ? 'Yes' : 'No'}</p>
+                    <p><strong>URL Auth Params:</strong> {testResults.finalFixTest.urlAuthParams ? 'Yes' : 'No'}</p>
+                    
+                    {testResults.finalFixTest.redirectResult && (
+                      <div className="mt-2">
+                        <p><strong>Redirect Result:</strong></p>
+                        {testResults.finalFixTest.redirectResult.error ? (
+                          <div>
+                            <p><strong>Error:</strong> {testResults.finalFixTest.redirectResult.error}</p>
+                            <p><strong>Message:</strong> {testResults.finalFixTest.redirectResult.message}</p>
+                          </div>
+                        ) : (
+                          <div>
+                            <p><strong>Has Result:</strong> {testResults.finalFixTest.redirectResult.hasResult ? 'Yes' : 'No'}</p>
+                            <p><strong>Has User:</strong> {testResults.finalFixTest.redirectResult.hasUser ? 'Yes' : 'No'}</p>
+                            <p><strong>Email:</strong> {testResults.finalFixTest.redirectResult.email || 'None'}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {testResults.finalFixTest.error && (
+                      <div className="mt-2">
+                        <p><strong>Test Error:</strong> {testResults.finalFixTest.error.code}</p>
+                        <p><strong>Error Message:</strong> {testResults.finalFixTest.error.message}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -281,6 +341,14 @@ export default function MobileAuthTest() {
               className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
             >
               {isLoading ? '🔍 Debugging...' : '🔍 Debug Redirect Flow'}
+            </button>
+            
+            <button
+              onClick={handleFinalFixTest}
+              disabled={isLoading}
+              className="w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+            >
+              {isLoading ? '🚀 Testing Final Fix...' : '🚀 Test Final Mobile Fix'}
             </button>
             
             <button
