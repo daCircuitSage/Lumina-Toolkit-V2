@@ -80,11 +80,21 @@ const isMobileDevice = () => {
 
 async function signInWithGoogle() {
     console.log('🔥 signInWithGoogle function called');
-    logAuthEvent('signInWithGoogle called');
+    try {
+      logAuthEvent('signInWithGoogle called');
+      console.log('🔥 logAuthEvent succeeded');
+    } catch (error) {
+      console.error('❌ logAuthEvent failed:', error);
+    }
     
     // Run mobile auth test for debugging
     const authTest = testMobileAuth();
-    logAuthEvent('Mobile auth test results', authTest);
+    console.log('🔥 Mobile auth test completed:', authTest);
+    try {
+      logAuthEvent('Mobile auth test results', authTest);
+    } catch (error) {
+      console.error('❌ Mobile auth test logging failed:', error);
+    }
     
     if (!auth || !googleProvider) {
       const error = '❌ Firebase auth or Google provider not available';
