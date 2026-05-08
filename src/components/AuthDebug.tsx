@@ -69,6 +69,17 @@ export default function AuthDebug() {
     setRemoteLogs(logs);
   };
 
+  const testSignInFunction = async () => {
+    try {
+      console.log('🧪 Testing signInWithGoogle function directly...');
+      logAuthEvent('Testing signInWithGoogle from debug panel');
+      await signInWithGoogle();
+    } catch (error: any) {
+      console.log('❌ Test signIn failed:', error);
+      logAuthEvent('Test signIn failed', { error: error.message });
+    }
+  };
+
   return (
     <div className="fixed bottom-4 right-4 bg-black/90 text-white p-3 rounded-lg text-xs max-w-md z-50 border border-yellow-500/30 max-h-96 overflow-y-auto">
       <div className="font-bold mb-2 text-yellow-400">🔍 Auth Debug</div>
@@ -127,6 +138,12 @@ export default function AuthDebug() {
           className="w-full bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded text-xs"
         >
           🧪 Test Logging
+        </button>
+        <button 
+          onClick={testSignInFunction}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white px-2 py-1 rounded text-xs"
+        >
+          🔐 Test Sign-In
         </button>
         <button 
           onClick={clearLogs}

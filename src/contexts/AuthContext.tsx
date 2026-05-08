@@ -79,6 +79,7 @@ const isMobileDevice = () => {
 };
 
 async function signInWithGoogle() {
+    console.log('🔥 signInWithGoogle function called');
     logAuthEvent('signInWithGoogle called');
     
     // Run mobile auth test for debugging
