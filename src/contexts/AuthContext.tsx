@@ -96,7 +96,7 @@ async function signInWithGoogle() {
     logAuthEvent('Current domain', window.location.origin);
     
     // ENHANCED: Force popup on mobile if redirect fails (common issue)
-    const forcePopupForMobile = true; // Force popup for mobile since redirect is problematic
+    const forcePopupForMobile = false; // Try redirect first, popup fallback for mobile
     
     try {
       let result;
@@ -124,8 +124,19 @@ async function signInWithGoogle() {
       } else {
         const method = isMobile ? 'Mobile (forced popup)' : 'Desktop (popup)';
         logAuthEvent(`Using ${method} method`);
-        result = await signInWithPopup(auth, googleProvider);
-        logAuthEvent('Sign-in successful via popup', { user: result.user?.email });
+        try {
+          result = await signInWithPopup(auth, googleProvider);
+          logAuthEvent('Sign-in successful via popup', { user: result.user?.email });
+        } catch (popupError: any) {
+          logAuthError('Popup method failed, trying redirect fallback', popupError);
+          if (isMobile && popupError.code === 'auth/popup-closed-by-user') {
+            logAuthEvent('Mobile popup blocked, trying redirect method...');
+            await signInWithRedirect(auth, googleProvider);
+            return null; // Redirect will cause page reload
+          } else {
+            throw popupError;
+          }
+        }
       }
       
       // Save user data to Firestore (only for successful sign-in)
@@ -337,11 +348,16 @@ async function signInWithGoogle() {
         const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('session_state');
         console.log('🔍 [MOBILE DEBUG] Has auth parameters in URL:', hasAuthParams);
         
-        // ENHANCED: Add small delay for mobile browsers to settle
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // ENHANCED: Add delay for mobile browsers to settle and check URL params
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Check if we have auth parameters in URL (indicates redirect just happened)
+        if (hasAuthParams) {
+          logAuthEvent('Auth parameters detected in URL, processing redirect...');
+        }
         
         const result = await getRedirectResult(auth);
-        console.log('🔍 [MOBILE DEBUG] getRedirectResult completed');
+        logAuthEvent('getRedirectResult completed', { hasResult: !!result });
         
         if (result && result.user) {
           console.log('✅ [MOBILE DEBUG] Redirect sign-in successful:', result.user);
