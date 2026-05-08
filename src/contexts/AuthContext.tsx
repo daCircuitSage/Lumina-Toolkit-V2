@@ -422,10 +422,8 @@ async function signInWithGoogle() {
 
     // Handle redirect result before setting up auth state listener
     handleRedirectResult().then((redirectHandled) => {
-      if (!redirectHandled) {
-        // Only set up auth state listener if redirect wasn't handled
-        setupAuthStateListener();
-      }
+      // Always set up auth state listener, regardless of redirect handling
+      setupAuthStateListener();
     });
 
     const setupAuthStateListener = () => {
