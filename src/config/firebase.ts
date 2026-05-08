@@ -38,12 +38,14 @@ if (isFirebaseConfigured()) {
         console.error('Failed to configure auth persistence:', error);
       });
     
-    // Configure Google Provider with proper settings
+    // Configure Google Provider with proper settings for mobile compatibility
     googleProvider = new GoogleAuthProvider();
     googleProvider.addScope('profile');
     googleProvider.addScope('email');
     googleProvider.setCustomParameters({
-      prompt: 'select_account'
+      prompt: 'select_account',
+      access_type: 'offline',
+      include_granted_scopes: 'true'
     });
     
     console.log('Firebase initialized successfully');
