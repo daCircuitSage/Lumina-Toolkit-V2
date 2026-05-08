@@ -73,7 +73,15 @@ export default function AuthDebug() {
     try {
       console.log('🧪 Testing signInWithGoogle function directly...');
       logAuthEvent('Testing signInWithGoogle from debug panel');
+      
+      // Add immediate test log
+      console.log('🔥 About to call signInWithGoogle...');
+      logAuthEvent('About to call signInWithGoogle');
+      
       await signInWithGoogle();
+      
+      console.log('🔥 signInWithGoogle completed successfully');
+      logAuthEvent('signInWithGoogle completed successfully');
     } catch (error: any) {
       console.log('❌ Test signIn failed:', error);
       logAuthEvent('Test signIn failed', { error: error.message });
