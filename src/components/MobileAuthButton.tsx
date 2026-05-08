@@ -17,12 +17,12 @@ export default function MobileAuthButton({ className = "", children }: MobileAut
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     if (isMobile) {
-      // For mobile, use redirect to avoid popup blocking
-      logAuthEvent('Mobile device detected, using optimized flow');
+      // For mobile, use popup auth to avoid redirect domain issues
+      logAuthEvent('Mobile device detected, using popup auth');
       
-      // Show user instruction for mobile
+      // Show user instruction for mobile popup
       const shouldContinue = window.confirm(
-        'Google sign-in will redirect this page. Please complete the sign-in and wait for the app to return.'
+        'Google sign-in will open a popup. Please allow popups and complete the sign-in.'
       );
       
       if (!shouldContinue) {
