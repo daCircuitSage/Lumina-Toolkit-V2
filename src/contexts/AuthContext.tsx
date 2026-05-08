@@ -85,6 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       if (isMobile) {
         logAuthEvent('Starting Google redirect auth for mobile');
+        console.log('🔁 Calling signInWithRedirect for mobile');
         await signInWithRedirect(auth, googleProvider);
         return { redirectInitiated: true };
       }
@@ -306,14 +307,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
 
       try {
+        console.log('🔄 Checking redirect result after app load');
+        console.log('🌐 Redirect URL search:', window.location.search);
+        console.log('🌐 Redirect URL hash:', window.location.hash);
+        console.log('📱 User agent on redirect return:', navigator.userAgent);
+        console.log('👤 current auth.currentUser before getRedirectResult:', auth.currentUser);
+
         const redirectResult = await getRedirectResult(auth);
+        console.log('🔄 getRedirectResult result:', redirectResult);
+
         if (redirectResult?.user) {
+          console.log('✅ Redirect result user detected:', redirectResult.user.email);
           setCurrentUser(redirectResult.user);
+        } else if (auth.currentUser) {
+          console.log('✅ No redirect result user, but auth.currentUser exists:', auth.currentUser.email);
+          setCurrentUser(auth.currentUser);
+        } else {
+          console.log('ℹ️ No redirect result user and no currentUser after redirect');
         }
       } catch (error: any) {
         if (error.code === 'auth/unauthorized-domain') {
           logAuthError('Unauthorized domain during redirect callback', { domain: window.location.origin });
-        } else if (error.code !== 'auth/no-current-user') {
+        } else if (error.code === 'auth/no-current-user') {
+          console.log('ℹ️ getRedirectResult returned no current user after redirect');
+        } else {
           console.warn('getRedirectResult returned an error:', error);
         }
       } finally {
