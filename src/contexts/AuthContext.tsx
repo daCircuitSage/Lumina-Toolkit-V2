@@ -15,6 +15,7 @@ import {
 import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../config/firebase';
 import { testMobileAuth, logAuthEvent } from '../utils/mobile-auth-test';
+import { logAuthError, logAuthWarning, remoteLogger } from '../utils/remote-logger';
 
 interface Review {
   id: string;
@@ -85,7 +86,8 @@ async function signInWithGoogle() {
     logAuthEvent('Mobile auth test results', authTest);
     
     if (!auth || !googleProvider) {
-      console.error('❌ Firebase auth or Google provider not available');
+      const error = '❌ Firebase auth or Google provider not available';
+      logAuthError(error);
       throw new Error('Authentication is not available. Firebase is not configured.');
     }
     
@@ -93,31 +95,37 @@ async function signInWithGoogle() {
     logAuthEvent('Device detection', { isMobile, shouldUseRedirect: authTest.shouldUseRedirect });
     logAuthEvent('Current domain', window.location.origin);
     
+    // ENHANCED: Force popup on mobile if redirect fails (common issue)
+    const forcePopupForMobile = true; // Force popup for mobile since redirect is problematic
+    
     try {
       let result;
       
-      if (isMobile) {
-        console.log('📱 Trying redirect method for mobile first...');
+      if (isMobile && !forcePopupForMobile) {
+        logAuthEvent('Trying redirect method for mobile first...');
         try {
           await signInWithRedirect(auth, googleProvider);
           return null; // Redirect will cause page reload
         } catch (redirectError: any) {
-          console.error('❌ Redirect method failed, trying popup fallback:', redirectError);
+          logAuthError('Redirect method failed, trying popup fallback', redirectError);
           
-          // If redirect fails, try popup as fallback
+          // ENHANCED: More comprehensive error handling for mobile
           if (redirectError.code === 'auth/unauthorized-domain' || 
-              redirectError.code === 'auth/redirect-cancelled-by-user') {
-            console.log('🔄 Trying popup method as fallback...');
+              redirectError.code === 'auth/redirect-cancelled-by-user' ||
+              redirectError.code === 'auth/redirect-pending' ||
+              redirectError.code === 'auth/network-request-failed') {
+            logAuthEvent('Trying popup method as fallback for mobile...');
             result = await signInWithPopup(auth, googleProvider);
-            console.log('✅ Fallback popup sign-in successful:', result.user);
+            logAuthEvent('Fallback popup sign-in successful', { user: result.user?.email });
           } else {
             throw redirectError;
           }
         }
       } else {
-        console.log('🖥️ Using popup method for desktop...');
+        const method = isMobile ? 'Mobile (forced popup)' : 'Desktop (popup)';
+        logAuthEvent(`Using ${method} method`);
         result = await signInWithPopup(auth, googleProvider);
-        console.log('✅ Sign-in successful via popup:', result.user);
+        logAuthEvent('Sign-in successful via popup', { user: result.user?.email });
       }
       
       // Save user data to Firestore (only for successful sign-in)
@@ -128,10 +136,11 @@ async function signInWithGoogle() {
       return result;
       
     } catch (error: any) {
-      console.error('Error initiating Google sign in:', error);
-      console.error('Error code:', error.code);
-      console.error('Error message:', error.message);
-      console.error('Current domain:', window.location.origin);
+      logAuthError('Error initiating Google sign in', {
+        code: error.code,
+        message: error.message,
+        domain: window.location.origin
+      });
       
       if (error.code === 'auth/unauthorized-domain') {
         throw new Error(`Domain ${window.location.origin} not authorized. Please add this domain to Firebase Auth → Settings → Authorized domains.`);
@@ -313,7 +322,7 @@ async function signInWithGoogle() {
 
     setupAuth();
 
-    // Handle redirect result first, before setting up auth state listener
+    // ENHANCED: Handle redirect result with better timing and error recovery
     const handleRedirectResult = async () => {
       try {
         console.log('🔄 [MOBILE DEBUG] Checking for redirect result...');
@@ -327,6 +336,9 @@ async function signInWithGoogle() {
         const urlParams = new URLSearchParams(window.location.search);
         const hasAuthParams = urlParams.has('code') || urlParams.has('state') || urlParams.has('session_state');
         console.log('🔍 [MOBILE DEBUG] Has auth parameters in URL:', hasAuthParams);
+        
+        // ENHANCED: Add small delay for mobile browsers to settle
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         const result = await getRedirectResult(auth);
         console.log('🔍 [MOBILE DEBUG] getRedirectResult completed');
@@ -370,6 +382,10 @@ async function signInWithGoogle() {
           console.log('ℹ️ [MOBILE DEBUG] Redirect was cancelled by user');
         } else if (error.code === 'auth/redirect-pending') {
           console.log('ℹ️ [MOBILE DEBUG] Redirect is pending, continuing...');
+        } else if (error.code === 'auth/network-request-failed') {
+          console.log('ℹ️ [MOBILE DEBUG] Network failed, will retry with popup fallback');
+          // ENHANCED: Try popup fallback for network errors
+          return { fallbackToPopup: true };
         } else {
           console.error('❌ [MOBILE DEBUG] Unexpected redirect error:', error.message);
         }

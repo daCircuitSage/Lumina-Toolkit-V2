@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../config/firebase';
+import { remoteLogger } from '../utils/remote-logger';
 
 export default function AuthDebug() {
   const { currentUser, loading } = useAuth();
   const [firebaseUser, setFirebaseUser] = useState<any>(null);
   const [redirectResult, setRedirectResult] = useState<any>(null);
+  const [remoteLogs, setRemoteLogs] = useState<any[]>([]);
   const { signInWithGoogle } = useAuth();
 
   useEffect(() => {
-    // Check Firebase auth state directly
+    // Check Firebase auth state directly and get remote logs
     const checkFirebaseAuth = async () => {
       if (auth) {
         const user = auth.currentUser;
@@ -22,6 +24,10 @@ export default function AuthDebug() {
           console.log('No redirect result available');
         }
       }
+      
+      // Get remote logs for debugging
+      const logs = remoteLogger.getLogs();
+      setRemoteLogs(logs);
     };
 
     checkFirebaseAuth();
@@ -46,10 +52,17 @@ export default function AuthDebug() {
     }
   };
 
+  const clearLogs = () => {
+    remoteLogger.clearLogs();
+    setRemoteLogs([]);
+  };
+
   return (
-    <div className="fixed bottom-4 right-4 bg-black/90 text-white p-3 rounded-lg text-xs max-w-sm z-50 border border-yellow-500/30">
+    <div className="fixed bottom-4 right-4 bg-black/90 text-white p-3 rounded-lg text-xs max-w-md z-50 border border-yellow-500/30 max-h-96 overflow-y-auto">
       <div className="font-bold mb-2 text-yellow-400">🔍 Auth Debug</div>
-      <div className="space-y-1">
+      
+      {/* Auth Status */}
+      <div className="space-y-1 mb-3 pb-2 border-b border-gray-600">
         <div>Loading: {loading ? 'Yes' : 'No'}</div>
         <div>Context User: {currentUser ? currentUser.email : 'Not logged in'}</div>
         <div>Firebase User: {firebaseUser ? firebaseUser.email : 'None'}</div>
@@ -61,22 +74,48 @@ export default function AuthDebug() {
           <div className="text-blue-400">🔥 Firebase: {firebaseUser ? 'Set' : 'Not Set'}</div>
           <div className="text-purple-400">🔄 Redirect: {redirectResult?.user ? 'Set' : 'Not Set'}</div>
         </div>
-        <div className="mt-3 space-y-2">
-          <button 
-            onClick={forceRefresh}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
-          >
-            🔄 Force Refresh
-          </button>
-          {firebaseUser && !currentUser && (
-            <button 
-              onClick={() => window.location.reload()}
-              className="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
-            >
-              🔄 Reload Page
-            </button>
-          )}
+      </div>
+
+      {/* Remote Logs */}
+      <div className="mb-3 pb-2 border-b border-gray-600">
+        <div className="font-bold text-yellow-300 mb-1">📱 Remote Logs ({remoteLogs.length})</div>
+        <div className="max-h-32 overflow-y-auto space-y-1">
+          {remoteLogs.slice(0, 10).map((log, index) => (
+            <div key={index} className={`text-xs ${
+              log.level === 'error' ? 'text-red-400' : 
+              log.level === 'warn' ? 'text-yellow-400' : 
+              'text-green-400'
+            }`}>
+              <div className="font-mono">{log.message}</div>
+              {log.data && <div className="text-gray-400 ml-2">{JSON.stringify(log.data)}</div>}
+            </div>
+          ))}
+          {remoteLogs.length === 0 && <div className="text-gray-400">No logs yet</div>}
         </div>
+      </div>
+
+      {/* Actions */}
+      <div className="space-y-2">
+        <button 
+          onClick={forceRefresh}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs"
+        >
+          🔄 Force Refresh
+        </button>
+        {firebaseUser && !currentUser && (
+          <button 
+            onClick={() => window.location.reload()}
+            className="w-full bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs"
+          >
+            🔄 Reload Page
+          </button>
+        )}
+        <button 
+          onClick={clearLogs}
+          className="w-full bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded text-xs"
+        >
+          🗑️ Clear Logs
+        </button>
       </div>
     </div>
   );
