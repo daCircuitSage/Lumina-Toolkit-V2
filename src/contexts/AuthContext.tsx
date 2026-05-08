@@ -14,8 +14,8 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../config/firebase';
-import { testMobileAuth, logAuthEvent } from '../utils/mobile-auth-test';
-import { logAuthError, logAuthWarning, remoteLogger } from '../utils/remote-logger';
+import { testMobileAuth } from '../utils/mobile-auth-test';
+import { logAuthError, logAuthWarning, logAuthEvent, remoteLogger } from '../utils/remote-logger';
 
 interface Review {
   id: string;
