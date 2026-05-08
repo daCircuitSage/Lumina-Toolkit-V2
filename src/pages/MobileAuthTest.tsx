@@ -4,7 +4,7 @@ import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-
 import { checkFirebaseDomainConfig, getFirebaseAuthInstructions, createMobileAuthTest } from '../utils/firebase-domain-check';
 import { simpleMobileDebug } from '../utils/simple-mobile-debug';
 import { checkFirebaseOAuthConfig, generateOAuthSetupInstructions } from '../utils/firebase-oauth-check';
-import { mobileAuthFinalFix } from '../utils/mobile-auth-final-fix';
+import { simpleFinalFix } from '../utils/simple-final-fix';
 
 export default function MobileAuthTest() {
   const { currentUser, signInWithGoogle, logout } = useAuth();
@@ -113,19 +113,19 @@ export default function MobileAuthTest() {
   const handleFinalFixTest = async () => {
     setIsLoading(true);
     try {
-      console.log('🚀 Running final mobile auth fix test...');
-      const testResult = await mobileAuthFinalFix.runMobileAuthTest();
-      console.log('📊 Final fix test result:', testResult);
+      console.log('🚀 Running simple final mobile fix test...');
+      const testResult = await simpleFinalFix();
+      console.log('📊 Simple final fix test result:', testResult);
       
       // Update test results with final fix info
       setTestResults(prev => ({
         ...prev,
-        finalFixTest: testResult.results
+        finalFixTest: testResult
       }));
       
       setIsLoading(false);
     } catch (error: any) {
-      console.error('❌ Final fix test failed:', error);
+      console.error('❌ Simple final fix test failed:', error);
       setIsLoading(false);
     }
   };
@@ -289,7 +289,6 @@ export default function MobileAuthTest() {
                     <p><strong>Device:</strong> {testResults.finalFixTest.isMobile ? 'Mobile' : 'Desktop'}</p>
                     <p><strong>Auth Ready:</strong> {testResults.finalFixTest.authReady ? 'Yes' : 'No'}</p>
                     <p><strong>Current User:</strong> {testResults.finalFixTest.currentUser ? testResults.finalFixTest.currentUser.email : 'Not logged in'}</p>
-                    <p><strong>Mobile Auth In Progress:</strong> {testResults.finalFixTest.mobileAuthInProgress ? 'Yes' : 'No'}</p>
                     <p><strong>URL Auth Params:</strong> {testResults.finalFixTest.urlAuthParams ? 'Yes' : 'No'}</p>
                     
                     {testResults.finalFixTest.redirectResult && (
