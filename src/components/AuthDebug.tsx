@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../config/firebase';
 import { remoteLogger, logAuthEvent } from '../utils/remote-logger';
+import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-diagnostic';
 
 export default function AuthDebug() {
   const { currentUser, loading } = useAuth();
@@ -73,6 +74,14 @@ export default function AuthDebug() {
     try {
       console.log('🧪 Testing signInWithGoogle function directly...');
       logAuthEvent('Testing signInWithGoogle from debug panel');
+      
+      // Run mobile diagnostic
+      const diagnostic = runMobileAuthDiagnostic();
+      logAuthEvent('Mobile diagnostic completed', diagnostic);
+      
+      // Test Firebase auth
+      const firebaseTest = await testFirebaseAuth();
+      logAuthEvent('Firebase auth test', { success: firebaseTest });
       
       // Add immediate test log
       console.log('🔥 About to call signInWithGoogle...');
@@ -152,6 +161,16 @@ export default function AuthDebug() {
           className="w-full bg-orange-500 hover:bg-orange-600 text-white px-2 py-1 rounded text-xs"
         >
           🔐 Test Sign-In
+        </button>
+        <button 
+          onClick={() => {
+            const diagnostic = runMobileAuthDiagnostic();
+            logAuthEvent('Manual diagnostic run', diagnostic);
+            console.log('📱 Mobile Diagnostic:', diagnostic);
+          }}
+          className="w-full bg-cyan-500 hover:bg-cyan-600 text-white px-2 py-1 rounded text-xs"
+        >
+          📱 Run Diagnostic
         </button>
         <button 
           onClick={clearLogs}
