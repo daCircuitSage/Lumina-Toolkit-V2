@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../config/firebase';
+import { getRedirectResult } from 'firebase/auth';
 import { remoteLogger, logAuthEvent } from '../utils/remote-logger';
 import { runMobileAuthDiagnostic, testFirebaseAuth } from '../utils/mobile-auth-diagnostic';
 
@@ -19,7 +20,7 @@ export default function AuthDebug() {
         setFirebaseUser(user);
         
         try {
-          const result = await auth.getRedirectResult();
+          const result = await getRedirectResult(auth);
           setRedirectResult(result);
         } catch (error) {
           console.log('No redirect result available');

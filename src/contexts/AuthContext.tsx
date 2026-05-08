@@ -106,13 +106,29 @@ async function signInWithGoogle() {
     logAuthEvent('Device detection', { isMobile, shouldUseRedirect: authTest.shouldUseRedirect });
     logAuthEvent('Current domain', window.location.origin);
     
-    // ENHANCED: Force popup on mobile if redirect fails (common issue)
-    const forcePopupForMobile = false; // Try redirect first, popup fallback for mobile
+    // ENHANCED: Use popup for mobile first, redirect only as fallback
+    const forcePopupForMobile = true;
     
     try {
       let result;
       
-      if (isMobile && !forcePopupForMobile) {
+      if (isMobile && forcePopupForMobile) {
+        const method = 'Mobile (popup)';
+        logAuthEvent(`Using ${method} method`);
+        try {
+          result = await signInWithPopup(auth, googleProvider);
+          logAuthEvent('Sign-in successful via popup', { user: result.user?.email });
+        } catch (popupError: any) {
+          logAuthError('Popup method failed, trying redirect fallback', popupError);
+          if (popupError.code === 'auth/popup-closed-by-user' || popupError.code === 'auth/popup-blocked') {
+            logAuthEvent('Mobile popup blocked, trying redirect method...');
+            await signInWithRedirect(auth, googleProvider);
+            return { redirectInitiated: true }; // Redirect will cause page reload
+          } else {
+            throw popupError;
+          }
+        }
+      } else if (isMobile && !forcePopupForMobile) {
         logAuthEvent('Trying redirect method for mobile first...');
         try {
           await signInWithRedirect(auth, googleProvider);
