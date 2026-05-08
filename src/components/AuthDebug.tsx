@@ -18,19 +18,12 @@ export default function AuthDebug() {
       if (auth) {
         const user = auth.currentUser;
         setFirebaseUser(user);
-        
-        try {
-          const result = await getRedirectResult(auth);
-          setRedirectResult(result);
-        } catch (error) {
-          console.log('No redirect result available');
-        }
       }
-      
+
       // Get remote logs for debugging
       const logs = remoteLogger.getLogs();
       setRemoteLogs(logs);
-      
+
       // Add test log if no logs exist
       if (logs.length === 0) {
         logAuthEvent('AuthDebug component initialized - testing logging system');
