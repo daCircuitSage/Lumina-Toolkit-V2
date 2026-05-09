@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, browserLocalPersistence, setPersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -11,49 +11,73 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Check if Firebase configuration is complete
+// Check if Firebase configuration is complete for database usage
 const isFirebaseConfigured = () => {
   const requiredFields = ['apiKey', 'authDomain', 'projectId', 'appId'];
   return requiredFields.every(field => firebaseConfig[field as keyof typeof firebaseConfig]);
 };
 
 let app: any = null;
-let auth: any = null;
 let db: any = null;
-let googleProvider: any = null;
+let auth: any = null;
 
 if (isFirebaseConfigured()) {
   try {
-    console.log('Firebase configuration found, initializing Firebase...');
+    console.log('Firebase configuration found, initializing Firebase services...');
     
-    // Enhanced initialization for mobile browsers
+    // Initialize Firebase app
     app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
     db = getFirestore(app);
+    auth = getAuth(app);
     
     console.log('Firebase app initialized:', !!app);
-    console.log('Firebase auth initialized:', !!auth);
-    console.log('Firebase db initialized:', !!db);
+    console.log('Firebase Firestore initialized:', !!db);
+    console.log('Firebase Auth initialized:', !!auth);
     
-    // Auth persistence is handled in AuthContext
-    
-    // Configure Google Provider with proper settings for mobile compatibility
-    googleProvider = new GoogleAuthProvider();
-    googleProvider.addScope('profile');
-    googleProvider.addScope('email');
-    googleProvider.setCustomParameters({
-      prompt: 'select_account',
-      access_type: 'offline',
-      include_granted_scopes: 'true'
-    });
-    
-    console.log('Firebase initialized successfully');
+    console.log('Firebase services initialized successfully');
   } catch (error) {
-    console.error('Failed to initialize Firebase:', error);
+    console.error('Failed to initialize Firebase services:', error);
   }
 } else {
-  console.warn('Firebase configuration is incomplete. Authentication features will be disabled.');
+  console.warn('Firebase configuration is incomplete. Database features will be disabled.');
 }
 
-export { app, auth, db, googleProvider };
+// Auth helper functions
+export const signInWithGoogle = async () => {
+  if (!auth) {
+    throw new Error('Firebase Auth is not initialized');
+  }
+  
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    return result.user;
+  } catch (error) {
+    console.error('Google sign-in error:', error);
+    throw error;
+  }
+};
+
+export const signOutUser = async () => {
+  if (!auth) {
+    return;
+  }
+  
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Sign out error:', error);
+    throw error;
+  }
+};
+
+export const onAuthStateChange = (callback: (user: any) => void) => {
+  if (!auth) {
+    return () => {};
+  }
+  
+  return onAuthStateChanged(auth, callback);
+};
+
+export { app, db, auth };
 export default app;

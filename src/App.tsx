@@ -6,18 +6,16 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { AuthProvider } from './contexts/AuthContext';
+import { DatabaseProvider } from './contexts/DatabaseContext';
 import AppRoutes from './routes/AppRoutes';
-import AuthDebug from './components/AuthDebug';
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-        <AuthProvider>
+        <DatabaseProvider>
           <AppRoutes />
-          <AuthDebug />
-        </AuthProvider>
+        </DatabaseProvider>
       </BrowserRouter>
     </ThemeProvider>
   );

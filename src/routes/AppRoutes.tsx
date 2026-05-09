@@ -24,13 +24,6 @@ import SeoHead from '../components/SeoHead';
 
 import ErrorBoundary from '../components/ErrorBoundary';
 
-import ProtectedRoute from '../components/auth/ProtectedRoute';
-
-import Login from '../components/auth/Login';
-
-import Register from '../components/auth/Register';
-
-import AuthDashboard from '../components/auth/Dashboard';
 
 
 
@@ -64,9 +57,6 @@ const CoverLetter = React.lazy(() => import('../pages/JobToolkit/CoverLetter'));
 
 const Contact = React.lazy(() => import('../pages/Contact'));
 
-const AuthTestPage = React.lazy(() => import('../pages/AuthTestPage'));
-
-const MobileAuthTest = React.lazy(() => import('../pages/MobileAuthTest'));
 
 
 
@@ -566,46 +556,8 @@ const AppRoutes = () => {
 
       
 
-      <Route path="/login" element={<Login />} />
-
+            
       
-      <Route path="/register" element={<Register />} />
-
-      
-      <Route path="/dashboard" element={
-        <ProtectedRoute>
-          <AuthDashboard />
-        </ProtectedRoute>
-      } />
-      
-      <Route path="/auth-test" element={
-        <AnimatedPage>
-          <Layout>
-            <SeoHead
-              title="Authentication Test | Lumina Toolkit"
-              description="Test and debug authentication system functionality."
-            />
-            <LazyLoadWrapper>
-              <AuthTestPage />
-            </LazyLoadWrapper>
-          </Layout>
-        </AnimatedPage>
-      } />
-      
-      <Route path="/mobile-auth-test" element={
-        <AnimatedPage>
-          <Layout>
-            <SeoHead
-              title="Mobile Authentication Test | Lumina Toolkit"
-              description="Test mobile authentication and debug issues."
-            />
-            <LazyLoadWrapper>
-              <MobileAuthTest />
-            </LazyLoadWrapper>
-          </Layout>
-        </AnimatedPage>
-      } />
-
       
       {/* 404 Catch-all Route */}
 
