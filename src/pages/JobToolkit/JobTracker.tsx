@@ -41,10 +41,10 @@ interface Job {
 }
 
 const STATUS_CONFIG: Record<JobStatus, { label: string, icon: any, colors: string }> = {
-  applied: { label: 'Applied', icon: Clock, colors: 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
-  interview: { label: 'Interviewing', icon: Plus, colors: 'bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 font-bold' },
-  rejected: { label: 'Declined', icon: XCircle, colors: 'bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 opacity-70' },
-  offer: { label: 'Offer Received', icon: Trophy, colors: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 ring-2 ring-emerald-500/20 shadow-lg shadow-emerald-500/10' }
+  applied: { label: 'Applied', icon: Clock, colors: 'bg-[#3ECF8E]/10 text-[#3ECF8E]' },
+  interview: { label: 'Interviewing', icon: Plus, colors: 'bg-[#3ECF8E]/20 text-[#3ECF8E] font-bold' },
+  rejected: { label: 'Declined', icon: XCircle, colors: 'bg-red-500/10 text-red-400 opacity-70' },
+  offer: { label: 'Offer Received', icon: Trophy, colors: 'bg-[#3ECF8E]/20 text-[#3ECF8E] ring-2 ring-[#3ECF8E]/30 shadow-lg shadow-[#3ECF8E]/10' }
 };
 
 export default function JobTracker() {
@@ -202,10 +202,10 @@ export default function JobTracker() {
 
   if (authLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="relative">
-          <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-indigo-200 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="w-8 h-8 border-2 border-[#3ECF8E] border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-[#3ECF8E]/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
         </div>
       </div>
     );
@@ -213,20 +213,22 @@ export default function JobTracker() {
 
   if (!user) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col items-center justify-center min-h-[400px] bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
-          <User className="w-16 h-16 text-indigo-600 mb-6" />
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+      <div className="min-h-screen bg-black flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-[#171717] border border-[#2E2E2E] rounded-2xl p-6 sm:p-8 text-center">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#3ECF8E]/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <User className="w-7 h-7 sm:w-8 sm:h-8 text-[#3ECF8E]" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
             Sign In to Job Tracker
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 text-center mb-8 max-w-md">
+          <p className="text-sm sm:text-base text-[#A0A0A0] text-center mb-6 sm:mb-8">
             Sign in with your Google account to track your job applications and keep your data synced across all your devices.
           </p>
           <button
             onClick={signIn}
-            className="flex items-center gap-3 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors font-medium"
+            className="w-full flex items-center justify-center gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors font-medium text-sm sm:text-base"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24">
               <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
               <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -241,45 +243,312 @@ export default function JobTracker() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="relative">
-          <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-indigo-200 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="w-8 h-8 border-2 border-[#3ECF8E] border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-[#3ECF8E]/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-black">
       {/* User info and sign-out */}
-      <div className="mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
-            {user?.photoURL ? (
-              <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full" />
-            ) : (
-              <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-            )}
-          </div>
-          <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-white">
-              {user?.displayName || user?.email || 'User'}
-            </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Signed in with Google
-            </p>
+      <div className="border-b border-[#2E2E2E] bg-black">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#3ECF8E]/10 rounded-full flex items-center justify-center">
+                {user?.photoURL ? (
+                  <img src={user.photoURL} alt="Profile" className="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
+                ) : (
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-[#3ECF8E]" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm font-medium text-white truncate">
+                  {user?.displayName || user?.email || 'User'}
+                </p>
+                <p className="text-xs text-[#A0A0A0] hidden sm:block">
+                  Signed in with Google
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={signOut}
+              className="flex items-center gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm text-[#A0A0A0] hover:text-white transition-colors"
+            >
+              <LogOut className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
           </div>
         </div>
-        <button
-          onClick={signOut}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          <LogOut className="w-4 h-4" />
-          Sign Out
-        </button>
       </div>
-      
+
+      {/* Main Job Tracker Tool - Hero Section */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <div className="text-center mb-6 sm:mb-8 lg:mb-12">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
+            Job Application Tracker
+          </h1>
+          <p className="text-base sm:text-lg lg:text-xl text-[#A0A0A0] max-w-lg sm:max-w-xl lg:max-w-2xl mx-auto px-4">
+            Track your job applications from submission to interview to offer
+          </p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 lg:mb-12">
+          {Object.entries(STATUS_CONFIG).map(([status, config]) => {
+            const count = (jobs || []).filter(job => job.status === status).length;
+            return (
+              <div key={status} className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-3 sm:p-4 lg:p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm text-[#A0A0A0] mb-1">{config.label}</p>
+                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">{count}</p>
+                  </div>
+                  <div className={cn('p-2 sm:p-3 rounded-xl', config.colors)}>
+                    <config.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Filters and Search */}
+        <div className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+          <div className="flex flex-col gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#A0A0A0] w-4 h-4 sm:w-5 sm:h-5" />
+              <input
+                type="text"
+                placeholder="Search jobs by company, role, or notes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] text-sm sm:text-base"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as JobStatus | 'all')}
+                className="flex-1 px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white text-sm sm:text-base"
+              >
+                <option value="all">All Status</option>
+                {Object.entries(STATUS_CONFIG).map(([status, config]) => (
+                  <option key={status} value={status}>{config.label}</option>
+                ))}
+              </select>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors flex items-center justify-center gap-2 font-medium text-sm sm:text-base"
+              >
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                Add Job
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Jobs List */}
+        <div className="space-y-3 sm:space-y-4">
+          {sortedJobs.length === 0 ? (
+            <div className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-6 sm:p-8 lg:p-12 text-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-[#3ECF8E]/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-[#3ECF8E]" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">
+                No job applications yet
+              </h3>
+              <p className="text-sm sm:text-base text-[#A0A0A0] mb-4 sm:mb-6 max-w-sm sm:max-w-md mx-auto px-4">
+                Start tracking your job applications by adding your first one.
+              </p>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors font-medium text-sm sm:text-base"
+              >
+                Add Your First Job
+              </button>
+            </div>
+          ) : (
+            sortedJobs.map((job) => (
+              <motion.div
+                key={job.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-4 sm:p-6 hover:border-[#3ECF8E]/30 transition-all"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                      <h3 className="text-lg sm:text-xl font-semibold text-white truncate">
+                        {job.role}
+                      </h3>
+                      <span className={cn('px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto', STATUS_CONFIG[job.status].colors)}>
+                        {STATUS_CONFIG[job.status].label}
+                      </span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-[#A0A0A0] mb-3">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4 flex-shrink-0" />
+                        <span className="truncate">{job.company}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 flex-shrink-0" />
+                        <span>{new Date(job.date).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    {job.notes && (
+                      <p className="text-sm text-[#A0A0A0] leading-relaxed line-clamp-2 sm:line-clamp-none">
+                        {job.notes}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-2 ml-0 sm:ml-4">
+                    <button
+                      onClick={() => handleEditJob(job)}
+                      className="p-2 text-[#A0A0A0] hover:text-[#3ECF8E] transition-colors rounded-lg hover:bg-[#3ECF8E]/10"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteJob(job.id)}
+                      className="p-2 text-[#A0A0A0] hover:text-red-400 transition-colors rounded-lg hover:bg-red-400/10"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Add/Edit Job Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+            onClick={() => setIsModalOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-[#171717] border border-[#2E2E2E] rounded-2xl shadow-2xl max-w-md w-full mx-4 sm:mx-auto max-h-[90vh] overflow-y-auto p-4 sm:p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">
+                {editingJob ? 'Edit Job Application' : 'Add Job Application'}
+              </h2>
+              
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Company *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.company || ''}
+                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] text-sm sm:text-base"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Role *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.role || ''}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] text-sm sm:text-base"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Status *
+                  </label>
+                  <select
+                    required
+                    value={formData.status || 'applied'}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value as JobStatus })}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white text-sm sm:text-base"
+                  >
+                    {Object.entries(STATUS_CONFIG).map(([status, config]) => (
+                      <option key={status} value={status}>{config.label}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Date *
+                  </label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.date || ''}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white text-sm sm:text-base"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-white mb-2">
+                    Notes
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={formData.notes || ''}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] resize-none text-sm sm:text-base"
+                  />
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors font-medium text-sm sm:text-base"
+                  >
+                    {editingJob ? 'Update Job' : 'Add Job'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setEditingJob(null);
+                      setFormData({
+                        company: '',
+                        role: '',
+                        status: 'applied',
+                        date: new Date().toISOString().split('T')[0],
+                        notes: ''
+                      });
+                    }}
+                    className="flex-1 px-4 py-2.5 sm:py-3 bg-[#2E2E2E] hover:bg-[#3A3A3A] text-white rounded-xl transition-colors font-medium text-sm sm:text-base"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* SEO Content - Secondary Section */}
       <SeoContent
         title="Job Tracker - Free Job Application Manager | Lumina Toolkit"
         description="Track your job applications, interviews, and offers with our free job tracker. Stay organized and never miss an opportunity."
@@ -323,265 +592,6 @@ export default function JobTracker() {
         ]}
         ctaTitle="Start Tracking Your Job Search Today"
       />
-      
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Job Application Tracker
-        </h1>
-        <p className="text-gray-600 dark:text-gray-300">
-          Track your job applications from submission to interview to offer
-        </p>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        {Object.entries(STATUS_CONFIG).map(([status, config]) => {
-          const count = (jobs || []).filter(job => job.status === status).length;
-          return (
-            <div key={status} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{config.label}</p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{count}</p>
-                </div>
-                <div className={cn('p-3 rounded-full', config.colors)}>
-                  <config.icon className="w-6 h-6" />
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Filters and Search */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search jobs by company, role, or notes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-              />
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as JobStatus | 'all')}
-              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-            >
-              <option value="all">All Status</option>
-              {Object.entries(STATUS_CONFIG).map(([status, config]) => (
-                <option key={status} value={status}>{config.label}</option>
-              ))}
-            </select>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors flex items-center gap-2"
-            >
-              <Plus className="w-5 h-5" />
-              Add Job
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Jobs List */}
-      <div className="space-y-4">
-        {sortedJobs.length === 0 ? (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
-            <Briefcase className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No job applications yet
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Start tracking your job applications by adding your first one.
-            </p>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
-            >
-              Add Your First Job
-            </button>
-          </div>
-        ) : (
-          sortedJobs.map((job) => (
-            <motion.div
-              key={job.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {job.role}
-                    </h3>
-                    <span className={cn('px-2 py-1 rounded-full text-xs font-medium', STATUS_CONFIG[job.status].colors)}>
-                      {STATUS_CONFIG[job.status].label}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 mb-2">
-                    <div className="flex items-center gap-1">
-                      <Building2 className="w-4 h-4" />
-                      {job.company}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      {new Date(job.date).toLocaleDateString()}
-                    </div>
-                  </div>
-                  {job.notes && (
-                    <p className="text-gray-600 dark:text-gray-300 text-sm">
-                      {job.notes}
-                    </p>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleEditJob(job)}
-                    className="p-2 text-gray-400 hover:text-indigo-600 transition-colors"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteJob(job.id)}
-                    className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))
-        )}
-      </div>
-
-      {/* Add/Edit Job Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                {editingJob ? 'Edit Job Application' : 'Add Job Application'}
-              </h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Company *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.company || ''}
-                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Role *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.role || ''}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Status *
-                  </label>
-                  <select
-                    required
-                    value={formData.status || 'applied'}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as JobStatus })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  >
-                    {Object.entries(STATUS_CONFIG).map(([status, config]) => (
-                      <option key={status} value={status}>{config.label}</option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Date *
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.date || ''}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Notes
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={formData.notes || ''}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  />
-                </div>
-                
-                <div className="flex gap-3 pt-4">
-                  <button
-                    type="submit"
-                    className="flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors"
-                  >
-                    {editingJob ? 'Update Job' : 'Add Job'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setEditingJob(null);
-                      setFormData({
-                        company: '',
-                        role: '',
-                        status: 'applied',
-                        date: new Date().toISOString().split('T')[0],
-                        notes: ''
-                      });
-                    }}
-                    className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
