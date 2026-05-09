@@ -19,7 +19,10 @@ import {
   Database,
   AlertCircle,
   User,
-  LogOut
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  List
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import SeoContent from '../../components/SeoContent';
@@ -55,6 +58,9 @@ export default function JobTracker() {
   const [filter, setFilter] = useState<JobStatus | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showAllJobs, setShowAllJobs] = useState(false);
+  const jobsPerPage = 8;
 
   // Form State
   const [formData, setFormData] = useState<Partial<Job>>({
@@ -199,6 +205,40 @@ export default function JobTracker() {
   const sortedJobs = filteredJobs.sort((a, b) => 
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
+
+  // Pagination logic
+  const totalPages = Math.ceil(sortedJobs.length / jobsPerPage);
+  const startIndex = (currentPage - 1) * jobsPerPage;
+  const endIndex = startIndex + jobsPerPage;
+  const paginatedJobs = showAllJobs ? sortedJobs : sortedJobs.slice(startIndex, endIndex);
+
+  // Reset to page 1 when filters or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter, searchQuery]);
+
+  // Pagination controls
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
+    }
+  };
+
+  const toggleShowAllJobs = () => {
+    setShowAllJobs(!showAllJobs);
+    setCurrentPage(1);
+  };
 
   if (authLoading) {
     return (
@@ -373,57 +413,138 @@ export default function JobTracker() {
               </button>
             </div>
           ) : (
-            sortedJobs.map((job) => (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-4 sm:p-6 hover:border-[#3ECF8E]/30 transition-all"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
-                      <h3 className="text-lg sm:text-xl font-semibold text-white truncate">
-                        {job.role}
-                      </h3>
-                      <span className={cn('px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto', STATUS_CONFIG[job.status].colors)}>
-                        {STATUS_CONFIG[job.status].label}
-                      </span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-[#A0A0A0] mb-3">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">{job.company}</span>
+            <>
+              {/* Results summary and pagination controls */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div className="text-sm text-[#A0A0A0]">
+                  {sortedJobs.length > 0 && (
+                    <span>
+                      Showing {showAllJobs ? 'all' : `${startIndex + 1}-${Math.min(endIndex, sortedJobs.length)}`} of {sortedJobs.length} jobs
+                    </span>
+                  )}
+                </div>
+                {sortedJobs.length > jobsPerPage && (
+                  <button
+                    onClick={toggleShowAllJobs}
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm bg-[#171717] border border-[#2E2E2E] rounded-lg hover:bg-[#2E2E2E] transition-colors text-white"
+                  >
+                    <List className="w-3 h-3" />
+                    {showAllJobs ? 'Show Paginated' : 'See All Jobs'}
+                  </button>
+                )}
+              </div>
+
+              {/* Job cards */}
+              {paginatedJobs.map((job) => (
+                <motion.div
+                  key={job.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-4 sm:p-6 hover:border-[#3ECF8E]/30 transition-all"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
+                        <h3 className="text-lg sm:text-xl font-semibold text-white truncate">
+                          {job.role}
+                        </h3>
+                        <span className={cn('px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto', STATUS_CONFIG[job.status].colors)}>
+                          {STATUS_CONFIG[job.status].label}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 flex-shrink-0" />
-                        <span>{new Date(job.date).toLocaleDateString()}</span>
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-[#A0A0A0] mb-3">
+                        <div className="flex items-center gap-2">
+                          <Building2 className="w-4 h-4 flex-shrink-0" />
+                          <span className="truncate">{job.company}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 flex-shrink-0" />
+                          <span>{new Date(job.date).toLocaleDateString()}</span>
+                        </div>
                       </div>
+                      {job.notes && (
+                        <p className="text-sm text-[#A0A0A0] leading-relaxed line-clamp-2 sm:line-clamp-none">
+                          {job.notes}
+                        </p>
+                      )}
                     </div>
-                    {job.notes && (
-                      <p className="text-sm text-[#A0A0A0] leading-relaxed line-clamp-2 sm:line-clamp-none">
-                        {job.notes}
-                      </p>
-                    )}
+                    <div className="flex items-center gap-2 sm:gap-2 ml-0 sm:ml-4">
+                      <button
+                        onClick={() => handleEditJob(job)}
+                        className="p-2 text-[#A0A0A0] hover:text-[#3ECF8E] transition-colors rounded-lg hover:bg-[#3ECF8E]/10"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteJob(job.id)}
+                        className="p-2 text-[#A0A0A0] hover:text-red-400 transition-colors rounded-lg hover:bg-red-400/10"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-2 ml-0 sm:ml-4">
+                </motion.div>
+              ))}
+
+              {/* Pagination controls */}
+              {!showAllJobs && totalPages > 1 && (
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-[#2E2E2E]">
+                  <div className="text-sm text-[#A0A0A0]">
+                    Page {currentPage} of {totalPages}
+                  </div>
+                  <div className="flex items-center gap-2">
                     <button
-                      onClick={() => handleEditJob(job)}
-                      className="p-2 text-[#A0A0A0] hover:text-[#3ECF8E] transition-colors rounded-lg hover:bg-[#3ECF8E]/10"
+                      onClick={handlePrevPage}
+                      disabled={currentPage === 1}
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-[#171717] border border-[#2E2E2E] rounded-lg hover:bg-[#2E2E2E] transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Edit3 className="w-4 h-4" />
+                      <ChevronLeft className="w-3 h-3" />
+                      Previous
                     </button>
+                    
+                    {/* Page numbers */}
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => handlePageChange(pageNum)}
+                            className={`w-8 h-8 text-sm rounded-lg transition-colors ${
+                              currentPage === pageNum
+                                ? 'bg-[#3ECF8E] text-black font-medium'
+                                : 'bg-[#171717] border border-[#2E2E2E] text-white hover:bg-[#2E2E2E]'
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    
                     <button
-                      onClick={() => handleDeleteJob(job.id)}
-                      className="p-2 text-[#A0A0A0] hover:text-red-400 transition-colors rounded-lg hover:bg-red-400/10"
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-[#171717] border border-[#2E2E2E] rounded-lg hover:bg-[#2E2E2E] transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      Next
+                      <ChevronRight className="w-3 h-3" />
                     </button>
                   </div>
                 </div>
-              </motion.div>
-            ))
+              )}
+            </>
           )}
         </div>
       </div>
