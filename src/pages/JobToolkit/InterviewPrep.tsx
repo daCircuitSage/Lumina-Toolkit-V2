@@ -234,21 +234,26 @@ Do not include any markdown formatting, explanations, or additional text. Only t
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
-      <header className="mb-8 md:mb-12">
-        <div className="flex flex-col md:flex-row md:items-center gap-4 mb-8">
-          <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 shrink-0 mx-auto md:mx-0">
-            <BrainCircuit size={28} />
-          </div>
-          <div className="text-center md:text-left">
-             <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Interview Preparation</h1>
-             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">Master your narrative with AI battle drills.</p>
-          </div>
-        </div>
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+      <header className="mb-8">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="inline-flex items-center gap-2 px-3 py-1 bg-accent/20 text-accent rounded-lg text-xs font-semibold mb-4"
+        >
+          <BrainCircuit size={14} />
+          AI-Powered Interview Coaching
+        </motion.div>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 max-w-3xl leading-tight">
+          Master Your Interview with AI Battle Drills
+        </h1>
+        <p className="text-lg text-text-secondary mb-8 max-w-2xl">
+          Practice personalized interview questions tailored to your role. Get expert coaching for technical, behavioral, and general screening scenarios.
+        </p>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 max-w-2xl">
            <div className="relative group">
-             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={18} />
+             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary group-focus-within:text-accent transition-colors" size={18} />
              <input 
               type="text" 
               placeholder="e.g. Senior Frontend Engineer"
@@ -256,15 +261,15 @@ Do not include any markdown formatting, explanations, or additional text. Only t
               onChange={(e) => handleRoleChange(e.target.value)}
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              className="w-full pl-12 pr-5 py-4 bg-white dark:bg-slate-900 rounded-xl md:rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all border border-slate-200 dark:border-slate-700 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full pl-12 pr-5 py-4 bg-surface border border-border rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all placeholder:text-text-secondary"
               onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
              />
              
              {/* Search suggestions dropdown */}
              {showSuggestions && getSearchSuggestions.length > 0 && (
-               <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden">
+               <div className="absolute top-full left-0 right-0 mt-2 bg-surface border border-border rounded-xl shadow-xl z-50 overflow-hidden">
                  <div className="p-2">
-                   <p className="text-xs font-medium text-slate-500 dark:text-slate-400 px-3 py-2">Did you mean:</p>
+                   <p className="text-xs font-medium text-text-secondary px-3 py-2">Did you mean:</p>
                    {getSearchSuggestions.slice(0, 5).map((suggestion, index) => (
                      <button
                        key={index}
@@ -272,10 +277,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                          setRole(suggestion.title);
                          setShowSuggestions(false);
                        }}
-                       className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                       className="w-full text-left px-3 py-2 hover:bg-hover rounded-lg transition-colors"
                      >
-                       <div className="text-sm font-medium text-slate-900 dark:text-white">{suggestion.title}</div>
-                       <div className="text-xs text-slate-500 dark:text-slate-400">{suggestion.description}</div>
+                       <div className="text-sm font-medium text-white">{suggestion.title}</div>
+                       <div className="text-xs text-text-secondary">{suggestion.description}</div>
                      </button>
                    ))}
                  </div>
@@ -286,7 +291,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
            <button 
             onClick={handleGenerate}
             disabled={isGenerating || !role.trim()}
-            className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl md:rounded-2xl text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl min-h-[52px]"
+            className="px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl min-h-[52px]"
            >
             {isGenerating ? <Loader2 size={18} className="animate-spin" /> : <Zap size={18} />}
             {isGenerating ? 'Generating...' : 'Generate Drills'}
@@ -330,21 +335,21 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 key="empty"
-                className="h-[300px] md:h-[400px] flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl md:rounded-[40px]"
+                className="h-[300px] md:h-[400px] flex flex-col items-center justify-center text-center p-8 bg-surface border-2 border-dashed border-border rounded-3xl"
                >
                  {isGenerating ? (
                    <div className="space-y-6">
                       <div className="flex items-center justify-center gap-1.5">
-                        {[0, 1, 2].map(i => <div key={i} className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
+                        {[0, 1, 2].map(i => <div key={i} className="w-3 h-3 bg-accent rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
                       </div>
-                      <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">Generating Questions...</h3>
-                      <p className="text-xs text-slate-500 max-w-md">Creating personalized interview questions for your role</p>
+                      <h2 className="text-sm font-black text-text-secondary uppercase tracking-widest">Generating Questions...</h2>
+                      <p className="text-xs text-text-secondary max-w-md">Creating personalized interview questions for your role</p>
                    </div>
                  ) : (
                    <>
-                    <BrainCircuit size={48} className="text-slate-200 dark:text-slate-800 mb-4" />
-                    <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">Ready to Start</h3>
-                    <p className="text-xs text-slate-500 mt-2 max-w-md">Enter your target role to generate personalized interview questions</p>
+                    <BrainCircuit size={48} className="text-text-secondary mb-4" />
+                    <h2 className="text-sm font-black text-text-secondary uppercase tracking-widest">Ready to Start</h2>
+                    <p className="text-xs text-text-secondary mt-2 max-w-md">Enter your target role to generate personalized interview questions</p>
                    </>
                  )}
                </motion.div>
@@ -356,18 +361,18 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                >
                  {/* Search Bar for Questions */}
                  <div className="relative">
-                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={16} />
                    <input
                      type="text"
                      placeholder={`Search ${activeTab} questions...`}
                      value={searchQuery}
                      onChange={(e) => setSearchQuery(e.target.value)}
-                     className="w-full pl-10 pr-10 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all border border-slate-200 dark:border-slate-700 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                     className="w-full pl-10 pr-10 py-3 bg-hover border border-border rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all placeholder:text-text-secondary"
                    />
                    {searchQuery && (
                      <button
                        onClick={clearSearch}
-                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                       className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white transition-colors"
                      >
                        <X size={16} />
                      </button>
@@ -392,17 +397,17 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                    
                    {filteredQuestions.length === 0 && searchQuery && (
                      <div className="text-center py-12">
-                       <Filter className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-                       <h3 className="text-sm font-medium text-slate-400 mb-2">No questions found</h3>
-                       <p className="text-xs text-slate-500">Try adjusting your search terms</p>
+                       <Filter className="w-12 h-12 text-text-secondary mx-auto mb-4" />
+                       <h3 className="text-sm font-medium text-text-secondary mb-2">No questions found</h3>
+                       <p className="text-xs text-text-secondary">Try adjusting your search terms</p>
                      </div>
                    )}
                    
                    {filteredQuestions.length === 0 && !searchQuery && (
                      <div className="text-center py-12">
-                       <HelpCircle className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-                       <h3 className="text-sm font-medium text-slate-400 mb-2">No {activeTab} questions</h3>
-                       <p className="text-xs text-slate-500">Try selecting another category</p>
+                       <HelpCircle className="w-12 h-12 text-text-secondary mx-auto mb-4" />
+                       <h3 className="text-sm font-medium text-text-secondary mb-2">No {activeTab} questions</h3>
+                       <p className="text-xs text-text-secondary">Try selecting another category</p>
                      </div>
                    )}
                  </div>
@@ -455,26 +460,26 @@ function TabButton({ active, onClick, icon: Icon, title, desc, count }: any) {
     <button 
       onClick={onClick}
       className={cn(
-        "flex lg:flex items-center gap-3 p-4 md:p-6 rounded-2xl md:rounded-[28px] border-2 transition-all text-left relative",
+        "flex lg:flex items-center gap-3 p-4 md:p-6 rounded-2xl border-2 transition-all text-left relative",
         active 
-          ? "bg-white dark:bg-slate-900 border-indigo-600 dark:border-indigo-400 shadow-xl shadow-indigo-500/5 scale-[1.02]" 
-          : "bg-slate-50 dark:bg-slate-800 border-transparent hover:border-slate-200 dark:hover:border-slate-700"
+          ? "bg-surface border-accent shadow-xl shadow-accent/20 scale-[1.02]" 
+          : "bg-hover border-transparent hover:border-border"
       )}
     >
       <div className={cn(
         "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0",
-        active ? "bg-indigo-600 text-white" : "bg-white dark:bg-slate-700 text-slate-400"
+        active ? "bg-accent text-white" : "bg-surface text-text-secondary"
       )}>
         <Icon size={18} />
       </div>
       <div className="min-w-0 flex-1">
-        <h4 className={cn("text-[11px] md:text-sm font-black uppercase tracking-wider transition-colors truncate", active ? "text-slate-900 dark:text-white" : "text-slate-400")}>{title}</h4>
-        <p className="hidden xs:block text-[9px] md:text-[10px] font-bold text-slate-400 tracking-wide uppercase truncate">{desc}</p>
+        <h4 className={cn("text-[11px] md:text-sm font-black uppercase tracking-wider transition-colors truncate", active ? "text-white" : "text-text-secondary")}>{title}</h4>
+        <p className="hidden xs:block text-[9px] md:text-[10px] font-bold text-text-secondary tracking-wide uppercase truncate">{desc}</p>
       </div>
       {count > 0 && (
         <div className={cn(
           "w-6 h-6 rounded-full flex items-center justify-center text-xs font-black",
-          active ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400"
+          active ? "bg-accent/20 text-accent" : "bg-surface text-text-secondary"
         )}>
           {count}
         </div>
@@ -485,32 +490,32 @@ function TabButton({ active, onClick, icon: Icon, title, desc, count }: any) {
 
 function QaCard({ q, index, isExpanded, onToggle }: { q: QaItem; index: number; isExpanded: boolean; onToggle: () => void }) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl md:rounded-[32px] border border-slate-200 dark:border-slate-800 overflow-hidden group hover:border-indigo-200 dark:hover:border-indigo-900 transition-all shadow-sm">
+    <div className="bg-surface rounded-2xl border border-border overflow-hidden group hover:border-accent/50 transition-all shadow-sm">
       <button 
         onClick={onToggle}
         className="w-full flex items-start justify-between p-5 md:p-8 text-left gap-4"
       >
         <div className="flex gap-3 md:gap-4 items-start flex-1 min-w-0">
-           <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0 font-black text-[10px] md:text-xs mt-0.5">
+           <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center shrink-0 font-black text-[10px] md:text-xs mt-0.5">
              {q.type === 'technical' ? 'T' : q.type === 'behavioral' ? 'B' : 'G'}
            </div>
            <div className="flex-1 min-w-0">
-             <h3 className="text-sm md:text-lg font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-2">
+             <h3 className="text-sm md:text-lg font-black text-white tracking-tight leading-tight mb-2">
                {q.question}
              </h3>
              <div className="flex items-center gap-2">
                <span className={cn(
                  "text-[8px] md:text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full",
-                 q.type === 'technical' ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" :
-                 q.type === 'behavioral' ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400" :
-                 "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400"
+                 q.type === 'technical' ? "bg-blue-500/20 text-blue-400" :
+                 q.type === 'behavioral' ? "bg-emerald-500/20 text-emerald-400" :
+                 "bg-purple-500/20 text-purple-400"
                )}>
                  {q.type}
                </span>
              </div>
            </div>
         </div>
-        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-slate-300 transition-all shrink-0 mt-1", isExpanded ? "rotate-90 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500" : "")}>
+        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-text-secondary transition-all shrink-0 mt-1", isExpanded ? "rotate-90 bg-accent/20 text-accent" : "")}>
            <ChevronRight size={20} />
         </div>
       </button>
@@ -521,28 +526,28 @@ function QaCard({ q, index, isExpanded, onToggle }: { q: QaItem; index: number; 
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden bg-gradient-to-b from-indigo-50/10 to-transparent dark:from-indigo-900/5"
+            className="overflow-hidden bg-gradient-to-b from-accent/10 to-transparent"
           >
             <div className="px-5 md:px-8 pb-6 md:pb-8 pt-2 ml-9 md:ml-12">
-               <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-white dark:bg-slate-900 rounded-xl md:rounded-[24px] border border-indigo-100 dark:border-indigo-900/40 shadow-sm">
-                  <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg shrink-0">
+               <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-surface rounded-xl border border-accent/20 shadow-sm">
+                  <div className="p-2 bg-accent/20 text-accent rounded-lg shrink-0">
                     <Trophy size={14} className="md:w-5 md:h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-3">Strategy & Model Answer</h5>
-                    <div className="text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+                    <h5 className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-accent mb-3">Strategy & Model Answer</h5>
+                    <div className="text-xs md:text-sm font-medium text-text-secondary leading-relaxed prose prose-sm dark:prose-invert max-w-none">
                       <ReactMarkdown 
                         components={{
                           p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
-                          strong: ({children}) => <strong className="font-bold text-slate-700 dark:text-slate-300">{children}</strong>,
+                          strong: ({children}) => <strong className="font-bold text-white">{children}</strong>,
                           em: ({children}) => <em className="italic">{children}</em>,
                           ul: ({children}) => <ul className="list-disc list-inside space-y-1 mb-2">{children}</ul>,
                           ol: ({children}) => <ol className="list-decimal list-inside space-y-1 mb-2">{children}</ol>,
                           li: ({children}) => <li className="text-xs md:text-sm">{children}</li>,
-                          h3: ({children}) => <h3 className="font-bold text-slate-700 dark:text-slate-300 mb-2">{children}</h3>,
-                          h4: ({children}) => <h4 className="font-semibold text-slate-700 dark:text-slate-300 mb-1">{children}</h4>,
-                          code: ({children}) => <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
-                          blockquote: ({children}) => <blockquote className="border-l-2 border-slate-300 dark:border-slate-600 pl-3 italic text-slate-600 dark:text-slate-400">{children}</blockquote>
+                          h3: ({children}) => <h3 className="font-bold text-white mb-2">{children}</h3>,
+                          h4: ({children}) => <h4 className="font-semibold text-white mb-1">{children}</h4>,
+                          code: ({children}) => <code className="bg-hover px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
+                          blockquote: ({children}) => <blockquote className="border-l-2 border-border pl-3 italic text-text-secondary">{children}</blockquote>
                         }}
                       >
                         {q.answer}
