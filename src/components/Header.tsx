@@ -28,7 +28,8 @@ export default function Header({ title, subtitle }: HeaderProps) {
       'job-tracker': 'Job Tracker',
       'interview-prep': 'Interview Preparation',
       'cover-letter-generator': 'Cover Letter Generator',
-      'contact': 'Contact'
+      'contact': 'Contact',
+      'profile': 'Profile'
     };
 
     pathSegments.forEach((segment, index) => {

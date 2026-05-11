@@ -57,6 +57,8 @@ const CoverLetter = React.lazy(() => import('../pages/JobToolkit/CoverLetter'));
 
 const Contact = React.lazy(() => import('../pages/Contact'));
 
+const Profile = React.lazy(() => import('../pages/Profile'));
+
 
 
 
@@ -559,6 +561,34 @@ const AppRoutes = () => {
             
       
       
+      <Route path="/profile" element={
+
+        <AnimatedPage>
+
+          <Layout>
+
+            <SeoHead
+
+              title="Profile - Manage Your Account | Lumina Toolkit"
+
+              description="Access and manage your Lumina Toolkit profile, account settings, and preferences. Control your personal information and security settings."
+
+            />
+
+            <LazyLoadWrapper>
+
+              <Profile />
+
+            </LazyLoadWrapper>
+
+          </Layout>
+
+        </AnimatedPage>
+
+      } />
+
+      
+
       {/* 404 Catch-all Route */}
 
       <Route path="*" element={

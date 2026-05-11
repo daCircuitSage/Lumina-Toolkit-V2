@@ -45,6 +45,8 @@ export default function Layout({ children }: LayoutProps) {
 
       'dashboard': '/all-tools',
 
+      'profile': '/profile',
+
       'chat': '/ai-assistant',
 
       'resume': '/resume-builder',
@@ -86,6 +88,8 @@ export default function Layout({ children }: LayoutProps) {
       '/': 'homepage',
 
       '/all-tools': 'dashboard',
+
+      '/profile': 'profile',
 
       '/ai-assistant': 'chat',
 

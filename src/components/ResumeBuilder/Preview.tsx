@@ -104,7 +104,7 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
               
               ${data.personalInfo.summary ? `<p style="margin-bottom: 24px;">${data.personalInfo.summary}</p>` : ''}
               
-              ${data.experience.length > 0 ? `
+              ${data.experience && data.experience.length > 0 ? `
                 <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 16px;">Experience</h2>
                 ${data.experience.map(exp => `
                   <div style="margin-bottom: 16px;">
@@ -115,7 +115,7 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
                 `).join('')}
               ` : ''}
               
-              ${data.education.length > 0 ? `
+              ${data.education && data.education.length > 0 ? `
                 <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 16px;">Education</h2>
                 ${data.education.map(edu => `
                   <div style="margin-bottom: 12px;">
@@ -125,7 +125,7 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
                 `).join('')}
               ` : ''}
               
-              ${data.skills.length > 0 ? `
+              ${data.skills && data.skills.length > 0 ? `
                 <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 16px;">Skills</h2>
                 <p>${data.skills.map(skill => skill.name || skill).join(', ')}</p>
               ` : ''}
@@ -202,25 +202,27 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
             clonedDoc.head.appendChild(style);
             
             const all = clonedDoc.getElementsByTagName('*');
-            for (let i = 0; i < all.length; i++) {
-              const el = all[i] as HTMLElement;
-              if (el.style) {
-                el.style.colorScheme = 'light';
-                
-                const checkAndFix = (prop: string, fallback: string) => {
-                  const val = window.getComputedStyle(el).getPropertyValue(prop);
-                  if (val && (val.includes('oklch') || val.includes('oklab') || val.includes('var(--oklch') || val.includes('var(--oklab'))) {
-                    el.style.setProperty(prop, fallback, 'important');
-                  }
-                };
-
-                checkAndFix('color', '#000000');
-                checkAndFix('background-color', 'transparent');
-                checkAndFix('border-color', 'transparent');
-                checkAndFix('fill', '#000000');
-                checkAndFix('stroke', '#000000');
-                checkAndFix('outline-color', 'transparent');
-                checkAndFix('box-shadow', 'none'); 
+            if (all && all.length > 0) {
+              for (let i = 0; i < all.length; i++) {
+                const el = all[i] as HTMLElement;
+                if (el.style) {
+                  el.style.colorScheme = 'light';
+                  
+                  const checkAndFix = (prop: string, fallback: string) => {
+                    const val = window.getComputedStyle(el).getPropertyValue(prop);
+                    if (val && (val.includes('oklch') || val.includes('oklab') || val.includes('var(--oklch') || val.includes('var(--oklab'))) {
+                      el.style.setProperty(prop, fallback, 'important');
+                    }
+                  };
+                  
+                  checkAndFix('color', '#000000');
+                  checkAndFix('background-color', '#ffffff');
+                  checkAndFix('border-color', 'transparent');
+                  checkAndFix('fill', '#000000');
+                  checkAndFix('stroke', '#000000');
+                  checkAndFix('outline-color', 'transparent');
+                  checkAndFix('box-shadow', 'none'); 
+                }
               }
             }
           }

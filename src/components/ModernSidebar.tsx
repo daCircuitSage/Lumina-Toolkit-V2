@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { TOOLS } from '../constants';
 import { 
   Home, 
-  Database, 
   User, 
   Settings, 
   Briefcase,
@@ -36,6 +35,7 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
     const routeMap: { [key: string]: string } = {
       'homepage': '/',
       'dashboard': '/all-tools',
+      'profile': '/profile',
       'chat': '/ai-assistant',
       'resume': '/resume-builder',
       'pdf': '/pdf-converter',
@@ -54,8 +54,7 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
 
   const iconBarItems = [
     { id: 'home', icon: Home, label: 'Home', toolId: 'homepage' },
-    { id: 'tools', icon: Database, label: 'Tools', toolId: 'dashboard' },
-    { id: 'auth', icon: User, label: 'Account', toolId: 'dashboard' },
+    { id: 'auth', icon: User, label: 'Account', toolId: 'profile' },
     { id: 'settings', icon: Settings, label: 'Settings', toolId: 'contact' }
   ];
 
