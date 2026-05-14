@@ -4,8 +4,8 @@
  */
 
 import { useState, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { Download, Layout, Pencil, Menu, X, Monitor, Smartphone, Eye } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router-dom';
+import { Download, Home, LayoutDashboard } from 'lucide-react';
 import { INITIAL_DATA } from './constants';
 import { ResumeData, TemplateId } from './types';
 import { cn } from './lib/utils';
@@ -15,7 +15,12 @@ import Editor from './components/Editor';
 import Preview from './components/Preview';
 import TemplateSelector from './components/TemplateSelector';
 
-export default function App() {
+export interface ResumeCraftAppProps {
+  /** When true, show links back to Lumina home and all-tools (standalone /resume-builder route). */
+  toolkitNav?: boolean;
+}
+
+export default function App({ toolkitNav = false }: ResumeCraftAppProps) {
   const [data, setData] = useState<ResumeData>(() => {
     const saved = localStorage.getItem('resume-data');
     return saved ? JSON.parse(saved) : INITIAL_DATA;
@@ -64,12 +69,39 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen w-full bg-[#F8FAFC] text-slate-800 font-sans overflow-hidden" style={{ colorScheme: 'light' }}>
       {/* Header Navigation */}
-      <header className="h-16 px-6 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0 z-50">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center text-white font-bold">R</div>
-          <h1 className="text-lg font-semibold tracking-tight text-slate-900">
-            ResumePro <span className="text-slate-400 font-normal hidden sm:inline">| Builder</span>
-          </h1>
+      <header className="h-16 px-3 sm:px-6 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0 gap-2 z-50">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          {toolkitNav && (
+            <nav
+              className="flex items-center gap-0.5 sm:gap-1 shrink-0 border-r border-slate-200 pr-2 sm:pr-3 mr-1 sm:mr-2"
+              aria-label="Lumina Toolkit"
+            >
+              <Link
+                to="/"
+                title="Lumina home"
+                aria-label="Lumina home"
+                className="inline-flex items-center gap-1 rounded-md px-2 py-2 text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                <Home size={18} className="shrink-0 text-slate-500" aria-hidden />
+                <span className="hidden sm:inline">Home</span>
+              </Link>
+              <Link
+                to="/all-tools"
+                title="Browse all tools"
+                aria-label="Browse all tools"
+                className="inline-flex items-center gap-1 rounded-md px-2 py-2 text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                <LayoutDashboard size={18} className="shrink-0 text-slate-500" aria-hidden />
+                <span className="hidden md:inline">All tools</span>
+              </Link>
+            </nav>
+          )}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center text-white font-bold shrink-0">R</div>
+            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-slate-900 truncate">
+              ResumePro <span className="text-slate-400 font-normal hidden sm:inline">| Builder</span>
+            </h1>
+          </div>
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">

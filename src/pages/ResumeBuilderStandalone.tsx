@@ -13,7 +13,7 @@ export default function ResumeBuilderStandalone() {
 
   return (
     <div className="h-dvh w-full overflow-hidden">
-      <ResumeCraftApp />
+      <ResumeCraftApp toolkitNav />
     </div>
   );
 }
