@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { Download, Layout, Pencil, Menu, X, Monitor, Smartphone, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { INITIAL_DATA } from './constants';
@@ -22,6 +22,27 @@ export default function App() {
   });
   const [view, setView] = useState<'edit' | 'preview'>('edit');
   const [isExporting, setIsExporting] = useState(false);
+  const previewSlotRef = useRef<HTMLDivElement>(null);
+  const [previewSlotWidth, setPreviewSlotWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = previewSlotRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const w = el.clientWidth;
+      if (w > 0) setPreviewSlotWidth(w);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener('orientationchange', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('orientationchange', measure);
+    };
+  }, [view]);
 
   useEffect(() => {
     localStorage.setItem('resume-data', JSON.stringify(data));
@@ -109,15 +130,27 @@ export default function App() {
             </div>
           </section>
 
-          {/* Live Preview Section */}
+          {/* Live Preview Section — column + inner scroll so width matches real viewport (not default flex-row) */}
           <section className={cn(
-            "flex-1 bg-slate-200 flex items-start justify-center p-4 md:p-8 relative overflow-y-auto custom-scrollbar",
+            "flex-1 min-h-0 min-w-0 bg-slate-200 flex flex-col relative lg:overflow-x-hidden",
             view === 'edit' && !isExporting && "hidden lg:flex"
           )}>
-            <div className="absolute top-4 right-4 bg-black/20 text-white text-[10px] px-2 py-1 rounded-full uppercase tracking-tighter backdrop-blur-md hidden md:block z-10">
+            <div className="absolute top-3 right-3 md:top-4 md:right-4 bg-black/20 text-white text-[10px] px-2 py-1 rounded-full uppercase tracking-tighter backdrop-blur-md hidden md:block z-10">
               A4 Preview
             </div>
-            <Preview data={data} isExporting={isExporting} view={view} />
+            <div className="flex-1 min-h-0 w-full min-w-0 flex flex-col p-2 sm:p-3 md:p-8">
+              <div
+                ref={previewSlotRef}
+                className="min-h-0 w-full min-w-0 flex-1 overflow-x-auto overflow-y-auto custom-scrollbar flex flex-col items-stretch"
+              >
+                <Preview
+                  data={data}
+                  isExporting={isExporting}
+                  view={view}
+                  slotWidth={previewSlotWidth > 0 ? previewSlotWidth : undefined}
+                />
+              </div>
+            </div>
           </section>
         </div>
       </main>

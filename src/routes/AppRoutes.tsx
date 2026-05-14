@@ -33,7 +33,7 @@ const Homepage = React.lazy(() => import('../pages/Homepage'));
 
 const Dashboard = React.lazy(() => import('../pages/Dashboard'));
 
-const ResumeBuilder = React.lazy(() => import('../pages/ResumeBuilder'));
+const ResumeBuilderStandalone = React.lazy(() => import('../pages/ResumeBuilderStandalone'));
 
 const PdfConverter = React.lazy(() => import('../pages/PdfConverter'));
 
@@ -254,23 +254,19 @@ const AppRoutes = () => {
 
         <AnimatedPage>
 
-          <Layout>
+          <SeoHead
 
-            <SeoHead
+            title="Resume Builder - Create Professional Resumes Free | Lumina Toolkit"
 
-              title="Resume Builder - Create Professional Resumes Free | Lumina Toolkit"
+            description="Build professional resumes in minutes with our free resume builder. Multiple templates and AI-powered suggestions."
 
-              description="Build professional resumes in minutes with our free resume builder. Multiple templates and AI-powered suggestions."
+          />
 
-            />
+          <LazyLoadWrapper>
 
-            <LazyLoadWrapper>
+            <ResumeBuilderStandalone />
 
-              <ResumeBuilder />
-
-            </LazyLoadWrapper>
-
-          </Layout>
+          </LazyLoadWrapper>
 
         </AnimatedPage>
 

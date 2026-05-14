@@ -93,8 +93,6 @@ export default function Layout({ children }: LayoutProps) {
 
       '/ai-assistant': 'chat',
 
-      '/resume-builder': 'resume',
-
       '/pdf-converter': 'pdf',
 
       '/age-calculator': 'age',

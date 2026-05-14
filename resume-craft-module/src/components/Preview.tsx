@@ -12,9 +12,11 @@ interface PreviewProps {
   data: ResumeData;
   isExporting: boolean;
   view: 'edit' | 'preview';
+  /** Inner scroll slot width from parent — fixes flex shrink-to-fit measuring bugs on mobile */
+  slotWidth?: number;
 }
 
-export default function Preview({ data, isExporting, view }: PreviewProps) {
+export default function Preview({ data, isExporting, view, slotWidth }: PreviewProps) {
   const resumeRef = useRef<HTMLDivElement>(null);
   const exportRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,28 +30,52 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
     const updateScale = () => {
       cancelAnimationFrame(frameId);
       frameId = requestAnimationFrame(() => {
-        const width = container.clientWidth;
+        let width: number;
+
+        if (slotWidth && slotWidth > 0) {
+          width = Math.round(slotWidth);
+        } else {
+          const rect = container.getBoundingClientRect();
+          width = Math.round(rect.width);
+
+          const parent = container.parentElement;
+          if (parent) {
+            const pw = Math.round(parent.getBoundingClientRect().width);
+            if (pw > width + 4) width = pw;
+          }
+
+          if (parent && width < 260) {
+            const pw = Math.round(parent.getBoundingClientRect().width);
+            if (pw >= 280) width = pw;
+          }
+        }
+
         if (width === 0) return;
 
         const targetWidth = 794;
-        // On very small screens, use less padding to maximize space
-        let padding = 48;
-        if (width < 400) padding = 8;
-        else if (width < 640) padding = 24;
-        
-        const availableWidth = width - padding;
-        
-        let newScale = availableWidth / targetWidth;
-        // Clamp scale to reasonable values
-        newScale = Math.max(0.1, Math.min(1.1, newScale));
-        
+        // Keep a sliver of room for shadow; on phones prefer filling width
+        let padding = 40;
+        if (width < 420) padding = 12;
+        else if (width < 640) padding = 20;
+
+        const availableWidth = Math.max(160, width - padding);
+        let baseScale = availableWidth / targetWidth;
+
+        const isNarrow = width < 640;
+        const zoomBoost = isNarrow ? 1.22 : width < 900 ? 1.04 : 1;
+        let newScale = baseScale * zoomBoost;
+
+        newScale = Math.max(0.15, Math.min(1, newScale));
+
         setScale(newScale);
       });
     };
 
     const observer = new ResizeObserver(updateScale);
     observer.observe(container);
-    
+    const parent = container.parentElement;
+    if (parent) observer.observe(parent);
+
     updateScale();
     
     // Also update scale when isExporting changes after a short delay
@@ -61,7 +87,7 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
       observer.disconnect();
       cancelAnimationFrame(frameId);
     };
-  }, [view, isExporting]);
+  }, [view, isExporting, slotWidth]);
 
   useEffect(() => {
     const handleExport = async () => {
@@ -181,36 +207,44 @@ export default function Preview({ data, isExporting, view }: PreviewProps) {
   };
 
   return (
-    <div ref={containerRef} className="w-full flex-1 flex flex-col items-center justify-start py-4 overflow-hidden">
+    <div
+      ref={containerRef}
+      className="w-full max-w-none min-w-0 flex-1 flex flex-col items-center justify-start py-2 sm:py-3"
+    >
       {/* Hidden container for PDF capture - always full scale to avoid mobile scaling issues */}
       <div 
         style={{ position: 'fixed', left: '-10000px', top: 0, width: '794px', pointerEvents: 'none', zIndex: -1 }}
         ref={exportRef}
         aria-hidden="true"
       >
-        <div className="w-[794px] min-h-[1123px] bg-white">
+        <div className="w-[794px] min-h-[1123px] bg-white max-w-none">
           {renderTemplate()}
         </div>
       </div>
 
-      {/* Wrapper to maintain scaled height and prevent layout flickering */}
-      <div 
-        style={{ 
-          width: `${794 * scale}px`, 
+      {/* Viewport clips scaled page; top-left origin keeps layout width === 794 * scale */}
+      <div
+        style={{
+          width: `${794 * scale}px`,
           height: `${1123 * scale}px`,
-          minHeight: `${1123 * scale}px`
+          minHeight: `${1123 * scale}px`,
+          maxWidth: 'none',
         }}
-        className="flex items-start justify-center overflow-visible"
+        className="relative shrink-0 overflow-hidden rounded-sm shadow-[0_16px_48px_-10px_rgba(0,0,0,0.32)] md:shadow-[0_30px_60px_-12px_rgba(0,0,0,0.25)]"
       >
-        <div 
-          className="bg-white shadow-[0_30px_60px_-12px_rgba(0,0,0,0.25)] relative overflow-hidden origin-top transform-gpu shrink-0"
+        <div
+          className="bg-white relative overflow-hidden max-w-none"
           style={{
-            minHeight: '1123px',
             width: '794px',
-            transform: `scale(${scale})`,
+            height: '1123px',
+            minHeight: '1123px',
+            maxWidth: 'none',
+            transform: `translateZ(0) scale(${scale})`,
+            transformOrigin: 'top left',
+            WebkitFontSmoothing: 'antialiased',
           }}
         >
-          <div ref={resumeRef} className="w-full h-full bg-white print:shadow-none">
+          <div ref={resumeRef} className="w-full h-full max-w-none bg-white print:shadow-none">
             {renderTemplate()}
           </div>
         </div>
