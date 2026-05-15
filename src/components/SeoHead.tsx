@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 
 interface SeoHeadProps {
   title?: string;
@@ -18,7 +19,6 @@ const defaultMeta = {
   keywords: 'resume builder, ATS checker, PDF converter, age calculator, GPA calculator, AI tools, cover letter generator, job tracker, interview prep, productivity tools',
   ogImage: 'https://lumintoolkit.com/og-image.png',
   ogType: 'website',
-  canonicalUrl: 'https://lumintoolkit.com',
 };
 
 export default function SeoHead({
@@ -31,12 +31,17 @@ export default function SeoHead({
   noindex = false,
   structuredData
 }: SeoHeadProps) {
+  const location = useLocation();
+  
+  // Auto-generate self-referencing canonical URL based on current route
+  const autoCanonicalUrl = `https://lumintoolkit.com${location.pathname}`;
+  const finalCanonicalUrl = canonicalUrl || autoCanonicalUrl;
+  
   const finalTitle = title ? `${title} | Lumina Toolkit` : defaultMeta.title;
   const finalDescription = description || defaultMeta.description;
   const finalKeywords = keywords || defaultMeta.keywords;
   const finalOgImage = ogImage || defaultMeta.ogImage;
   const finalOgType = ogType || defaultMeta.ogType;
-  const finalCanonicalUrl = canonicalUrl || defaultMeta.canonicalUrl;
 
   return (
     <Helmet>
