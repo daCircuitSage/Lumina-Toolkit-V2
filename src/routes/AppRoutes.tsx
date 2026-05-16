@@ -478,9 +478,9 @@ const AppRoutes = () => {
 
             <SeoHead
 
-              title="Interview Preparation - Practice Questions & Coaching | Lumina Toolkit"
+              title="AI Interview Preparation Tool – Practice Job Interview Questions Free"
 
-              description="Prepare for job interviews with AI-powered coaching, practice questions, and personalized feedback."
+              description="Prepare for your next job interview with our free AI Interview Preparation tool. Practice common interview questions, improve behavioral answers using the STAR method, and get AI-powered mock interview coaching from an intelligent AI interviewer."
 
             />
 
@@ -506,9 +506,9 @@ const AppRoutes = () => {
 
             <SeoHead
 
-              title="Cover Letter Generator - AI-Powered Cover Letters | Lumina Toolkit"
+              title="Free AI Cover Letter Generator – Create Professional Cover Letters"
 
-              description="Create tailored, professional cover letters in minutes with AI. Customize for any job application."
+              description="Generate professional cover letters instantly with our free AI Cover Letter Generator. Create personalized job application letters, customize tone, export PDF files, and improve your chances of landing interviews with AI-powered writing."
 
             />
 
