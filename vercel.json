@@ -100,6 +100,118 @@
 
     {
 
+      "src": "/all-tools",
+
+      "dest": "/all-tools/index.html"
+
+    },
+
+    {
+
+      "src": "/resume-builder",
+
+      "dest": "/resume-builder/index.html"
+
+    },
+
+    {
+
+      "src": "/ats-resume-checker",
+
+      "dest": "/ats-resume-checker/index.html"
+
+    },
+
+    {
+
+      "src": "/cover-letter-generator",
+
+      "dest": "/cover-letter-generator/index.html"
+
+    },
+
+    {
+
+      "src": "/job-tracker",
+
+      "dest": "/job-tracker/index.html"
+
+    },
+
+    {
+
+      "src": "/interview-prep",
+
+      "dest": "/interview-prep/index.html"
+
+    },
+
+    {
+
+      "src": "/pdf-converter",
+
+      "dest": "/pdf-converter/index.html"
+
+    },
+
+    {
+
+      "src": "/ai-assistant",
+
+      "dest": "/ai-assistant/index.html"
+
+    },
+
+    {
+
+      "src": "/ai-caption-generator",
+
+      "dest": "/ai-caption-generator/index.html"
+
+    },
+
+    {
+
+      "src": "/youtube-title-generator",
+
+      "dest": "/youtube-title-generator/index.html"
+
+    },
+
+    {
+
+      "src": "/age-calculator",
+
+      "dest": "/age-calculator/index.html"
+
+    },
+
+    {
+
+      "src": "/gpa-calculator",
+
+      "dest": "/gpa-calculator/index.html"
+
+    },
+
+    {
+
+      "src": "/contact",
+
+      "dest": "/contact/index.html"
+
+    },
+
+    {
+
+      "src": "/profile",
+
+      "dest": "/profile/index.html"
+
+    },
+
+    {
+
       "src": "/(.*)",
 
       "dest": "/index.html"
