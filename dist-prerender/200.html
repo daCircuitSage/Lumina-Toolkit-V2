@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Lumina Toolkit - Professional productivity suite with resume builder, ATS checker, PDF converter, age calculator, GPA calculator, AI tools, and more. Free online tools for career development." />
+    <meta name="keywords" content="resume builder, ATS checker, PDF converter, age calculator, GPA calculator, AI tools, cover letter generator, job tracker, interview prep, productivity tools" />
+    <meta name="author" content="Lumina Toolkit" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content="Lumina Toolkit - Professional Productivity Suite" />
+    <meta property="og:description" content="Free online tools for career development including resume builder, ATS checker, PDF converter, and AI-powered productivity tools." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lumintoolkit.com" />
+    <meta property="og:image" content="https://lumintoolkit.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Lumina Toolkit" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Lumina Toolkit - Professional Productivity Suite" />
+    <meta name="twitter:description" content="Free online tools for career development including resume builder, ATS checker, and AI-powered productivity tools." />
+    <meta name="twitter:image" content="https://lumintoolkit.com/og-image.png" />
+    <meta name="twitter:domain" content="lumintoolkit.com" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- Theme Flash Prevention Script -->
+    <script>
+      (function() {
+        try {
+          // Get saved theme or system preference
+          const savedTheme = localStorage.getItem('theme');
+          const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
+          
+          // Apply theme to HTML root before any rendering
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.add('light');
+          }
+          
+          // Set initial background to prevent flash
+          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#f9fafb';
+          document.documentElement.style.color = theme === 'dark' ? '#f1f5f9' : '#111827';
+          
+          // Store theme for React context
+          window.__THEME_INITIALIZED = theme;
+        } catch (e) {
+          // Fallback to system preference if localStorage fails
+          const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = systemPrefersDark ? 'dark' : 'light';
+          document.documentElement.classList.add(theme);
+          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#f9fafb';
+          document.documentElement.style.color = theme === 'dark' ? '#f1f5f9' : '#111827';
+          window.__THEME_INITIALIZED = theme;
+        }
+      })();
+    </script>
+    
+    <title>Lumina Toolkit - Professional Productivity Suite</title>
+    
+    <!-- Suppress Vercel Analytics Errors -->
+    <script>
+      window.addEventListener('error', function(e) {
+        if (e.filename && e.filename.includes('_vercel/insights')) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        }
+      }, true);
+      
+      // Override fetch to suppress Vercel analytics errors
+      const originalFetch = window.fetch;
+      window.fetch = function(...args) {
+        const url = args[0];
+        if (typeof url === 'string' && url.includes('_vercel/insights')) {
+          return Promise.resolve(new Response('{}', { status: 200 }));
+        }
+        return originalFetch.apply(this, args);
+      };
+    </script>
+    <script type="module" crossorigin src="/assets/index-D1YO5EpP.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/ui-BA64maBH.js">
+    <link rel="modulepreload" crossorigin href="/assets/router-CUsy5-T-.js">
+    <link rel="modulepreload" crossorigin href="/assets/utils-BPc3WLar.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-BuOpCJty.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
