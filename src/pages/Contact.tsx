@@ -39,7 +39,7 @@ export default function Contact() {
         from_email: formData.email,
         message_type: formData.type,
         message: formData.message,
-        to_email: 'hello@jobtoolkit.io' // Your receiving email
+        to_email: 'contact@lumintoolkit.com' // Your receiving email
       };
 
       // Send email using EmailJS
@@ -110,7 +110,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Email Us</p>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">hello@jobtoolkit.io</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">contact@lumintoolkit.com</p>
                 </div>
               </a>
             </div>
