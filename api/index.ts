@@ -549,7 +549,7 @@ Make it compelling and tailored to the position.`;
 
       const { jobDescription, questionType = 'general' } = req.body;
 
-      
+
 
       if (!jobDescription) {
 
@@ -569,19 +569,14 @@ Make it compelling and tailored to the position.`;
 
 
 
-      const prompt = `Generate 5-7 ${questionType} interview questions for this position:
-
-${jobDescription}
-
-
-
-Include behavioral, technical, and situational questions.`;
+      // Use the detailed prompt from the frontend (jobDescription contains the full enhanced prompt)
+      const prompt = jobDescription;
 
 
 
       const messages = [
 
-        { role: 'system', content: 'You are an expert interview coach. Generate relevant, challenging interview questions that help candidates prepare effectively.' },
+        { role: 'system', content: 'You are an expert interview coach. Generate relevant, challenging interview questions that help candidates prepare effectively. Follow all formatting instructions in the user prompt exactly.' },
 
         { role: 'user', content: prompt }
 
@@ -609,7 +604,7 @@ Include behavioral, technical, and situational questions.`;
 
           temperature: 0.7,
 
-          max_tokens: 1500,
+          max_tokens: 2000,
 
         }),
 
@@ -629,7 +624,7 @@ Include behavioral, technical, and situational questions.`;
 
       const data = await response.json();
 
-      
+
 
       if (!data.choices || data.choices.length === 0) {
 
@@ -645,9 +640,9 @@ Include behavioral, technical, and situational questions.`;
 
       console.error('Interview Prep Error:', error);
 
-      res.status(500).json({ 
+      res.status(500).json({
 
-        error: error instanceof Error ? error.message : 'AI service is temporarily unavailable' 
+        error: error instanceof Error ? error.message : 'AI service is temporarily unavailable'
 
       });
 
