@@ -57,6 +57,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
       'gpa': '/gpa-calculator',
       'caption': '/ai-caption-generator',
       'youtube': '/youtube-title-generator',
+      'blog': '/blog',
       'ats': '/ats-resume-checker',
       'tracker': '/job-tracker',
       'interview': '/interview-prep',

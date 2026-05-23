@@ -22,7 +22,9 @@ import {
 
   BrainCircuit,
 
-  Mail
+  Mail,
+
+  BookOpen
 
 } from 'lucide-react';
 
@@ -135,6 +137,18 @@ export const TOOLS = [
     icon: Youtube,
 
     description: 'Optimize your videos for high CTR'
+
+  },
+
+  {
+
+    id: 'blog',
+
+    name: 'Blog',
+
+    icon: BookOpen,
+
+    description: 'Career tips, interview advice & job search strategies'
 
   },
 

@@ -24,6 +24,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
       'gpa-calculator': 'GPA Calculator',
       'ai-caption-generator': 'AI Caption Generator',
       'youtube-title-generator': 'YouTube Title Generator',
+      'blog': 'Blog',
       'ats-resume-checker': 'ATS Resume Checker',
       'job-tracker': 'Job Tracker',
       'interview-prep': 'Interview Preparation',

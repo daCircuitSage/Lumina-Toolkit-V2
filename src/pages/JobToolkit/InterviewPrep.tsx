@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Terminal, 
@@ -14,7 +14,25 @@ import {
   Search,
   Trophy,
   Filter,
-  X
+  X,
+  Mic,
+  MicOff,
+  Clock,
+  Star,
+  Bookmark,
+  Download,
+  TrendingUp,
+  Target,
+  Flame,
+  Award,
+  Play,
+  Pause,
+  RotateCcw,
+  BarChart3,
+  Building2,
+  Calendar,
+  CheckCircle2,
+  XCircle
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Fuse from 'fuse.js';
@@ -27,6 +45,20 @@ interface QaItem {
   type: 'technical' | 'behavioral' | 'general';
   category?: string;
   difficulty?: 'easy' | 'medium' | 'hard';
+  userAnswer?: string;
+  rating?: number;
+  timeSpent?: number;
+  isBookmarked?: boolean;
+  isCompleted?: boolean;
+}
+
+interface SessionStats {
+  totalQuestions: number;
+  completed: number;
+  averageRating: number;
+  totalTime: number;
+  streak: number;
+  points: number;
 }
 
 interface SearchSuggestion {
@@ -48,12 +80,33 @@ const SEARCH_SUGGESTIONS: SearchSuggestion[] = [
 
 export default function InterviewPrep() {
   const [role, setRole] = useState('');
+  const [company, setCompany] = useState('');
+  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
   const [isGenerating, setIsGenerating] = useState(false);
   const [questions, setQuestions] = useState<QaItem[]>([]);
   const [activeTab, setActiveTab] = useState<'technical' | 'behavioral' | 'general'>('technical');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [expandedQuestions, setExpandedQuestions] = useState<Set<number>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number | null>(null);
+  const [showTimer, setShowTimer] = useState(false);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [sessionStats, setSessionStats] = useState<SessionStats>({
+    totalQuestions: 0,
+    completed: 0,
+    averageRating: 0,
+    totalTime: 0,
+    streak: 0,
+    points: 0
+  });
+  const [showStats, setShowStats] = useState(false);
+  const [practiceMode, setPracticeMode] = useState<'standard' | 'timed' | 'voice'>('standard');
+  
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleGenerate = async () => {
     if (!role.trim()) return;
@@ -62,7 +115,7 @@ export default function InterviewPrep() {
     setExpandedQuestions(new Set());
 
     const enhancedPrompt = `
-You are an expert interview coach. Generate 9 diverse interview questions for the role: "${role}".
+You are an expert interview coach. Generate 9 diverse interview questions for the role: "${role}"${company ? ` at company: "${company}"` : ''}.
 
 CRITICAL REQUIREMENTS:
 1. Generate EXACTLY 3 questions for each category: technical, behavioral, general
@@ -70,14 +123,16 @@ CRITICAL REQUIREMENTS:
    - Technical: coding, algorithms, system design, architecture, tools, technologies
    - Behavioral: teamwork, leadership, conflict resolution, mentoring, project management
    - General: career goals, motivations, company fit, strengths/weaknesses
-3. For each question, provide a concise, high-impact strategy or model answer
-4. Format as valid JSON array with proper escaping
+3. Difficulty level: ${difficulty}
+4. For each question, provide a concise, high-impact strategy or model answer
+5. ${company ? `Tailor questions to ${company}'s culture, values, and interview style.` : ''}
+6. Format as valid JSON array with proper escaping
 
 Output format (strict JSON):
 [
-  { "question": "...", "answer": "...", "type": "technical" },
-  { "question": "...", "answer": "...", "type": "behavioral" },
-  { "question": "...", "answer": "...", "type": "general" },
+  { "question": "...", "answer": "...", "type": "technical", "difficulty": "${difficulty}" },
+  { "question": "...", "answer": "...", "type": "behavioral", "difficulty": "${difficulty}" },
+  { "question": "...", "answer": "...", "type": "general", "difficulty": "${difficulty}" },
   ...
 ]
 
@@ -166,7 +221,22 @@ Do not include any markdown formatting, explanations, or additional text. Only t
         });
       }
       
-      setQuestions([...technicalQuestions, ...behavioralQuestions, ...generalQuestions]);
+      const finalQuestions = [...technicalQuestions, ...behavioralQuestions, ...generalQuestions].map(q => ({
+        ...q,
+        difficulty: difficulty,
+        isBookmarked: false,
+        isCompleted: false
+      }));
+      
+      setQuestions(finalQuestions);
+      setSessionStats({
+        totalQuestions: finalQuestions.length,
+        completed: 0,
+        averageRating: 0,
+        totalTime: 0,
+        streak: parseInt(localStorage.getItem('interviewStreak') || '0'),
+        points: parseInt(localStorage.getItem('interviewPoints') || '0')
+      });
     } catch (error) {
       console.error(error);
       alert(error instanceof Error ? error.message : "Failed to reach the coaching engine. Try again.");
@@ -233,6 +303,123 @@ Do not include any markdown formatting, explanations, or additional text. Only t
     setSearchQuery('');
   };
 
+  const startRecording = async (index: number) => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      const chunks: BlobPart[] = [];
+      
+      mediaRecorderRef.current.ondataavailable = (e) => chunks.push(e.data);
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(chunks, { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setQuestions(prev => prev.map((q, i) => 
+          i === index ? { ...q, userAnswer: audioUrl } : q
+        ));
+      };
+      
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+      setCurrentQuestionIndex(index);
+      setRecordingTime(0);
+      
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+      alert('Please allow microphone access to use voice recording.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      setIsRecording(false);
+      setCurrentQuestionIndex(null);
+      if (recordingTimerRef.current) {
+        clearInterval(recordingTimerRef.current);
+      }
+    }
+  };
+
+  const startTimer = () => {
+    setShowTimer(true);
+    setTimerSeconds(0);
+    timerRef.current = setInterval(() => {
+      setTimerSeconds(prev => prev + 1);
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+  };
+
+  const resetTimer = () => {
+    stopTimer();
+    setTimerSeconds(0);
+  };
+
+  const toggleBookmark = (index: number) => {
+    setQuestions(prev => prev.map((q, i) => 
+      i === index ? { ...q, isBookmarked: !q.isBookmarked } : q
+    ));
+  };
+
+  const rateAnswer = (index: number, rating: number) => {
+    setQuestions(prev => {
+      const updated = prev.map((q, i) => 
+        i === index ? { ...q, rating, isCompleted: true } : q
+      );
+      
+      const completed = updated.filter(q => q.isCompleted).length;
+      const rated = updated.filter(q => q.rating !== undefined);
+      const avgRating = rated.length > 0 
+        ? rated.reduce((sum, q) => sum + (q.rating || 0), 0) / rated.length 
+        : 0;
+      
+      const points = sessionStats.points + (rating * 10);
+      localStorage.setItem('interviewPoints', points.toString());
+      
+      setSessionStats(prev => ({
+        ...prev,
+        completed,
+        averageRating: avgRating,
+        points
+      }));
+      
+      return updated;
+    });
+  };
+
+  const exportSession = () => {
+    const exportData = {
+      role,
+      company,
+      difficulty,
+      questions,
+      sessionStats,
+      date: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `interview-prep-${role}-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current);
+    };
+  }, []);
+
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
       <header className="mb-8">
@@ -288,16 +475,144 @@ Do not include any markdown formatting, explanations, or additional text. Only t
              )}
            </div>
            
+           {/* Company Input */}
+           <div className="relative group">
+             <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary group-focus-within:text-accent transition-colors" size={18} />
+             <input 
+              type="text" 
+              placeholder="Company (optional, e.g. Google, Microsoft)"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              className="w-full pl-12 pr-5 py-4 bg-surface border border-border rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all placeholder:text-text-secondary"
+             />
+           </div>
+           
+           {/* Difficulty Selector */}
+           <div className="flex gap-2">
+             {(['easy', 'medium', 'hard'] as const).map((level) => (
+               <button
+                 key={level}
+                 onClick={() => setDifficulty(level)}
+                 className={cn(
+                   "flex-1 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all",
+                   difficulty === level 
+                     ? "bg-accent text-white shadow-lg" 
+                     : "bg-surface text-text-secondary hover:bg-hover"
+                 )}
+               >
+                 {level}
+               </button>
+             ))}
+           </div>
+           
+           {/* Practice Mode Selector */}
+           <div className="flex gap-2">
+             {[
+               { id: 'standard', icon: Target, label: 'Standard' },
+               { id: 'timed', icon: Clock, label: 'Timed' },
+               { id: 'voice', icon: Mic, label: 'Voice' }
+             ].map((mode) => (
+               <button
+                 key={mode.id}
+                 onClick={() => setPracticeMode(mode.id as any)}
+                 className={cn(
+                   "flex-1 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+                   practiceMode === mode.id 
+                     ? "bg-accent text-white shadow-lg" 
+                     : "bg-surface text-text-secondary hover:bg-hover"
+                 )}
+               >
+                 <mode.icon size={14} />
+                 {mode.label}
+               </button>
+             ))}
+           </div>
+           
            <button 
             onClick={handleGenerate}
             disabled={isGenerating || !role.trim()}
             className="px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl min-h-[52px]"
            >
-            {isGenerating ? <Loader2 size={18} className="animate-spin" /> : <Zap size={18} />}
-            {isGenerating ? 'Generating...' : 'Generate Drills'}
+            {isGenerating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
+            {isGenerating ? 'Generating...' : 'Generate Battle Drills'}
            </button>
         </div>
       </header>
+
+      {/* Session Stats Bar */}
+      {questions.length > 0 && (
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 p-4 bg-surface border border-border rounded-2xl flex flex-wrap items-center justify-between gap-4"
+        >
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <Flame className="text-orange-500" size={20} />
+              <span className="text-sm font-black text-white">{sessionStats.streak} Day Streak</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award className="text-yellow-500" size={20} />
+              <span className="text-sm font-black text-white">{sessionStats.points} Points</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="text-green-500" size={20} />
+              <span className="text-sm font-black text-white">{sessionStats.completed}/{sessionStats.totalQuestions}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowStats(!showStats)}
+              className="px-4 py-2 bg-hover rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 hover:bg-accent/20 transition-colors"
+            >
+              <BarChart3 size={14} />
+              Stats
+            </button>
+            <button
+              onClick={exportSession}
+              className="px-4 py-2 bg-hover rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 hover:bg-accent/20 transition-colors"
+            >
+              <Download size={14} />
+              Export
+            </button>
+          </div>
+        </motion.div>
+      )}
+      
+      {/* Detailed Stats Panel */}
+      <AnimatePresence>
+        {showStats && questions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-6 p-6 bg-surface border border-border rounded-2xl"
+          >
+            <h3 className="text-lg font-black text-white mb-4 flex items-center gap-2">
+              <TrendingUp size={20} className="text-accent" />
+              Session Analytics
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="p-4 bg-hover rounded-xl">
+                <div className="text-2xl font-black text-accent">{sessionStats.averageRating.toFixed(1)}</div>
+                <div className="text-xs font-bold text-text-secondary uppercase">Avg Rating</div>
+              </div>
+              <div className="p-4 bg-hover rounded-xl">
+                <div className="text-2xl font-black text-accent">{Math.floor(sessionStats.totalTime / 60)}m</div>
+                <div className="text-xs font-bold text-text-secondary uppercase">Total Time</div>
+              </div>
+              <div className="p-4 bg-hover rounded-xl">
+                <div className="text-2xl font-black text-accent">{questions.filter(q => q.isBookmarked).length}</div>
+                <div className="text-xs font-bold text-text-secondary uppercase">Bookmarked</div>
+              </div>
+              <div className="p-4 bg-hover rounded-xl">
+                <div className="text-2xl font-black text-accent">{difficulty}</div>
+                <div className="text-xs font-bold text-text-secondary uppercase">Difficulty</div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Category Tabs */}
@@ -359,6 +674,48 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                 key="results"
                 className="space-y-6"
                >
+                 {/* Timer and Controls */}
+                 <div className="flex items-center justify-between mb-4">
+                   <div className="flex items-center gap-2">
+                     {practiceMode === 'timed' && (
+                       <div className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-xl">
+                         <Clock size={16} className="text-accent" />
+                         <span className="text-sm font-black text-white">
+                           {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60).toString().padStart(2, '0')}
+                         </span>
+                         {!showTimer ? (
+                           <button onClick={startTimer} className="p-1 hover:bg-accent/20 rounded-lg transition-colors">
+                             <Play size={14} className="text-accent" />
+                           </button>
+                         ) : (
+                           <div className="flex gap-1">
+                             <button onClick={stopTimer} className="p-1 hover:bg-accent/20 rounded-lg transition-colors">
+                               <Pause size={14} className="text-accent" />
+                             </button>
+                             <button onClick={resetTimer} className="p-1 hover:bg-accent/20 rounded-lg transition-colors">
+                               <RotateCcw size={14} className="text-accent" />
+                             </button>
+                           </div>
+                         )}
+                       </div>
+                     )}
+                     {practiceMode === 'voice' && isRecording && (
+                       <div className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-xl">
+                         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                         <span className="text-sm font-black text-red-400">
+                           Recording {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
+                         </span>
+                         <button onClick={stopRecording} className="p-1 hover:bg-red-500/30 rounded-lg transition-colors">
+                           <MicOff size={14} className="text-red-400" />
+                         </button>
+                       </div>
+                     )}
+                   </div>
+                   <div className="flex items-center gap-2 text-xs font-bold text-text-secondary uppercase tracking-wider">
+                     <span>{practiceMode} Mode</span>
+                   </div>
+                 </div>
+                 
                  {/* Search Bar for Questions */}
                  <div className="relative">
                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" size={16} />
@@ -390,6 +747,12 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                            index={globalIndex}
                            isExpanded={expandedQuestions.has(globalIndex)}
                            onToggle={() => toggleQuestionExpansion(globalIndex)}
+                           onBookmark={() => toggleBookmark(globalIndex)}
+                           onRate={(rating) => rateAnswer(globalIndex, rating)}
+                           onStartRecording={() => startRecording(globalIndex)}
+                           onStopRecording={stopRecording}
+                           isRecording={isRecording && currentQuestionIndex === globalIndex}
+                           practiceMode={practiceMode}
                          />
                        </motion.div>
                      );
@@ -540,7 +903,29 @@ function TabButton({ active, onClick, icon: Icon, title, desc, count }: any) {
   );
 }
 
-function QaCard({ q, index, isExpanded, onToggle }: { q: QaItem; index: number; isExpanded: boolean; onToggle: () => void }) {
+function QaCard({ 
+  q, 
+  index, 
+  isExpanded, 
+  onToggle, 
+  onBookmark, 
+  onRate, 
+  onStartRecording, 
+  onStopRecording,
+  isRecording,
+  practiceMode
+}: { 
+  q: QaItem; 
+  index: number; 
+  isExpanded: boolean; 
+  onToggle: () => void;
+  onBookmark: () => void;
+  onRate: (rating: number) => void;
+  onStartRecording: () => void;
+  onStopRecording: () => void;
+  isRecording: boolean;
+  practiceMode: 'standard' | 'timed' | 'voice';
+}) {
   return (
     <div className="bg-surface rounded-2xl border border-border overflow-hidden group hover:border-accent/50 transition-all shadow-sm">
       <button 
@@ -548,14 +933,17 @@ function QaCard({ q, index, isExpanded, onToggle }: { q: QaItem; index: number; 
         className="w-full flex items-start justify-between p-5 md:p-8 text-left gap-4"
       >
         <div className="flex gap-3 md:gap-4 items-start flex-1 min-w-0">
-           <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center shrink-0 font-black text-[10px] md:text-xs mt-0.5">
-             {q.type === 'technical' ? 'T' : q.type === 'behavioral' ? 'B' : 'G'}
+           <div className={cn(
+             "w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 font-black text-[10px] md:text-xs mt-0.5",
+             q.isCompleted ? "bg-green-500/20 text-green-400" : "bg-accent/20 text-accent"
+           )}>
+             {q.isCompleted ? <CheckCircle2 size={12} /> : (q.type === 'technical' ? 'T' : q.type === 'behavioral' ? 'B' : 'G')}
            </div>
            <div className="flex-1 min-w-0">
              <h3 className="text-sm md:text-lg font-black text-white tracking-tight leading-tight mb-2">
                {q.question}
              </h3>
-             <div className="flex items-center gap-2">
+             <div className="flex items-center gap-2 flex-wrap">
                <span className={cn(
                  "text-[8px] md:text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full",
                  q.type === 'technical' ? "bg-blue-500/20 text-blue-400" :
@@ -564,11 +952,48 @@ function QaCard({ q, index, isExpanded, onToggle }: { q: QaItem; index: number; 
                )}>
                  {q.type}
                </span>
+               {q.difficulty && (
+                 <span className={cn(
+                   "text-[8px] md:text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full",
+                   q.difficulty === 'easy' ? "bg-green-500/20 text-green-400" :
+                   q.difficulty === 'medium' ? "bg-yellow-500/20 text-yellow-400" :
+                   "bg-red-500/20 text-red-400"
+                 )}>
+                 {q.difficulty}
+               </span>
+               )}
+               {q.rating && (
+                 <div className="flex items-center gap-1">
+                   {[1, 2, 3, 4, 5].map((star) => (
+                     <Star
+                       key={star}
+                       size={10}
+                       className={cn(
+                         star <= q.rating! ? "text-yellow-400 fill-yellow-400" : "text-text-secondary"
+                       )}
+                     />
+                   ))}
+                 </div>
+               )}
              </div>
            </div>
         </div>
-        <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-text-secondary transition-all shrink-0 mt-1", isExpanded ? "rotate-90 bg-accent/20 text-accent" : "")}>
-           <ChevronRight size={20} />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onBookmark();
+            }}
+            className={cn(
+              "w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0",
+              q.isBookmarked ? "text-yellow-400 bg-yellow-400/20" : "text-text-secondary hover:text-yellow-400 hover:bg-yellow-400/10"
+            )}
+          >
+            <Bookmark size={16} className={q.isBookmarked ? "fill-current" : ""} />
+          </button>
+          <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-text-secondary transition-all shrink-0", isExpanded ? "rotate-90 bg-accent/20 text-accent" : "")}>
+             <ChevronRight size={20} />
+          </div>
         </div>
       </button>
 
@@ -581,6 +1006,51 @@ function QaCard({ q, index, isExpanded, onToggle }: { q: QaItem; index: number; 
             className="overflow-hidden bg-gradient-to-b from-accent/10 to-transparent"
           >
             <div className="px-5 md:px-8 pb-6 md:pb-8 pt-2 ml-9 md:ml-12">
+               {/* Voice Recording Controls */}
+               {practiceMode === 'voice' && (
+                 <div className="mb-4 flex items-center gap-2">
+                   {!isRecording ? (
+                     <button
+                       onClick={onStartRecording}
+                       className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all"
+                     >
+                       <Mic size={14} />
+                       Record Answer
+                     </button>
+                   ) : (
+                     <button
+                       onClick={onStopRecording}
+                       className="px-4 py-2 bg-red-500 hover:bg-red-500/90 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all animate-pulse"
+                     >
+                       <MicOff size={14} />
+                       Stop Recording
+                     </button>
+                   )}
+                   {q.userAnswer && (
+                     <audio controls src={q.userAnswer} className="h-8" />
+                   )}
+                 </div>
+               )}
+               
+               {/* Rating System */}
+               <div className="mb-4 flex items-center gap-2">
+                 <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-text-secondary">Rate your answer:</span>
+                 <div className="flex gap-1">
+                   {[1, 2, 3, 4, 5].map((rating) => (
+                     <button
+                       key={rating}
+                       onClick={() => onRate(rating)}
+                       className={cn(
+                         "transition-all hover:scale-110",
+                         (q.rating || 0) >= rating ? "text-yellow-400" : "text-text-secondary hover:text-yellow-400"
+                       )}
+                     >
+                       <Star size={18} className={(q.rating || 0) >= rating ? "fill-current" : ""} />
+                     </button>
+                   ))}
+                 </div>
+               </div>
+               
                <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-surface rounded-xl border border-accent/20 shadow-sm">
                   <div className="p-2 bg-accent/20 text-accent rounded-lg shrink-0">
                     <Trophy size={14} className="md:w-5 md:h-5" />

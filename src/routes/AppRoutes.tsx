@@ -59,6 +59,10 @@ const Contact = React.lazy(() => import('../pages/Contact'));
 
 const Profile = React.lazy(() => import('../pages/Profile'));
 
+const Blog = React.lazy(() => import('../pages/Blog'));
+
+const BlogPost = React.lazy(() => import('../pages/BlogPost'));
+
 
 
 
@@ -578,6 +582,42 @@ const AppRoutes = () => {
             </LazyLoadWrapper>
 
           </Layout>
+
+        </AnimatedPage>
+
+      } />
+
+      
+
+      <Route path="/blog" element={
+
+        <AnimatedPage>
+
+          <Layout>
+
+            <LazyLoadWrapper>
+
+              <Blog />
+
+            </LazyLoadWrapper>
+
+          </Layout>
+
+        </AnimatedPage>
+
+      } />
+
+      
+
+      <Route path="/blog/:slug" element={
+
+        <AnimatedPage>
+
+          <LazyLoadWrapper>
+
+            <BlogPost />
+
+          </LazyLoadWrapper>
 
         </AnimatedPage>
 
