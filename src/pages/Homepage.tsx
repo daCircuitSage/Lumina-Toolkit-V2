@@ -2,40 +2,40 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
 import { 
-  Sparkles, 
-  Terminal, 
-  Cpu, 
-  Search, 
-  FileText, 
-  ChevronRight,
-  Bot,
-  FileUp,
-  Calendar,
-  Calculator,
-  MessageSquare,
-  Youtube,
-  BarChart3,
-  ListTodo,
-  BrainCircuit,
-  Mail,
-  CheckCircle,
-  Users,
-  Star,
-  ArrowRight,
-  Shield,
-  Zap,
-  Clock,
-  User,
-  LogOut,
-  Command,
-  Globe,
-  TrendingUp,
-  Layers,
-  Puzzle,
-  Rocket,
-  Flame,
-  Infinity
-} from 'lucide-react';
+  FaStar as Sparkles, 
+  FaTerminal as Terminal, 
+  FaMicrochip as Cpu, 
+  FaSearch as Search, 
+  FaFileAlt as FileText, 
+  FaChevronRight as ChevronRight,
+  FaRobot as Bot,
+  FaFileUpload as FileUp,
+  FaCalendar as Calendar,
+  FaCalculator as Calculator,
+  FaComment as MessageSquare,
+  FaYoutube as Youtube,
+  FaChartBar as BarChart3,
+  FaTasks as ListTodo,
+  FaBrain as BrainCircuit,
+  FaEnvelope as Mail,
+  FaCheckCircle as CheckCircle,
+  FaUsers as Users,
+  FaStar as Star,
+  FaArrowRight as ArrowRight,
+  FaShieldAlt as Shield,
+  FaBolt as Zap,
+  FaClock as Clock,
+  FaUser as User,
+  FaSignOutAlt as LogOut,
+  FaTerminal as Command,
+  FaGlobe as Globe,
+  FaChartLine as TrendingUp,
+  FaLayerGroup as Layers,
+  FaPuzzlePiece as Puzzle,
+  FaRocket as Rocket,
+  FaFire as Flame,
+  FaInfinity as Infinity
+} from 'react-icons/fa';
 import TerminalBackground from '../components/TerminalBackground';
 import CustomCursor from '../components/CustomCursor';
 import { TOOLS } from '../constants';
@@ -316,8 +316,8 @@ export default function Homepage() {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-accent to-accent/70 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Bot className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Bot className="w-8 h-8 text-accent" />
                 </div>
                 <h3 className="text-2xl font-bold mb-2">AI Assistant</h3>
                 <p className="text-text-secondary mb-4 max-w-md">
@@ -341,8 +341,8 @@ export default function Homepage() {
               onClick={() => navigate('/resume-builder')}
               className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-500/70 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <FileText className="w-7 h-7 text-white" />
+              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <FileText className="w-8 h-8 text-accent" />
               </div>
               <h3 className="text-xl font-bold mb-2">Resume Builder</h3>
               <p className="text-text-secondary mb-4">
@@ -364,8 +364,8 @@ export default function Homepage() {
               onClick={() => navigate('/ats-resume-checker')}
               className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-500/70 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BarChart3 className="w-7 h-7 text-white" />
+              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BarChart3 className="w-8 h-8 text-accent" />
               </div>
               <h3 className="text-xl font-bold mb-2">ATS Checker</h3>
               <p className="text-text-secondary mb-4">
@@ -387,8 +387,8 @@ export default function Homepage() {
               onClick={() => navigate('/interview-prep')}
               className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-500/70 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BrainCircuit className="w-7 h-7 text-white" />
+              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BrainCircuit className="w-8 h-8 text-accent" />
               </div>
               <h3 className="text-xl font-bold mb-2">Interview Prep</h3>
               <p className="text-text-secondary mb-4">
@@ -410,8 +410,8 @@ export default function Homepage() {
               onClick={() => navigate('/pdf-converter')}
               className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-red-500 to-red-500/70 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <FileUp className="w-7 h-7 text-white" />
+              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <FileUp className="w-8 h-8 text-accent" />
               </div>
               <h3 className="text-xl font-bold mb-2">PDF Converter</h3>
               <p className="text-text-secondary mb-4">
