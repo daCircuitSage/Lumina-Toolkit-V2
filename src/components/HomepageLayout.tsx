@@ -28,7 +28,8 @@ export default function HomepageLayout({ children }: HomepageLayoutProps) {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen">
+    // xAI design: canvas background, no additional styling needed
+    <div className="min-h-screen bg-canvas text-ink">
       {children}
       <Analytics />
     </div>

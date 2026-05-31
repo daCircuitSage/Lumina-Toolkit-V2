@@ -64,20 +64,20 @@ export default function GpaCalculator() {
   return (
     <div className="tool-container">
       <header className="mb-12">
-        <h1 className="text-3xl font-bold flex items-center gap-3 text-slate-900 dark:text-white transition-colors">
-          <Calculator className="text-indigo-600 dark:text-indigo-400" /> GPA & CGPA Calculator
+        <h1 className="text-3xl font-normal flex items-center gap-3 text-ink transition-colors">
+          <Calculator className="text-white" /> GPA & CGPA Calculator
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 mt-2">Professional academic performance tracking system.</p>
+        <p className="text-body-mid mt-2">Professional academic performance tracking system.</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
-            <div className="p-4 md:p-6 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
-              <h2 className="font-bold text-slate-700 dark:text-slate-200">Course List</h2>
+          <div className="bg-canvas-card border border-hairline rounded-sm overflow-hidden transition-colors">
+            <div className="p-4 md:p-6 border-b border-hairline flex justify-between items-center bg-canvas-soft">
+              <h2 className="font-normal text-ink">Course List</h2>
               <button 
                 onClick={addCourse}
-                className="flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
+                className="flex items-center gap-2 text-sm font-normal text-white hover:text-ink transition-colors"
               >
                 <Plus size={16} /> <span className="hidden sm:inline">Add Course</span><span className="sm:hidden">Add</span>
               </button>
@@ -91,41 +91,41 @@ export default function GpaCalculator() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
-                    className="flex flex-col sm:flex-row gap-4 p-4 border border-slate-50 dark:border-slate-800 rounded-2xl bg-slate-50/20 dark:bg-slate-800/20 group relative transition-colors"
+                    className="flex flex-col sm:flex-row gap-4 p-4 border border-hairline rounded-sm bg-canvas-soft group relative transition-colors"
                   >
                     <div className="flex-1">
-                      <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2 px-1">Course Name</label>
+                      <label className="text-[10px] font-normal text-body-mid uppercase tracking-widest block mb-2 px-1">Course Name</label>
                       <input 
                         placeholder="e.g. Advanced Mathematics"
                         value={course.name}
                         onChange={(e) => updateCourse(course.id, 'name', e.target.value)}
-                        className="w-full h-11 px-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                        className="w-full h-11 px-4 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white transition-colors"
                       />
                     </div>
                     <div className="flex gap-4">
                       <div className="flex-1 sm:w-32">
-                        <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-2 px-1">Grade</label>
+                        <label className="text-[10px] font-normal text-body-mid uppercase tracking-widest block mb-2 px-1">Grade</label>
                         <select 
                           value={course.grade}
                           onChange={(e) => updateCourse(course.id, 'grade', e.target.value)}
-                          className="w-full h-11 px-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:border-indigo-500 appearance-none transition-colors"
+                          className="w-full h-11 px-4 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white appearance-none transition-colors"
                         >
                           {Object.keys(GRADE_VALUES).map(g => <option key={g} value={g}>{g}</option>)}
                         </select>
                       </div>
                       <div className="w-24">
-                        <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-1 px-1">Credits</label>
+                        <label className="text-[10px] font-normal text-body-mid uppercase tracking-widest block mb-1 px-1">Credits</label>
                         <input 
                           type="number"
                           value={course.credits}
                           onChange={(e) => updateCourse(course.id, 'credits', e.target.value)}
-                          className="w-full h-11 px-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                          className="w-full h-11 px-4 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white transition-colors"
                         />
                       </div>
                     </div>
                     <button 
                       onClick={() => removeCourse(course.id)}
-                      className="absolute -top-2 -right-2 sm:static sm:mt-6 p-2 text-slate-300 dark:text-slate-600 hover:text-red-500 transition-colors bg-white dark:bg-slate-800 sm:bg-transparent rounded-full shadow-sm sm:shadow-none border border-slate-100 dark:border-slate-700 sm:border-0"
+                      className="absolute -top-2 -right-2 sm:static sm:mt-6 p-2 text-body-mid hover:text-red-500 transition-colors bg-canvas-soft sm:bg-transparent rounded-sm border border-hairline sm:border-0"
                     >
                       <Trash2 size={18} />
                     </button>
@@ -135,29 +135,29 @@ export default function GpaCalculator() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 md:p-8 transition-colors">
-            <h3 className="font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
-              <Rocket size={18} className="text-orange-500" /> Previous History (Optional)
+          <div className="bg-canvas-card border border-hairline rounded-sm p-6 md:p-8 transition-colors">
+            <h3 className="font-normal text-ink mb-6 flex items-center gap-2">
+              <Rocket size={18} className="text-white" /> Previous History (Optional)
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase px-1">Cumulative GPA</label>
+                <label className="text-xs font-normal text-body-mid uppercase px-1">Cumulative GPA</label>
                 <input 
                   type="number"
                   placeholder="0.00"
                   value={cgpaData.prevGpa}
                   onChange={(e) => setCgpaData({...cgpaData, prevGpa: e.target.value})}
-                  className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full h-12 px-4 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white transition-colors"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase px-1">Completed Credits</label>
+                <label className="text-xs font-normal text-body-mid uppercase px-1">Completed Credits</label>
                 <input 
                   type="number"
                   placeholder="0"
                   value={cgpaData.prevCredits}
                   onChange={(e) => setCgpaData({...cgpaData, prevCredits: e.target.value})}
-                  className="w-full h-12 px-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                  className="w-full h-12 px-4 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white transition-colors"
                 />
               </div>
             </div>
@@ -165,9 +165,9 @@ export default function GpaCalculator() {
         </div>
 
         <div className="space-y-6">
-           <div className="bg-indigo-600 rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-indigo-500/20">
+           <div className="bg-white text-black rounded-sm p-6 md:p-8">
               <div className="flex justify-between items-start mb-10 text-center sm:text-left">
-                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mx-auto sm:mx-0">
+                <div className="w-12 h-12 rounded-sm bg-canvas-soft flex items-center justify-center mx-auto sm:mx-0">
                   <Calculator size={24} />
                 </div>
                 <button 
@@ -175,7 +175,7 @@ export default function GpaCalculator() {
                     setCourses([{ id: '1', name: '', grade: 'A', credits: '3' }]);
                     setCgpaData({ prevGpa: '', prevCredits: '' });
                   }}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 hover:bg-canvas-soft rounded-sm transition-colors"
                 >
                   <RotateCcw size={18} />
                 </button>
@@ -183,29 +183,29 @@ export default function GpaCalculator() {
 
               <div className="space-y-8 text-center sm:text-left">
                 <div>
-                  <label className="text-[10px] font-bold uppercase tracking-[2px] opacity-70 block mb-2">Semester GPA</label>
-                  <div className="text-5xl md:text-6xl font-black tracking-tight">{currentGpa}</div>
+                  <label className="text-[10px] font-normal uppercase tracking-[2px] opacity-70 block mb-2">Semester GPA</label>
+                  <div className="text-5xl md:text-6xl font-normal tracking-tight">{currentGpa}</div>
                 </div>
 
-                <div className="pt-8 border-t border-white/10">
+                <div className="pt-8 border-t border-hairline">
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-bold opacity-70 uppercase tracking-widest">Final CGPA</span>
-                    <span className="text-xl font-bold">{finalCgpa}</span>
+                    <span className="text-xs font-normal opacity-70 uppercase tracking-widest">Final CGPA</span>
+                    <span className="text-xl font-normal">{finalCgpa}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold opacity-70 uppercase tracking-widest">Credits</span>
-                    <span className="text-xl font-bold">{parseFloat(cgpaData.prevCredits || '0') + totalCredits}</span>
+                    <span className="text-xs font-normal opacity-70 uppercase tracking-widest">Credits</span>
+                    <span className="text-xl font-normal">{parseFloat(cgpaData.prevCredits || '0') + totalCredits}</span>
                   </div>
                 </div>
               </div>
            </div>
 
-           <div className="p-6 bg-slate-900 rounded-3xl text-white">
-              <h4 className="text-sm font-bold mb-4 text-slate-400">Quick Tips</h4>
+           <div className="p-6 bg-canvas-card rounded-sm text-ink">
+              <h4 className="text-sm font-normal mb-4 text-body-mid">Quick Tips</h4>
               <ul className="space-y-3">
-                 <li className="text-xs text-slate-500 leading-relaxed">• Grade points are calculated on a standard 4.0 scale.</li>
-                 <li className="text-xs text-slate-500 leading-relaxed">• Ensure all credits match your university's weighting.</li>
-                 <li className="text-xs text-slate-500 leading-relaxed">• Target a 3.5+ for Dean's List inclusion.</li>
+                 <li className="text-xs text-body-mid leading-relaxed">• Grade points are calculated on a standard 4.0 scale.</li>
+                 <li className="text-xs text-body-mid leading-relaxed">• Ensure all credits match your university's weighting.</li>
+                 <li className="text-xs text-body-mid leading-relaxed">• Target a 3.5+ for Dean's List inclusion.</li>
               </ul>
            </div>
         </div>

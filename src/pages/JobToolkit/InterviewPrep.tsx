@@ -535,15 +535,15 @@ Do not include any markdown formatting, explanations, or additional text. Only t
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="inline-flex items-center gap-2 px-3 py-1 bg-accent/20 text-accent rounded-lg text-xs font-semibold mb-4"
+          className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-sm text-xs font-normal mb-4"
         >
           <BrainCircuit size={14} />
           AI-Powered Interview Coaching
         </motion.div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 max-w-3xl leading-tight">
+        <h1 className="text-4xl md:text-5xl font-normal text-ink mb-4 max-w-3xl leading-tight">
           Master Your Interview with AI Battle Drills
         </h1>
-        <p className="text-lg text-text-secondary mb-8 max-w-2xl">
+        <p className="text-lg text-body-mid mb-8 max-w-2xl">
           Practice personalized interview questions tailored to your role. Get expert coaching for technical, behavioral, and general screening scenarios.
         </p>
 
@@ -557,15 +557,15 @@ Do not include any markdown formatting, explanations, or additional text. Only t
               onChange={(e) => handleRoleChange(e.target.value)}
               onFocus={() => setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              className="w-full pl-12 pr-5 py-4 bg-surface border border-border rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all placeholder:text-text-secondary"
+              className="w-full pl-12 pr-5 py-4 bg-canvas border border-hairline rounded-sm text-sm font-normal focus:outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-body-mid"
               onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
              />
              
              {/* Search suggestions dropdown */}
              {showSuggestions && getSearchSuggestions.length > 0 && (
-               <div className="absolute top-full left-0 right-0 mt-2 bg-surface border border-border rounded-xl shadow-xl z-50 overflow-hidden">
+               <div className="absolute top-full left-0 right-0 mt-2 bg-canvas-card border border-hairline rounded-sm z-50 overflow-hidden">
                  <div className="p-2">
-                   <p className="text-xs font-medium text-text-secondary px-3 py-2">Did you mean:</p>
+                   <p className="text-xs font-normal text-body-mid px-3 py-2">Did you mean:</p>
                    {getSearchSuggestions.slice(0, 5).map((suggestion, index) => (
                      <button
                        key={index}
@@ -573,10 +573,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                          setRole(suggestion.title);
                          setShowSuggestions(false);
                        }}
-                       className="w-full text-left px-3 py-2 hover:bg-hover rounded-lg transition-colors"
+                       className="w-full text-left px-3 py-2 hover:bg-canvas-soft rounded-sm transition-colors"
                      >
-                       <div className="text-sm font-medium text-white">{suggestion.title}</div>
-                       <div className="text-xs text-text-secondary">{suggestion.description}</div>
+                       <div className="text-sm font-normal text-ink">{suggestion.title}</div>
+                       <div className="text-xs text-body-mid">{suggestion.description}</div>
                      </button>
                    ))}
                  </div>
@@ -592,7 +592,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
               placeholder="Company (optional, e.g. Google, Microsoft)"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="w-full pl-12 pr-5 py-4 bg-surface border border-border rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all placeholder:text-text-secondary"
+              className="w-full pl-12 pr-5 py-4 bg-canvas border border-hairline rounded-sm text-sm font-normal focus:outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-body-mid"
              />
            </div>
            
@@ -603,10 +603,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                  key={level}
                  onClick={() => setDifficulty(level)}
                  className={cn(
-                   "flex-1 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all",
+                   "flex-1 px-4 py-3 rounded-sm text-xs font-normal uppercase tracking-wider transition-all",
                    difficulty === level 
-                     ? "bg-accent text-white shadow-lg" 
-                     : "bg-surface text-text-secondary hover:bg-hover"
+                     ? "bg-white text-black" 
+                     : "bg-canvas text-body-mid hover:bg-canvas-soft"
                  )}
                >
                  {level}
@@ -625,10 +625,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                  key={mode.id}
                  onClick={() => setPracticeMode(mode.id as any)}
                  className={cn(
-                   "flex-1 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+                   "flex-1 px-4 py-3 rounded-sm text-xs font-normal uppercase tracking-wider transition-all flex items-center justify-center gap-2",
                    practiceMode === mode.id 
-                     ? "bg-accent text-white shadow-lg" 
-                     : "bg-surface text-text-secondary hover:bg-hover"
+                     ? "bg-white text-black" 
+                     : "bg-canvas text-body-mid hover:bg-canvas-soft"
                  )}
                >
                  <mode.icon size={14} />
@@ -640,7 +640,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
            <button 
             onClick={handleGenerate}
             disabled={isGenerating || !role.trim()}
-            className="px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl min-h-[52px]"
+            className="px-8 py-4 bg-white hover:bg-gray-100 text-black rounded-sm text-sm font-normal uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed min-h-[52px]"
            >
             {isGenerating ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
             {isGenerating ? 'Generating...' : 'Generate Battle Drills'}
@@ -653,33 +653,33 @@ Do not include any markdown formatting, explanations, or additional text. Only t
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-surface border border-border rounded-2xl flex flex-wrap items-center justify-between gap-4"
+          className="mb-6 p-4 bg-canvas-card border border-hairline rounded-sm flex flex-wrap items-center justify-between gap-4"
         >
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Flame className="text-orange-500" size={20} />
-              <span className="text-sm font-black text-white">{sessionStats.streak} Day Streak</span>
+              <span className="text-sm font-normal text-ink">{sessionStats.streak} Day Streak</span>
             </div>
             <div className="flex items-center gap-2">
               <Award className="text-yellow-500" size={20} />
-              <span className="text-sm font-black text-white">{sessionStats.points} Points</span>
+              <span className="text-sm font-normal text-ink">{sessionStats.points} Points</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="text-green-500" size={20} />
-              <span className="text-sm font-black text-white">{sessionStats.completed}/{sessionStats.totalQuestions}</span>
+              <span className="text-sm font-normal text-ink">{sessionStats.completed}/{sessionStats.totalQuestions}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowStats(!showStats)}
-              className="px-4 py-2 bg-hover rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 hover:bg-accent/20 transition-colors"
+              className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 hover:bg-canvas transition-colors"
             >
               <BarChart3 size={14} />
               Stats
             </button>
             <button
               onClick={exportSession}
-              className="px-4 py-2 bg-hover rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 hover:bg-accent/20 transition-colors"
+              className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 hover:bg-canvas transition-colors"
             >
               <Download size={14} />
               Export
@@ -695,28 +695,28 @@ Do not include any markdown formatting, explanations, or additional text. Only t
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mb-6 p-6 bg-surface border border-border rounded-2xl"
+            className="mb-6 p-6 bg-canvas-card border border-hairline rounded-sm"
           >
-            <h3 className="text-lg font-black text-white mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
               <TrendingUp size={20} className="text-accent" />
               Session Analytics
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-4 bg-hover rounded-xl">
-                <div className="text-2xl font-black text-accent">{sessionStats.averageRating.toFixed(1)}</div>
-                <div className="text-xs font-bold text-text-secondary uppercase">Avg Rating</div>
+              <div className="p-4 bg-canvas-soft rounded-sm">
+                <div className="text-2xl font-normal text-white">{sessionStats.averageRating.toFixed(1)}</div>
+                <div className="text-xs font-normal text-body-mid uppercase">Avg Rating</div>
               </div>
-              <div className="p-4 bg-hover rounded-xl">
-                <div className="text-2xl font-black text-accent">{Math.floor(sessionStats.totalTime / 60)}m</div>
-                <div className="text-xs font-bold text-text-secondary uppercase">Total Time</div>
+              <div className="p-4 bg-canvas-soft rounded-sm">
+                <div className="text-2xl font-normal text-white">{Math.floor(sessionStats.totalTime / 60)}m</div>
+                <div className="text-xs font-normal text-body-mid uppercase">Total Time</div>
               </div>
-              <div className="p-4 bg-hover rounded-xl">
-                <div className="text-2xl font-black text-accent">{questions.filter(q => q.isBookmarked).length}</div>
-                <div className="text-xs font-bold text-text-secondary uppercase">Bookmarked</div>
+              <div className="p-4 bg-canvas-soft rounded-sm">
+                <div className="text-2xl font-normal text-white">{questions.filter(q => q.isBookmarked).length}</div>
+                <div className="text-xs font-normal text-body-mid uppercase">Bookmarked</div>
               </div>
-              <div className="p-4 bg-hover rounded-xl">
-                <div className="text-2xl font-black text-accent">{difficulty}</div>
-                <div className="text-xs font-bold text-text-secondary uppercase">Difficulty</div>
+              <div className="p-4 bg-canvas-soft rounded-sm">
+                <div className="text-2xl font-normal text-white">{difficulty}</div>
+                <div className="text-xs font-normal text-body-mid uppercase">Difficulty</div>
               </div>
             </div>
           </motion.div>
@@ -759,21 +759,21 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 key="empty"
-                className="h-[300px] md:h-[400px] flex flex-col items-center justify-center text-center p-8 bg-surface border-2 border-dashed border-border rounded-3xl"
+                className="h-[300px] md:h-[400px] flex flex-col items-center justify-center text-center p-8 bg-canvas-card border-2 border-dashed border-hairline rounded-sm"
                >
                  {isGenerating ? (
                    <div className="space-y-6">
                       <div className="flex items-center justify-center gap-1.5">
                         {[0, 1, 2].map(i => <div key={i} className="w-3 h-3 bg-accent rounded-full animate-bounce" style={{ animationDelay: `${i * 0.15}s` }} />)}
                       </div>
-                      <h2 className="text-sm font-black text-text-secondary uppercase tracking-widest">Generating Questions...</h2>
-                      <p className="text-xs text-text-secondary max-w-md">Creating personalized interview questions for your role</p>
+                      <h2 className="text-sm font-normal text-body-mid uppercase tracking-widest">Generating Questions...</h2>
+                      <p className="text-xs text-body-mid max-w-md">Creating personalized interview questions for your role</p>
                    </div>
                  ) : (
                    <>
                     <BrainCircuit size={48} className="text-text-secondary mb-4" />
-                    <h2 className="text-sm font-black text-text-secondary uppercase tracking-widest">Ready to Start</h2>
-                    <p className="text-xs text-text-secondary mt-2 max-w-md">Enter your target role to generate personalized interview questions</p>
+                    <h2 className="text-sm font-normal text-body-mid uppercase tracking-widest">Ready to Start</h2>
+                    <p className="text-xs text-body-mid mt-2 max-w-md">Enter your target role to generate personalized interview questions</p>
                    </>
                  )}
                </motion.div>
@@ -787,40 +787,40 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                  <div className="flex items-center justify-between mb-4">
                    <div className="flex items-center gap-2">
                      {practiceMode === 'timed' && (
-                       <div className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-xl">
-                         <Clock size={16} className="text-accent" />
-                         <span className="text-sm font-black text-white">
+                       <div className="flex items-center gap-2 px-4 py-2 bg-canvas-card border border-hairline rounded-sm">
+                         <Clock size={16} className="text-white" />
+                         <span className="text-sm font-normal text-ink">
                            {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60).toString().padStart(2, '0')}
                          </span>
                          {!showTimer ? (
-                           <button onClick={startTimer} className="p-1 hover:bg-accent/20 rounded-lg transition-colors">
-                             <Play size={14} className="text-accent" />
+                           <button onClick={startTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors">
+                             <Play size={14} className="text-white" />
                            </button>
                          ) : (
                            <div className="flex gap-1">
-                             <button onClick={stopTimer} className="p-1 hover:bg-accent/20 rounded-lg transition-colors">
-                               <Pause size={14} className="text-accent" />
+                             <button onClick={stopTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors">
+                               <Pause size={14} className="text-white" />
                              </button>
-                             <button onClick={resetTimer} className="p-1 hover:bg-accent/20 rounded-lg transition-colors">
-                               <RotateCcw size={14} className="text-accent" />
+                             <button onClick={resetTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors">
+                               <RotateCcw size={14} className="text-white" />
                              </button>
                            </div>
                          )}
                        </div>
                      )}
                      {practiceMode === 'voice' && isRecording && (
-                       <div className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-xl">
+                       <div className="flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/50 rounded-sm">
                          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                         <span className="text-sm font-black text-red-400">
+                         <span className="text-sm font-normal text-red-400">
                            Recording {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
                          </span>
-                         <button onClick={stopRecording} className="p-1 hover:bg-red-500/30 rounded-lg transition-colors">
+                         <button onClick={stopRecording} className="p-1 hover:bg-red-500/30 rounded-sm transition-colors">
                            <MicOff size={14} className="text-red-400" />
                          </button>
                        </div>
                      )}
                    </div>
-                   <div className="flex items-center gap-2 text-xs font-bold text-text-secondary uppercase tracking-wider">
+                   <div className="flex items-center gap-2 text-xs font-normal text-body-mid uppercase tracking-wider">
                      <span>{practiceMode} Mode</span>
                    </div>
                  </div>
@@ -833,12 +833,12 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                      placeholder={`Search ${activeTab} questions...`}
                      value={searchQuery}
                      onChange={(e) => setSearchQuery(e.target.value)}
-                     className="w-full pl-10 pr-10 py-3 bg-hover border border-border rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all placeholder:text-text-secondary"
+                     className="w-full pl-10 pr-10 py-3 bg-canvas border border-hairline rounded-sm text-sm font-normal focus:outline-none focus:ring-2 focus:ring-white/20 transition-all placeholder:text-body-mid"
                    />
                    {searchQuery && (
                      <button
                        onClick={clearSearch}
-                       className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-white transition-colors"
+                       className="absolute right-3 top-1/2 -translate-y-1/2 text-body-mid hover:text-ink transition-colors"
                      >
                        <X size={16} />
                      </button>
@@ -869,17 +869,17 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                    
                    {filteredQuestions.length === 0 && searchQuery && (
                      <div className="text-center py-12">
-                       <Filter className="w-12 h-12 text-text-secondary mx-auto mb-4" />
-                       <h3 className="text-sm font-medium text-text-secondary mb-2">No questions found</h3>
-                       <p className="text-xs text-text-secondary">Try adjusting your search terms</p>
+                       <Filter className="w-12 h-12 text-body-mid mx-auto mb-4" />
+                       <h3 className="text-sm font-normal text-body-mid mb-2">No questions found</h3>
+                       <p className="text-xs text-body-mid">Try adjusting your search terms</p>
                      </div>
                    )}
                    
                    {filteredQuestions.length === 0 && !searchQuery && (
                      <div className="text-center py-12">
-                       <HelpCircle className="w-12 h-12 text-text-secondary mx-auto mb-4" />
-                       <h3 className="text-sm font-medium text-text-secondary mb-2">No {activeTab} questions</h3>
-                       <p className="text-xs text-text-secondary">Try selecting another category</p>
+                       <HelpCircle className="w-12 h-12 text-body-mid mx-auto mb-4" />
+                       <h3 className="text-sm font-normal text-body-mid mb-2">No {activeTab} questions</h3>
+                       <p className="text-xs text-body-mid">Try selecting another category</p>
                      </div>
                    )}
                  </div>
@@ -984,26 +984,26 @@ function TabButton({ active, onClick, icon: Icon, title, desc, count }: any) {
     <button 
       onClick={onClick}
       className={cn(
-        "flex lg:flex items-center gap-3 p-4 md:p-6 rounded-2xl border-2 transition-all text-left relative",
+        "flex lg:flex items-center gap-3 p-4 md:p-6 rounded-sm border-2 transition-all text-left relative",
         active 
-          ? "bg-surface border-accent shadow-xl shadow-accent/20 scale-[1.02]" 
-          : "bg-hover border-transparent hover:border-border"
+          ? "bg-canvas-card border-white" 
+          : "bg-canvas border-hairline hover:border-white/30"
       )}
     >
       <div className={cn(
-        "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0",
-        active ? "bg-accent text-white" : "bg-surface text-text-secondary"
+        "w-10 h-10 md:w-12 md:h-12 rounded-sm flex items-center justify-center shrink-0",
+        active ? "bg-white text-black" : "bg-canvas-soft text-body-mid"
       )}>
         <Icon size={18} />
       </div>
       <div className="min-w-0 flex-1">
-        <h4 className={cn("text-[11px] md:text-sm font-black uppercase tracking-wider transition-colors truncate", active ? "text-white" : "text-text-secondary")}>{title}</h4>
-        <p className="hidden xs:block text-[9px] md:text-[10px] font-bold text-text-secondary tracking-wide uppercase truncate">{desc}</p>
+        <h4 className={cn("text-[11px] md:text-sm font-normal uppercase tracking-wider transition-colors truncate", active ? "text-ink" : "text-body-mid")}>{title}</h4>
+        <p className="hidden xs:block text-[9px] md:text-[10px] font-normal text-body-mid tracking-wide uppercase truncate">{desc}</p>
       </div>
       {count > 0 && (
         <div className={cn(
-          "w-6 h-6 rounded-full flex items-center justify-center text-xs font-black",
-          active ? "bg-accent/20 text-accent" : "bg-surface text-text-secondary"
+          "w-6 h-6 rounded-full flex items-center justify-center text-xs font-normal",
+          active ? "bg-white/10 text-white" : "bg-canvas-soft text-body-mid"
         )}>
           {count}
         </div>
@@ -1036,25 +1036,25 @@ function QaCard({
   practiceMode: 'standard' | 'timed' | 'voice';
 }) {
   return (
-    <div className="bg-surface rounded-2xl border border-border overflow-hidden group hover:border-accent/50 transition-all shadow-sm">
+    <div className="bg-canvas-card rounded-sm border border-hairline overflow-hidden group hover:border-white/30 transition-all">
       <button 
         onClick={onToggle}
         className="w-full flex items-start justify-between p-5 md:p-8 text-left gap-4"
       >
         <div className="flex gap-3 md:gap-4 items-start flex-1 min-w-0">
            <div className={cn(
-             "w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 font-black text-[10px] md:text-xs mt-0.5",
-             q.isCompleted ? "bg-green-500/20 text-green-400" : "bg-accent/20 text-accent"
+             "w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 font-normal text-[10px] md:text-xs mt-0.5",
+             q.isCompleted ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white"
            )}>
              {q.isCompleted ? <CheckCircle2 size={12} /> : (q.type === 'technical' ? 'T' : q.type === 'behavioral' ? 'B' : 'G')}
            </div>
            <div className="flex-1 min-w-0">
-             <h3 className="text-sm md:text-lg font-black text-white tracking-tight leading-tight mb-2">
+             <h3 className="text-sm md:text-lg font-normal text-ink tracking-tight leading-tight mb-2">
                {q.question}
              </h3>
              <div className="flex items-center gap-2 flex-wrap">
                <span className={cn(
-                 "text-[8px] md:text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full",
+                 "text-[8px] md:text-[9px] font-normal uppercase tracking-wider px-2 py-1 rounded-full",
                  q.type === 'technical' ? "bg-blue-500/20 text-blue-400" :
                  q.type === 'behavioral' ? "bg-emerald-500/20 text-emerald-400" :
                  "bg-purple-500/20 text-purple-400"
@@ -1063,7 +1063,7 @@ function QaCard({
                </span>
                {q.difficulty && (
                  <span className={cn(
-                   "text-[8px] md:text-[9px] font-black uppercase tracking-wider px-2 py-1 rounded-full",
+                   "text-[8px] md:text-[9px] font-normal uppercase tracking-wider px-2 py-1 rounded-full",
                    q.difficulty === 'easy' ? "bg-green-500/20 text-green-400" :
                    q.difficulty === 'medium' ? "bg-yellow-500/20 text-yellow-400" :
                    "bg-red-500/20 text-red-400"
@@ -1095,12 +1095,12 @@ function QaCard({
             }}
             className={cn(
               "w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0",
-              q.isBookmarked ? "text-yellow-400 bg-yellow-400/20" : "text-text-secondary hover:text-yellow-400 hover:bg-yellow-400/10"
+              q.isBookmarked ? "text-yellow-400 bg-yellow-400/20" : "text-body-mid hover:text-yellow-400 hover:bg-yellow-400/10"
             )}
           >
             <Bookmark size={16} className={q.isBookmarked ? "fill-current" : ""} />
           </button>
-          <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-text-secondary transition-all shrink-0", isExpanded ? "rotate-90 bg-accent/20 text-accent" : "")}>
+          <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-body-mid transition-all shrink-0", isExpanded ? "rotate-90 bg-white/10 text-white" : "")}>
              <ChevronRight size={20} />
           </div>
         </div>
@@ -1112,7 +1112,7 @@ function QaCard({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden bg-gradient-to-b from-accent/10 to-transparent"
+            className="overflow-hidden bg-canvas-soft"
           >
             <div className="px-5 md:px-8 pb-6 md:pb-8 pt-2 ml-9 md:ml-12">
                {/* Voice Recording Controls */}
@@ -1121,7 +1121,7 @@ function QaCard({
                    {!isRecording ? (
                      <button
                        onClick={onStartRecording}
-                       className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all"
+                       className="px-4 py-2 bg-white hover:bg-gray-100 text-black rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 transition-all"
                      >
                        <Mic size={14} />
                        Record Answer
@@ -1129,7 +1129,7 @@ function QaCard({
                    ) : (
                      <button
                        onClick={onStopRecording}
-                       className="px-4 py-2 bg-red-500 hover:bg-red-500/90 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all animate-pulse"
+                       className="px-4 py-2 bg-red-500 hover:bg-red-500/90 text-white rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 transition-all animate-pulse"
                      >
                        <MicOff size={14} />
                        Stop Recording
@@ -1143,7 +1143,7 @@ function QaCard({
                
                {/* Rating System */}
                <div className="mb-4 flex items-center gap-2">
-                 <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-text-secondary">Rate your answer:</span>
+                 <span className="text-[9px] md:text-[10px] font-normal uppercase tracking-widest text-body-mid">Rate your answer:</span>
                  <div className="flex gap-1">
                    {[1, 2, 3, 4, 5].map((rating) => (
                      <button
@@ -1151,7 +1151,7 @@ function QaCard({
                        onClick={() => onRate(rating)}
                        className={cn(
                          "transition-all hover:scale-110",
-                         (q.rating || 0) >= rating ? "text-yellow-400" : "text-text-secondary hover:text-yellow-400"
+                         (q.rating || 0) >= rating ? "text-yellow-400" : "text-body-mid hover:text-yellow-400"
                        )}
                      >
                        <Star size={18} className={(q.rating || 0) >= rating ? "fill-current" : ""} />
@@ -1160,25 +1160,25 @@ function QaCard({
                  </div>
                </div>
                
-               <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-surface rounded-xl border border-accent/20 shadow-sm">
-                  <div className="p-2 bg-accent/20 text-accent rounded-lg shrink-0">
+               <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-canvas-card rounded-sm border border-hairline">
+                  <div className="p-2 bg-white/10 text-white rounded-sm shrink-0">
                     <Trophy size={14} className="md:w-5 md:h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-accent mb-3">Strategy & Model Answer</h5>
-                    <div className="text-xs md:text-sm font-medium text-text-secondary leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+                    <h5 className="text-[9px] md:text-[10px] font-normal uppercase tracking-widest text-white mb-3">Strategy & Model Answer</h5>
+                    <div className="text-xs md:text-sm font-normal text-body-mid leading-relaxed prose prose-sm dark:prose-invert max-w-none">
                       <ReactMarkdown 
                         components={{
                           p: ({children}) => <p className="mb-2 last:mb-0">{children}</p>,
-                          strong: ({children}) => <strong className="font-bold text-white">{children}</strong>,
+                          strong: ({children}) => <strong className="font-normal text-ink">{children}</strong>,
                           em: ({children}) => <em className="italic">{children}</em>,
                           ul: ({children}) => <ul className="list-disc list-inside space-y-1 mb-2">{children}</ul>,
                           ol: ({children}) => <ol className="list-decimal list-inside space-y-1 mb-2">{children}</ol>,
                           li: ({children}) => <li className="text-xs md:text-sm">{children}</li>,
-                          h3: ({children}) => <h3 className="font-bold text-white mb-2">{children}</h3>,
-                          h4: ({children}) => <h4 className="font-semibold text-white mb-1">{children}</h4>,
-                          code: ({children}) => <code className="bg-hover px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
-                          blockquote: ({children}) => <blockquote className="border-l-2 border-border pl-3 italic text-text-secondary">{children}</blockquote>
+                          h3: ({children}) => <h3 className="font-normal text-ink mb-2">{children}</h3>,
+                          h4: ({children}) => <h4 className="font-normal text-ink mb-1">{children}</h4>,
+                          code: ({children}) => <code className="bg-canvas-soft px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
+                          blockquote: ({children}) => <blockquote className="border-l-2 border-hairline pl-3 italic text-body-mid">{children}</blockquote>
                         }}
                       >
                         {q.answer}

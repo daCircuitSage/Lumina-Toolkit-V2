@@ -59,22 +59,22 @@ export default function AiCaption() {
   return (
     <div className="tool-container max-w-4xl px-4 sm:px-6">
       <header className="mb-8 md:mb-12 text-center">
-        <div className="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-2xl md:rounded-3xl flex items-center justify-center mx-auto mb-4 md:mb-6 transition-colors">
+        <div className="w-14 h-14 md:w-16 md:h-16 bg-white/10 text-white rounded-sm flex items-center justify-center mx-auto mb-4 md:mb-6 transition-colors">
            <MessageSquare size={28} className="md:size-32" />
         </div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 md:mb-3">AI Caption Generator</h1>
-        <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 max-w-lg mx-auto">Create viral-ready captions for your social media posts in seconds.</p>
+        <h1 className="text-2xl md:text-3xl font-normal tracking-tight text-ink mb-2 md:mb-3">AI Caption Generator</h1>
+        <p className="text-sm md:text-base text-body-mid max-w-lg mx-auto">Create viral-ready captions for your social media posts in seconds.</p>
       </header>
 
       <div className="space-y-6 md:space-y-8">
-        <div className="glass-card p-6 md:p-10">
+        <div className="bg-canvas-card border border-hairline rounded-sm p-6 md:p-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">Target Platform</label>
+              <label className="text-[10px] font-normal text-body-mid uppercase tracking-widest px-1">Target Platform</label>
               <select 
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value)}
-                className="w-full h-12 md:h-14 px-4 md:px-5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl md:rounded-2xl text-sm focus:outline-none focus:border-indigo-500 appearance-none transition-colors"
+                className="w-full h-12 md:h-14 px-4 md:px-5 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white appearance-none transition-colors"
               >
                 {['Instagram', 'LinkedIn', 'Twitter (X)', 'TikTok', 'Facebook'].map(p => (
                   <option key={p} value={p}>{p}</option>
@@ -82,11 +82,11 @@ export default function AiCaption() {
               </select>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">Desired Tone</label>
+              <label className="text-[10px] font-normal text-body-mid uppercase tracking-widest px-1">Desired Tone</label>
               <select 
                 value={tone}
                 onChange={(e) => setTone(e.target.value)}
-                className="w-full h-12 md:h-14 px-4 md:px-5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl md:rounded-2xl text-sm focus:outline-none focus:border-indigo-500 appearance-none transition-colors"
+                className="w-full h-12 md:h-14 px-4 md:px-5 bg-canvas border border-hairline text-ink rounded-sm text-sm focus:outline-none focus:border-white appearance-none transition-colors"
               >
                 {['Engaging', 'Professional', 'Funny', 'Minimalist', 'Inspiring', 'Provocative'].map(t => (
                   <option key={t} value={t}>{t}</option>
@@ -96,19 +96,19 @@ export default function AiCaption() {
           </div>
 
           <div className="space-y-2 mb-6 md:mb-8">
-            <label className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-1">What is your post about?</label>
+            <label className="text-[10px] font-normal text-body-mid uppercase tracking-widest px-1">What is your post about?</label>
             <textarea 
               placeholder="e.g. A photo of my desk setup with the new MacBook and some plants around it..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="w-full px-4 md:px-6 py-4 md:py-5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl md:rounded-2xl text-sm md:text-base focus:outline-none focus:border-indigo-500 min-h-[100px] md:min-h-[120px] resize-none transition-colors"
+              className="w-full px-4 md:px-6 py-4 md:py-5 bg-canvas border border-hairline text-ink rounded-sm text-sm md:text-base focus:outline-none focus:border-white min-h-[100px] md:min-h-[120px] resize-none transition-colors"
             />
           </div>
 
           <button 
             disabled={!input || isGenerating}
             onClick={generate}
-            className="w-full h-14 md:h-16 bg-indigo-600 text-white rounded-xl md:rounded-2xl font-bold text-sm md:text-base flex items-center justify-center gap-3 hover:bg-indigo-700 active:scale-[0.98] transition-all disabled:opacity-50"
+            className="w-full h-14 md:h-16 bg-white text-black rounded-sm font-normal text-sm md:text-base flex items-center justify-center gap-3 hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50"
           >
             {isGenerating ? <Loader2 className="animate-spin" /> : <Wand2 size={20} />}
             {isGenerating ? 'Analyzing Content...' : 'Generate Magic Captions'}
@@ -123,26 +123,26 @@ export default function AiCaption() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
-                className="p-6 md:p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl md:rounded-3xl shadow-sm hover:border-indigo-200 transition-colors relative group"
+                className="p-6 md:p-8 bg-canvas-card border border-hairline rounded-sm hover:border-white/30 transition-colors relative group"
               >
                 <div className="absolute top-4 right-4 md:top-6 md:right-6">
                   <button 
                      onClick={() => copyToClipboard(caption, idx)}
-                     className="p-2 bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg md:rounded-xl transition-all border border-transparent dark:border-slate-700"
+                     className="p-2 bg-canvas-soft text-body-mid hover:text-white hover:bg-canvas rounded-sm transition-all border border-transparent"
                   >
                     {copiedIndex === idx ? <Check size={18} /> : <Copy size={18} />}
                   </button>
                 </div>
-                <div className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[2px] mb-3 md:mb-4">Option 0{idx + 1}</div>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed pr-10 md:pr-12 text-sm md:text-lg whitespace-pre-wrap">{caption}</p>
+                <div className="text-[10px] font-normal text-white uppercase tracking-[2px] mb-3 md:mb-4">Option 0{idx + 1}</div>
+                <p className="text-body-mid leading-relaxed pr-10 md:pr-12 text-sm md:text-lg whitespace-pre-wrap">{caption}</p>
               </motion.div>
             ))}
           </AnimatePresence>
           
           {isGenerating && (
-            <div className="py-12 flex flex-col items-center justify-center text-gray-300">
+            <div className="py-12 flex flex-col items-center justify-center text-body-mid">
                <Loader2 className="animate-spin mb-4" size={32} />
-               <p className="text-sm font-medium animate-pulse">Consulting the AI copywriter...</p>
+               <p className="text-sm font-normal animate-pulse">Consulting the AI copywriter...</p>
             </div>
           )}
         </div>

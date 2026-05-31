@@ -51,7 +51,7 @@ export default function Blog() {
       />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-accent/10 to-transparent py-20 md:py-32">
+      <section className="relative overflow-hidden bg-canvas-soft py-20 md:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,26 +59,26 @@ export default function Blog() {
             transition={{ duration: 0.5 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/20 text-accent rounded-full text-xs font-black uppercase tracking-wider mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-sm text-xs font-normal uppercase tracking-wider mb-6">
               <BookOpen size={14} />
               Career Blog
             </div>
-            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-normal text-ink mb-6 tracking-tight">
               Expert Career Advice & Insights
             </h1>
-            <p className="text-lg md:text-xl text-text-secondary mb-8 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-body-mid mb-8 max-w-2xl mx-auto">
               Master your job search with proven strategies, interview tips, and career development insights from industry experts.
             </p>
             
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary" size={20} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-body-mid" size={20} />
               <input
                 type="text"
                 placeholder="Search articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-surface border border-border rounded-2xl text-white placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+                className="w-full pl-12 pr-4 py-4 bg-canvas border border-hairline rounded-sm text-ink placeholder:text-body-mid focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
               />
             </div>
           </motion.div>
@@ -100,10 +100,10 @@ export default function Blog() {
                 key={category}
                 onClick={() => setSelectedCategory(category)}
                 className={cn(
-                  "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all",
+                  "px-4 py-2 rounded-sm text-xs font-normal uppercase tracking-wider transition-all",
                   selectedCategory === category
-                    ? "bg-accent text-white"
-                    : "bg-surface text-text-secondary hover:bg-hover"
+                    ? "bg-white text-black"
+                    : "bg-canvas text-body-mid hover:bg-canvas-soft"
                 )}
               >
                 {category}
@@ -113,11 +113,11 @@ export default function Blog() {
           
           {/* Tag Filter */}
           <div className="flex items-center gap-2">
-            <Tag size={16} className="text-text-secondary" />
+            <Tag size={16} className="text-body-mid" />
             <select
               value={selectedTag}
               onChange={(e) => setSelectedTag(e.target.value)}
-              className="px-4 py-2 bg-surface border border-border rounded-xl text-xs font-black uppercase tracking-wider text-text-secondary focus:outline-none focus:ring-2 focus:ring-accent/50"
+              className="px-4 py-2 bg-canvas border border-hairline rounded-sm text-xs font-normal uppercase tracking-wider text-body-mid focus:outline-none focus:ring-2 focus:ring-white/20"
             >
               {tags.map(tag => (
                 <option key={tag} value={tag}>{tag}</option>
@@ -134,48 +134,48 @@ export default function Blog() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mb-16"
           >
-            <div className="relative bg-surface border-2 border-accent rounded-3xl overflow-hidden group">
+            <div className="relative bg-canvas-card border-2 border-white rounded-sm overflow-hidden group">
               <div className="absolute top-4 left-4 z-10">
-                <div className="flex items-center gap-2 px-3 py-1 bg-accent text-white rounded-full text-xs font-black uppercase tracking-wider">
+                <div className="flex items-center gap-2 px-3 py-1 bg-white text-black rounded-sm text-xs font-normal uppercase tracking-wider">
                   <TrendingUp size={12} />
                   Featured
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
                 <div className="flex flex-col justify-center">
-                  <div className="flex items-center gap-4 mb-4 text-xs font-bold text-text-secondary uppercase tracking-wider">
-                    <span className="px-3 py-1 bg-accent/20 text-accent rounded-full">{featuredPost.category}</span>
+                  <div className="flex items-center gap-4 mb-4 text-xs font-normal text-body-mid uppercase tracking-wider">
+                    <span className="px-3 py-1 bg-white/10 text-white rounded-sm">{featuredPost.category}</span>
                     <div className="flex items-center gap-1">
                       <Calendar size={12} />
                       {new Date(featuredPost.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </div>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black text-white mb-4 leading-tight">
+                  <h2 className="text-2xl md:text-3xl font-normal text-ink mb-4 leading-tight">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-text-secondary mb-6 line-clamp-3">
+                  <p className="text-body-mid mb-6 line-clamp-3">
                     {featuredPost.excerpt}
                   </p>
                   <div className="flex items-center gap-4 mb-6">
                     <div className="flex items-center gap-2">
-                      <User size={16} className="text-text-secondary" />
-                      <span className="text-sm font-bold text-text-secondary">{featuredPost.author}</span>
+                      <User size={16} className="text-body-mid" />
+                      <span className="text-sm font-normal text-body-mid">{featuredPost.author}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock size={16} className="text-text-secondary" />
-                      <span className="text-sm font-bold text-text-secondary">{featuredPost.readingTime} min read</span>
+                      <Clock size={16} className="text-body-mid" />
+                      <span className="text-sm font-normal text-body-mid">{featuredPost.readingTime} min read</span>
                     </div>
                   </div>
                   <Link
                     to={`/blog/${featuredPost.slug}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-all group-hover:scale-105"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white hover:bg-gray-100 text-black rounded-sm text-sm font-normal uppercase tracking-wider transition-all group-hover:scale-105"
                   >
                     Read Article
                     <ArrowRight size={16} />
                   </Link>
                 </div>
-                <div className="relative bg-gradient-to-br from-accent/20 to-transparent rounded-2xl flex items-center justify-center min-h-[300px]">
-                  <BookOpen size={120} className="text-accent/30" />
+                <div className="relative bg-canvas-soft rounded-sm flex items-center justify-center min-h-[300px]">
+                  <BookOpen size={120} className="text-white/30" />
                 </div>
               </div>
             </div>
@@ -188,8 +188,8 @@ export default function Blog() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <h2 className="text-2xl font-black text-white mb-8 flex items-center gap-3">
-            <Filter size={24} className="text-accent" />
+          <h2 className="text-2xl font-normal text-ink mb-8 flex items-center gap-3">
+            <Filter size={24} className="text-white" />
             {searchQuery || selectedCategory !== 'All' || selectedTag !== 'All' 
               ? `Search Results (${filteredPosts.length})` 
               : 'Latest Articles'}
@@ -197,9 +197,9 @@ export default function Blog() {
           
           {filteredPosts.length === 0 ? (
             <div className="text-center py-20">
-              <BookOpen size={64} className="text-text-secondary mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">No articles found</h3>
-              <p className="text-text-secondary">Try adjusting your search or filters</p>
+              <BookOpen size={64} className="text-body-mid mx-auto mb-4" />
+              <h3 className="text-xl font-normal text-ink mb-2">No articles found</h3>
+              <p className="text-body-mid">Try adjusting your search or filters</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -212,33 +212,33 @@ export default function Blog() {
                 >
                   <Link
                     to={`/blog/${post.slug}`}
-                    className="block h-full bg-surface border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all group"
+                    className="block h-full bg-canvas-card border border-hairline rounded-sm overflow-hidden hover:border-white/30 transition-all group"
                   >
-                    <div className="relative bg-gradient-to-br from-accent/10 to-transparent h-48 flex items-center justify-center">
-                      <BookOpen size={64} className="text-accent/30 group-hover:scale-110 transition-transform" />
+                    <div className="relative bg-canvas-soft h-48 flex items-center justify-center">
+                      <BookOpen size={64} className="text-white/30 group-hover:scale-110 transition-transform" />
                     </div>
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="px-2 py-1 bg-accent/20 text-accent rounded-full text-[10px] font-black uppercase tracking-wider">
+                        <span className="px-2 py-1 bg-white/10 text-white rounded-sm text-[10px] font-normal uppercase tracking-wider">
                           {post.category}
                         </span>
-                        <div className="flex items-center gap-1 text-[10px] font-bold text-text-secondary">
+                        <div className="flex items-center gap-1 text-[10px] font-normal text-body-mid">
                           <Clock size={10} />
                           {post.readingTime} min
                         </div>
                       </div>
-                      <h3 className="text-lg font-black text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">
+                      <h3 className="text-lg font-normal text-ink mb-2 line-clamp-2 group-hover:text-white transition-colors">
                         {post.title}
                       </h3>
-                      <p className="text-sm text-text-secondary mb-4 line-clamp-2">
+                      <p className="text-sm text-body-mid mb-4 line-clamp-2">
                         {post.excerpt}
                       </p>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1 text-xs font-bold text-text-secondary">
+                        <div className="flex items-center gap-1 text-xs font-normal text-body-mid">
                           <Calendar size={12} />
                           {new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                         </div>
-                        <ArrowRight size={16} className="text-accent group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight size={16} className="text-white group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
                   </Link>
@@ -254,10 +254,10 @@ export default function Blog() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-16 p-8 bg-surface border border-border rounded-2xl"
+            className="mt-16 p-8 bg-canvas-card border border-hairline rounded-sm"
           >
-            <h3 className="text-lg font-black text-white mb-6 flex items-center gap-2">
-              <Tag size={20} className="text-accent" />
+            <h3 className="text-lg font-normal text-ink mb-6 flex items-center gap-2">
+              <Tag size={20} className="text-white" />
               Popular Topics
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -265,7 +265,7 @@ export default function Blog() {
                 <button
                   key={tag}
                   onClick={() => setSelectedTag(tag)}
-                  className="px-4 py-2 bg-hover rounded-xl text-xs font-bold text-text-secondary hover:bg-accent/20 hover:text-accent transition-all"
+                  className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal text-body-mid hover:bg-canvas hover:text-white transition-all"
                 >
                   #{tag}
                 </button>

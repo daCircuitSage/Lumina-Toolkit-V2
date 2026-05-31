@@ -154,17 +154,17 @@ export default function Profile() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-surface via-surface/95 to-surface flex items-center justify-center">
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-text-secondary">Loading profile...</p>
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-body-mid">Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-surface via-surface/95 to-surface">
+    <div className="min-h-screen bg-canvas">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <motion.div
@@ -172,8 +172,8 @@ export default function Profile() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl font-bold text-white mb-2">Account Settings</h1>
-          <p className="text-text-secondary">Manage your profile, security, and preferences</p>
+          <h1 className="text-4xl font-normal text-ink mb-2">Account Settings</h1>
+          <p className="text-body-mid">Manage your profile, security, and preferences</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -182,55 +182,55 @@ export default function Profile() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-gradient-to-br from-surface to-surface/50 border border-border rounded-2xl p-4"
+              className="bg-canvas-card border border-hairline rounded-sm p-4"
             >
               <nav className="space-y-2">
                 <button
                   onClick={() => setActiveSection('overview')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
                     activeSection === 'overview' 
-                      ? 'bg-accent text-black' 
-                      : 'text-text-secondary hover:bg-surface/50 hover:text-white'
+                      ? 'bg-white text-black' 
+                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
                   }`}
                 >
                   <User size={16} />
-                  <span className="text-sm font-medium">Overview</span>
+                  <span className="text-sm font-normal">Overview</span>
                 </button>
                 
                 <button
                   onClick={() => setActiveSection('personal')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
                     activeSection === 'personal' 
-                      ? 'bg-accent text-black' 
-                      : 'text-text-secondary hover:bg-surface/50 hover:text-white'
+                      ? 'bg-white text-black' 
+                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
                   }`}
                 >
                   <Edit2 size={16} />
-                  <span className="text-sm font-medium">Personal Info</span>
+                  <span className="text-sm font-normal">Personal Info</span>
                 </button>
                 
                 <button
                   onClick={() => setActiveSection('security')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
                     activeSection === 'security' 
-                      ? 'bg-accent text-black' 
-                      : 'text-text-secondary hover:bg-surface/50 hover:text-white'
+                      ? 'bg-white text-black' 
+                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
                   }`}
                 >
                   <Shield size={16} />
-                  <span className="text-sm font-medium">Security</span>
+                  <span className="text-sm font-normal">Security</span>
                 </button>
                 
                 <button
                   onClick={() => setActiveSection('email')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
                     activeSection === 'email' 
-                      ? 'bg-accent text-black' 
-                      : 'text-text-secondary hover:bg-surface/50 hover:text-white'
+                      ? 'bg-white text-black' 
+                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
                   }`}
                 >
                   <Mail size={16} />
-                  <span className="text-sm font-medium">Email Preferences</span>
+                  <span className="text-sm font-normal">Email Preferences</span>
                 </button>
               </nav>
             </motion.div>
@@ -242,14 +242,14 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-surface to-surface/50 border border-border rounded-2xl p-6"
+                className="bg-canvas-card border border-hairline rounded-sm p-6"
               >
-                <h2 className="text-2xl font-bold text-white mb-6">Profile Overview</h2>
+                <h2 className="text-2xl font-normal text-ink mb-6">Profile Overview</h2>
                 
                 {/* Profile Picture Section */}
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-accent to-accent/70 flex items-center justify-center overflow-hidden">
+                    <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center overflow-hidden">
                       {profileImage || user?.photoURL ? (
                         <img 
                           src={profileImage || user.photoURL} 
@@ -269,7 +269,7 @@ export default function Profile() {
                     />
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute bottom-2 right-2 w-10 h-10 bg-accent rounded-full flex items-center justify-center border-2 border-surface hover:bg-accent/90 transition-colors"
+                      className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full flex items-center justify-center border-2 border-canvas hover:bg-gray-100 transition-colors"
                       disabled={isUploading}
                     >
                       {isUploading ? (
@@ -283,16 +283,16 @@ export default function Profile() {
                   {/* User Info */}
                   <div className="flex-1 text-center md:text-left">
                     <div className="flex items-center gap-3 mb-4">
-                      <h3 className="text-2xl font-bold text-white">{user?.displayName}</h3>
+                      <h3 className="text-2xl font-normal text-ink">{user?.displayName}</h3>
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="p-2 text-text-secondary hover:text-white transition-colors rounded-lg hover:bg-surface/50"
+                        className="p-2 text-body-mid hover:text-ink transition-colors rounded-sm hover:bg-canvas-soft"
                       >
                         <Edit2 size={16} />
                       </button>
                     </div>
                     
-                    <div className="space-y-3 text-text-secondary">
+                    <div className="space-y-3 text-body-mid">
                       <div className="flex items-center gap-2">
                         <Mail size={16} />
                         <span>{user?.email}</span>
@@ -310,31 +310,31 @@ export default function Profile() {
 
                 {/* Quick Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <div className="flex items-center gap-2 mb-2">
-                      <User className="w-5 h-5 text-accent" />
-                      <span className="text-sm font-semibold text-white">Profile Completion</span>
+                      <User className="w-5 h-5 text-white" />
+                      <span className="text-sm font-normal text-ink">Profile Completion</span>
                     </div>
-                    <div className="text-2xl font-bold text-accent">85%</div>
-                    <p className="text-xs text-text-secondary">Profile filled out</p>
+                    <div className="text-2xl font-normal text-white">85%</div>
+                    <p className="text-xs text-body-mid">Profile filled out</p>
                   </div>
                   
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <div className="flex items-center gap-2 mb-2">
-                      <Shield className="w-5 h-5 text-green-500" />
-                      <span className="text-sm font-semibold text-white">Security Level</span>
+                      <Shield className="w-5 h-5 text-white" />
+                      <span className="text-sm font-normal text-ink">Security Level</span>
                     </div>
-                    <div className="text-2xl font-bold text-green-500">High</div>
-                    <p className="text-xs text-text-secondary">Account secured</p>
+                    <div className="text-2xl font-normal text-white">High</div>
+                    <p className="text-xs text-body-mid">Account secured</p>
                   </div>
                   
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="w-5 h-5 text-blue-500" />
-                      <span className="text-sm font-semibold text-white">Member Since</span>
+                      <Calendar className="w-5 h-5 text-white" />
+                      <span className="text-sm font-normal text-ink">Member Since</span>
                     </div>
-                    <div className="text-2xl font-bold text-blue-500">{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).getFullYear() : '2024'}</div>
-                    <p className="text-xs text-text-secondary">Years active</p>
+                    <div className="text-2xl font-normal text-white">{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).getFullYear() : '2024'}</div>
+                    <p className="text-xs text-body-mid">Years active</p>
                   </div>
                 </div>
               </motion.div>
@@ -344,43 +344,43 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-surface to-surface/50 border border-border rounded-2xl p-6"
+                className="bg-canvas-card border border-hairline rounded-sm p-6"
               >
-                <h2 className="text-2xl font-bold text-white mb-6">Personal Information</h2>
+                <h2 className="text-2xl font-normal text-ink mb-6">Personal Information</h2>
                 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-text-secondary mb-2">Display Name</label>
+                    <label className="block text-sm font-normal text-body-mid mb-2">Display Name</label>
                     <input
                       type="text"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
-                      className="w-full px-4 py-3 bg-surface/50 border border-border rounded-lg text-white focus:outline-none focus:border-accent transition-colors"
+                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors"
                       placeholder="Enter your display name"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-text-secondary mb-2">Bio</label>
+                    <label className="block text-sm font-normal text-body-mid mb-2">Bio</label>
                     <textarea
-                      className="w-full px-4 py-3 bg-surface/50 border border-border rounded-lg text-white focus:outline-none focus:border-accent transition-colors resize-none"
+                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors resize-none"
                       rows={4}
                       placeholder="Tell us about yourself..."
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-text-secondary mb-2">Location</label>
+                    <label className="block text-sm font-normal text-body-mid mb-2">Location</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-surface/50 border border-border rounded-lg text-white focus:outline-none focus:border-accent transition-colors"
+                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors"
                       placeholder="City, Country"
                     />
                   </div>
                   
                   <button
                     onClick={handleSaveProfile}
-                    className="w-full px-6 py-3 bg-accent hover:bg-accent/90 text-black font-semibold rounded-lg transition-colors"
+                    className="w-full px-6 py-3 bg-white hover:bg-gray-100 text-black font-normal rounded-sm transition-colors"
                   >
                     Save Changes
                   </button>
@@ -392,61 +392,61 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-surface to-surface/50 border border-border rounded-2xl p-6"
+                className="bg-canvas-card border border-hairline rounded-sm p-6"
               >
-                <h2 className="text-2xl font-bold text-white mb-6">Privacy & Security</h2>
+                <h2 className="text-2xl font-normal text-ink mb-6">Privacy & Security</h2>
                 
                 <div className="space-y-6">
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
-                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <Shield size={18} className="text-green-500" />
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
+                    <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
+                      <Shield size={18} className="text-white" />
                       Password Security
                     </h3>
                     <div className="space-y-3">
-                      <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-surface/50 transition-colors">
-                        <span className="text-white">Change Password</span>
-                        <ChevronRight size={16} className="text-text-secondary" />
+                      <button className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors">
+                        <span className="text-ink">Change Password</span>
+                        <ChevronRight size={16} className="text-body-mid" />
                       </button>
-                      <button className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-surface/50 transition-colors">
-                        <span className="text-white">Enable Two-Factor Authentication</span>
-                        <ChevronRight size={16} className="text-text-secondary" />
+                      <button className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors">
+                        <span className="text-ink">Enable Two-Factor Authentication</span>
+                        <ChevronRight size={16} className="text-body-mid" />
                       </button>
                     </div>
                   </div>
                   
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
-                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <User size={18} className="text-blue-500" />
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
+                    <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
+                      <User size={18} className="text-white" />
                       Privacy Settings
                     </h3>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between p-3">
-                        <span className="text-white">Profile Visibility</span>
-                        <button className="px-3 py-1 bg-accent/20 text-accent rounded-lg text-sm">Public</button>
+                        <span className="text-ink">Profile Visibility</span>
+                        <button className="px-3 py-1 bg-white/10 text-white rounded-sm text-sm">Public</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
-                        <span className="text-white">Show Email Publicly</span>
-                        <button className="px-3 py-1 bg-surface/50 text-text-secondary rounded-lg text-sm">Hidden</button>
+                        <span className="text-ink">Show Email Publicly</span>
+                        <button className="px-3 py-1 bg-canvas text-body-mid rounded-sm text-sm">Hidden</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
-                        <span className="text-white">Activity Status</span>
-                        <button className="px-3 py-1 bg-green-500/20 text-green-500 rounded-lg text-sm">Active</button>
+                        <span className="text-ink">Activity Status</span>
+                        <button className="px-3 py-1 bg-white/10 text-white rounded-sm text-sm">Active</button>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
-                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                      <Settings size={18} className="text-purple-500" />
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
+                    <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
+                      <Settings size={18} className="text-white" />
                       Data & Storage
                     </h3>
                     <div className="space-y-3">
                       <button 
                         onClick={handleDownloadData}
-                        className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-surface/50 transition-colors"
+                        className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors"
                       >
-                        <span className="text-white">Download Your Data</span>
-                        <ChevronRight size={16} className="text-text-secondary" />
+                        <span className="text-ink">Download Your Data</span>
+                        <ChevronRight size={16} className="text-body-mid" />
                       </button>
                     </div>
                   </div>
@@ -458,44 +458,44 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-surface to-surface/50 border border-border rounded-2xl p-6"
+                className="bg-canvas-card border border-hairline rounded-sm p-6"
               >
-                <h2 className="text-2xl font-bold text-white mb-6">Email Preferences</h2>
+                <h2 className="text-2xl font-normal text-ink mb-6">Email Preferences</h2>
                 
                 <div className="space-y-6">
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
-                    <h3 className="text-lg font-semibold text-white mb-4">Notification Settings</h3>
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
+                    <h3 className="text-lg font-normal text-ink mb-4">Notification Settings</h3>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between p-3">
                         <div>
-                          <span className="text-white block">Product Updates</span>
-                          <span className="text-text-secondary text-sm">New features and announcements</span>
+                          <span className="text-ink block">Product Updates</span>
+                          <span className="text-body-mid text-sm">New features and announcements</span>
                         </div>
-                        <button className="px-3 py-1 bg-accent text-black rounded-lg text-sm">Enabled</button>
+                        <button className="px-3 py-1 bg-white text-black rounded-sm text-sm">Enabled</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
                         <div>
-                          <span className="text-white block">Security Alerts</span>
-                          <span className="text-text-secondary text-sm">Important security notifications</span>
+                          <span className="text-ink block">Security Alerts</span>
+                          <span className="text-body-mid text-sm">Important security notifications</span>
                         </div>
-                        <button className="px-3 py-1 bg-accent text-black rounded-lg text-sm">Enabled</button>
+                        <button className="px-3 py-1 bg-white text-black rounded-sm text-sm">Enabled</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
                         <div>
-                          <span className="text-white block">Marketing Emails</span>
-                          <span className="text-text-secondary text-sm">Tips and promotional content</span>
+                          <span className="text-ink block">Marketing Emails</span>
+                          <span className="text-body-mid text-sm">Tips and promotional content</span>
                         </div>
-                        <button className="px-3 py-1 bg-surface/50 text-text-secondary rounded-lg text-sm">Disabled</button>
+                        <button className="px-3 py-1 bg-canvas text-body-mid rounded-sm text-sm">Disabled</button>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="bg-surface/50 rounded-xl p-4 border border-border/50">
-                    <h3 className="text-lg font-semibold text-white mb-4">Communication Preferences</h3>
+                  <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
+                    <h3 className="text-lg font-normal text-ink mb-4">Communication Preferences</h3>
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-sm font-medium text-text-secondary mb-2">Preferred Language</label>
-                        <select className="w-full px-4 py-3 bg-surface/50 border border-border rounded-lg text-white focus:outline-none focus:border-accent transition-colors">
+                        <label className="block text-sm font-normal text-body-mid mb-2">Preferred Language</label>
+                        <select className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors">
                           <option>English</option>
                           <option>Spanish</option>
                           <option>French</option>
@@ -503,8 +503,8 @@ export default function Profile() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-text-secondary mb-2">Time Zone</label>
-                        <select className="w-full px-4 py-3 bg-surface/50 border border-border rounded-lg text-white focus:outline-none focus:border-accent transition-colors">
+                        <label className="block text-sm font-normal text-body-mid mb-2">Time Zone</label>
+                        <select className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors">
                           <option>UTC-08:00 Pacific Time</option>
                           <option>UTC-05:00 Eastern Time</option>
                           <option>UTC+00:00 London</option>

@@ -44,10 +44,10 @@ interface Job {
 }
 
 const STATUS_CONFIG: Record<JobStatus, { label: string, icon: any, colors: string }> = {
-  applied: { label: 'Applied', icon: Clock, colors: 'bg-[#3ECF8E]/10 text-[#3ECF8E]' },
-  interview: { label: 'Interviewing', icon: Plus, colors: 'bg-[#3ECF8E]/20 text-[#3ECF8E] font-bold' },
+  applied: { label: 'Applied', icon: Clock, colors: 'bg-white/10 text-white' },
+  interview: { label: 'Interviewing', icon: Plus, colors: 'bg-white/20 text-white font-normal' },
   rejected: { label: 'Declined', icon: XCircle, colors: 'bg-red-500/10 text-red-400 opacity-70' },
-  offer: { label: 'Offer Received', icon: Trophy, colors: 'bg-[#3ECF8E]/20 text-[#3ECF8E] ring-2 ring-[#3ECF8E]/30 shadow-lg shadow-[#3ECF8E]/10' }
+  offer: { label: 'Offer Received', icon: Trophy, colors: 'bg-white/20 text-white' }
 };
 
 export default function JobTracker() {
@@ -242,10 +242,10 @@ export default function JobTracker() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
         <div className="relative">
-          <div className="w-8 h-8 border-2 border-[#3ECF8E] border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-[#3ECF8E]/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-white/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
         </div>
       </div>
     );
@@ -253,20 +253,20 @@ export default function JobTracker() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-[#171717] border border-[#2E2E2E] rounded-2xl p-6 sm:p-8 text-center">
-          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#3ECF8E]/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-            <User className="w-7 h-7 sm:w-8 sm:h-8 text-[#3ECF8E]" />
+      <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-canvas-card border border-hairline rounded-sm p-6 sm:p-8 text-center">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-sm flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <User className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl font-normal text-ink mb-3 sm:mb-4">
             Sign In to Job Tracker
           </h2>
-          <p className="text-sm sm:text-base text-[#A0A0A0] text-center mb-6 sm:mb-8">
+          <p className="text-sm sm:text-base text-body-mid text-center mb-6 sm:mb-8">
             Sign in with your Google account to track your job applications and keep your data synced across all your devices.
           </p>
           <button
             onClick={signIn}
-            className="w-full flex items-center justify-center gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors font-medium text-sm sm:text-base"
+            className="w-full flex items-center justify-center gap-3 px-4 sm:px-6 py-2.5 sm:py-3 bg-white hover:bg-gray-100 text-black rounded-sm transition-colors font-normal text-sm sm:text-base"
           >
             <svg className="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24">
               <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -283,41 +283,41 @@ export default function JobTracker() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
         <div className="relative">
-          <div className="w-8 h-8 border-2 border-[#3ECF8E] border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-[#3ECF8E]/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-white/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-canvas">
       {/* User info and sign-out */}
-      <div className="border-b border-[#2E2E2E] bg-black">
+      <div className="border-b border-hairline bg-canvas-card">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#3ECF8E]/10 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/10 rounded-sm flex items-center justify-center">
                 {user?.photoURL ? (
-                  <img src={user.photoURL} alt="Profile" className="w-6 h-6 sm:w-8 sm:h-8 rounded-full" />
+                  <img src={user.photoURL} alt="Profile" className="w-6 h-6 sm:w-8 sm:h-8 rounded-sm" />
                 ) : (
-                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-[#3ECF8E]" />
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-white truncate">
+                <p className="text-xs sm:text-sm font-normal text-ink truncate">
                   {user?.displayName || user?.email || 'User'}
                 </p>
-                <p className="text-xs text-[#A0A0A0] hidden sm:block">
+                <p className="text-xs text-body-mid hidden sm:block">
                   Signed in with Google
                 </p>
               </div>
             </div>
             <button
               onClick={signOut}
-              className="flex items-center gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm text-[#A0A0A0] hover:text-white transition-colors"
+              className="flex items-center gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm text-body-mid hover:text-ink transition-colors"
             >
               <LogOut className="w-3 h-3 sm:w-4 sm:h-4" />
               <span className="hidden sm:inline">Sign Out</span>
@@ -329,10 +329,10 @@ export default function JobTracker() {
       {/* Main Job Tracker Tool - Hero Section */}
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8 lg:py-12">
         <div className="text-center mb-6 sm:mb-8 lg:mb-12">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-ink mb-3 sm:mb-4">
             Job Application Tracker
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-[#A0A0A0] max-w-lg sm:max-w-xl lg:max-w-2xl mx-auto px-4">
+          <p className="text-base sm:text-lg lg:text-xl text-body-mid max-w-lg sm:max-w-xl lg:max-w-2xl mx-auto px-4">
             Track your job applications from submission to interview to offer
           </p>
         </div>
@@ -342,13 +342,13 @@ export default function JobTracker() {
           {Object.entries(STATUS_CONFIG).map(([status, config]) => {
             const count = (jobs || []).filter(job => job.status === status).length;
             return (
-              <div key={status} className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-3 sm:p-4 lg:p-6">
+              <div key={status} className="bg-canvas-card border border-hairline rounded-sm p-3 sm:p-4 lg:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs sm:text-sm text-[#A0A0A0] mb-1">{config.label}</p>
-                    <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">{count}</p>
+                    <p className="text-xs sm:text-sm text-body-mid mb-1">{config.label}</p>
+                    <p className="text-xl sm:text-2xl lg:text-3xl font-normal text-ink">{count}</p>
                   </div>
-                  <div className={cn('p-2 sm:p-3 rounded-xl', config.colors)}>
+                  <div className={cn('p-2 sm:p-3 rounded-sm', config.colors)}>
                     <config.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                   </div>
                 </div>
@@ -358,23 +358,23 @@ export default function JobTracker() {
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+        <div className="bg-canvas-card border border-hairline rounded-sm p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex flex-col gap-4">
             <div className="relative">
-              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#A0A0A0] w-4 h-4 sm:w-5 sm:h-5" />
+              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-body-mid w-4 h-4 sm:w-5 sm:h-5" />
               <input
                 type="text"
                 placeholder="Search jobs by company, role, or notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] text-sm sm:text-base"
+                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink placeholder:text-body-mid text-sm sm:text-base"
               />
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <select
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as JobStatus | 'all')}
-                className="flex-1 px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white text-sm sm:text-base"
+                className="flex-1 px-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink text-sm sm:text-base"
               >
                 <option value="all">All Status</option>
                 {Object.entries(STATUS_CONFIG).map(([status, config]) => (
@@ -383,7 +383,7 @@ export default function JobTracker() {
               </select>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors flex items-center justify-center gap-2 font-medium text-sm sm:text-base"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-white hover:bg-gray-100 text-black rounded-sm transition-colors flex items-center justify-center gap-2 font-normal text-sm sm:text-base"
               >
                 <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                 Add Job
@@ -395,19 +395,19 @@ export default function JobTracker() {
         {/* Jobs List */}
         <div className="space-y-3 sm:space-y-4">
           {sortedJobs.length === 0 ? (
-            <div className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-6 sm:p-8 lg:p-12 text-center">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-[#3ECF8E]/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-[#3ECF8E]" />
+            <div className="bg-canvas-card border border-hairline rounded-sm p-6 sm:p-8 lg:p-12 text-center">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/10 rounded-sm flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">
+              <h3 className="text-lg sm:text-xl font-normal text-ink mb-2 sm:mb-3">
                 No job applications yet
               </h3>
-              <p className="text-sm sm:text-base text-[#A0A0A0] mb-4 sm:mb-6 max-w-sm sm:max-w-md mx-auto px-4">
+              <p className="text-sm sm:text-base text-body-mid mb-4 sm:mb-6 max-w-sm sm:max-w-md mx-auto px-4">
                 Start tracking your job applications by adding your first one.
               </p>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors font-medium text-sm sm:text-base"
+                className="px-4 sm:px-6 py-2.5 sm:py-3 bg-white hover:bg-gray-100 text-black rounded-sm transition-colors font-normal text-sm sm:text-base"
               >
                 Add Your First Job
               </button>
@@ -416,7 +416,7 @@ export default function JobTracker() {
             <>
               {/* Results summary and pagination controls */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <div className="text-sm text-[#A0A0A0]">
+                <div className="text-sm text-body-mid">
                   {sortedJobs.length > 0 && (
                     <span>
                       Showing {showAllJobs ? 'all' : `${startIndex + 1}-${Math.min(endIndex, sortedJobs.length)}`} of {sortedJobs.length} jobs
@@ -426,7 +426,7 @@ export default function JobTracker() {
                 {sortedJobs.length > jobsPerPage && (
                   <button
                     onClick={toggleShowAllJobs}
-                    className="flex items-center gap-2 px-3 py-1.5 text-sm bg-[#171717] border border-[#2E2E2E] rounded-lg hover:bg-[#2E2E2E] transition-colors text-white"
+                    className="flex items-center gap-2 px-3 py-1.5 text-sm bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-colors text-ink"
                   >
                     <List className="w-3 h-3" />
                     {showAllJobs ? 'Show Paginated' : 'See All Jobs'}
@@ -441,19 +441,19 @@ export default function JobTracker() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="bg-[#171717] border border-[#2E2E2E] rounded-xl p-4 sm:p-6 hover:border-[#3ECF8E]/30 transition-all"
+                  className="bg-canvas-card border border-hairline rounded-sm p-4 sm:p-6 hover:border-white/30 transition-all"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-3">
-                        <h3 className="text-lg sm:text-xl font-semibold text-white truncate">
+                        <h3 className="text-lg sm:text-xl font-normal text-ink truncate">
                           {job.role}
                         </h3>
-                        <span className={cn('px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start sm:self-auto', STATUS_CONFIG[job.status].colors)}>
+                        <span className={cn('px-2 sm:px-3 py-1 rounded-sm text-xs sm:text-sm font-normal self-start sm:self-auto', STATUS_CONFIG[job.status].colors)}>
                           {STATUS_CONFIG[job.status].label}
                         </span>
                       </div>
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-[#A0A0A0] mb-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-body-mid mb-3">
                         <div className="flex items-center gap-2">
                           <Building2 className="w-4 h-4 flex-shrink-0" />
                           <span className="truncate">{job.company}</span>
@@ -464,7 +464,7 @@ export default function JobTracker() {
                         </div>
                       </div>
                       {job.notes && (
-                        <p className="text-sm text-[#A0A0A0] leading-relaxed line-clamp-2 sm:line-clamp-none">
+                        <p className="text-sm text-body-mid leading-relaxed line-clamp-2 sm:line-clamp-none">
                           {job.notes}
                         </p>
                       )}
@@ -472,13 +472,13 @@ export default function JobTracker() {
                     <div className="flex items-center gap-2 sm:gap-2 ml-0 sm:ml-4">
                       <button
                         onClick={() => handleEditJob(job)}
-                        className="p-2 text-[#A0A0A0] hover:text-[#3ECF8E] transition-colors rounded-lg hover:bg-[#3ECF8E]/10"
+                        className="p-2 text-body-mid hover:text-white transition-colors rounded-sm hover:bg-canvas-soft"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteJob(job.id)}
-                        className="p-2 text-[#A0A0A0] hover:text-red-400 transition-colors rounded-lg hover:bg-red-400/10"
+                        className="p-2 text-body-mid hover:text-red-400 transition-colors rounded-sm hover:bg-red-400/10"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -489,15 +489,15 @@ export default function JobTracker() {
 
               {/* Pagination controls */}
               {!showAllJobs && totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-[#2E2E2E]">
-                  <div className="text-sm text-[#A0A0A0]">
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-6 border-t border-hairline">
+                  <div className="text-sm text-body-mid">
                     Page {currentPage} of {totalPages}
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handlePrevPage}
                       disabled={currentPage === 1}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-[#171717] border border-[#2E2E2E] rounded-lg hover:bg-[#2E2E2E] transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-colors text-ink disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="w-3 h-3" />
                       Previous
@@ -521,10 +521,10 @@ export default function JobTracker() {
                           <button
                             key={pageNum}
                             onClick={() => handlePageChange(pageNum)}
-                            className={`w-8 h-8 text-sm rounded-lg transition-colors ${
+                            className={`w-8 h-8 text-sm rounded-sm transition-colors ${
                               currentPage === pageNum
-                                ? 'bg-[#3ECF8E] text-black font-medium'
-                                : 'bg-[#171717] border border-[#2E2E2E] text-white hover:bg-[#2E2E2E]'
+                                ? 'bg-white text-black font-normal'
+                                : 'bg-canvas-soft border border-hairline text-ink hover:bg-canvas'
                             }`}
                           >
                             {pageNum}
@@ -536,7 +536,7 @@ export default function JobTracker() {
                     <button
                       onClick={handleNextPage}
                       disabled={currentPage === totalPages}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-[#171717] border border-[#2E2E2E] rounded-lg hover:bg-[#2E2E2E] transition-colors text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-1 px-3 py-1.5 text-sm bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-colors text-ink disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Next
                       <ChevronRight className="w-3 h-3" />
@@ -563,16 +563,16 @@ export default function JobTracker() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-[#171717] border border-[#2E2E2E] rounded-2xl shadow-2xl max-w-md w-full mx-4 sm:mx-auto max-h-[90vh] overflow-y-auto p-4 sm:p-6"
+              className="bg-canvas-card border border-hairline rounded-sm max-w-md w-full mx-4 sm:mx-auto max-h-[90vh] overflow-y-auto p-4 sm:p-6"
               onClick={(e) => e.stopPropagation()}
             >
-              <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl font-normal text-ink mb-4 sm:mb-6">
                 {editingJob ? 'Edit Job Application' : 'Add Job Application'}
               </h2>
               
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
+                  <label className="block text-sm font-normal text-ink mb-2">
                     Company *
                   </label>
                   <input
@@ -580,12 +580,12 @@ export default function JobTracker() {
                     required
                     value={formData.company || ''}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] text-sm sm:text-base"
+                    className="w-full px-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink placeholder:text-body-mid text-sm sm:text-base"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
+                  <label className="block text-sm font-normal text-ink mb-2">
                     Role *
                   </label>
                   <input
@@ -593,19 +593,19 @@ export default function JobTracker() {
                     required
                     value={formData.role || ''}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] text-sm sm:text-base"
+                    className="w-full px-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink placeholder:text-body-mid text-sm sm:text-base"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
+                  <label className="block text-sm font-normal text-ink mb-2">
                     Status *
                   </label>
                   <select
                     required
                     value={formData.status || 'applied'}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as JobStatus })}
-                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white text-sm sm:text-base"
+                    className="w-full px-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink text-sm sm:text-base"
                   >
                     {Object.entries(STATUS_CONFIG).map(([status, config]) => (
                       <option key={status} value={status}>{config.label}</option>
@@ -614,7 +614,7 @@ export default function JobTracker() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
+                  <label className="block text-sm font-normal text-ink mb-2">
                     Date *
                   </label>
                   <input
@@ -622,26 +622,26 @@ export default function JobTracker() {
                     required
                     value={formData.date || ''}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white text-sm sm:text-base"
+                    className="w-full px-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink text-sm sm:text-base"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-white mb-2">
+                  <label className="block text-sm font-normal text-ink mb-2">
                     Notes
                   </label>
                   <textarea
                     rows={3}
                     value={formData.notes || ''}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-4 py-2.5 sm:py-3 bg-black border border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#3ECF8E] focus:border-transparent text-white placeholder-[#A0A0A0] resize-none text-sm sm:text-base"
+                    className="w-full px-4 py-2.5 sm:py-3 bg-canvas border border-hairline rounded-sm focus:ring-2 focus:ring-white/20 focus:border-transparent text-ink placeholder:text-body-mid resize-none text-sm sm:text-base"
                   />
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
                     type="submit"
-                    className="flex-1 px-4 py-2.5 sm:py-3 bg-[#3ECF8E] hover:bg-[#3ECF8E]/90 text-black rounded-xl transition-colors font-medium text-sm sm:text-base"
+                    className="flex-1 px-4 py-2.5 sm:py-3 bg-white hover:bg-gray-100 text-black rounded-sm transition-colors font-normal text-sm sm:text-base"
                   >
                     {editingJob ? 'Update Job' : 'Add Job'}
                   </button>
@@ -658,7 +658,7 @@ export default function JobTracker() {
                         notes: ''
                       });
                     }}
-                    className="flex-1 px-4 py-2.5 sm:py-3 bg-[#2E2E2E] hover:bg-[#3A3A3A] text-white rounded-xl transition-colors font-medium text-sm sm:text-base"
+                    className="flex-1 px-4 py-2.5 sm:py-3 bg-canvas-soft hover:bg-canvas text-ink rounded-sm transition-colors font-normal text-sm sm:text-base"
                   >
                     Cancel
                   </button>

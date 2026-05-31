@@ -321,25 +321,25 @@ export default function AtsChecker() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-canvas">
       <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
         <header className="mb-8 md:mb-10 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-white/10 text-white text-[10px] font-normal uppercase tracking-widest mb-4">
             <Brain size={12} /> AI-Powered Analysis
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white tracking-tighter">Production-Grade ATS Checker</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">Advanced semantic analysis with Mistral AI for accurate resume evaluation.</p>
+          <h1 className="text-2xl md:text-3xl font-normal text-ink tracking-tighter">Production-Grade ATS Checker</h1>
+          <p className="text-body-mid mt-2 text-sm">Advanced semantic analysis with Mistral AI for accurate resume evaluation.</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           <div className="space-y-8">
             <div className="space-y-4">
-              <label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center justify-between gap-2 px-1">
-                <span className="flex items-center gap-2"><FileText size={16} className="text-emerald-500" /> Resume Source</span>
+              <label className="text-[10px] md:text-xs font-normal uppercase tracking-widest text-body-mid flex items-center justify-between gap-2 px-1">
+                <span className="flex items-center gap-2"><FileText size={16} className="text-white" /> Resume Source</span>
                 {resume && (
                   <button 
                     onClick={() => { setResume(''); setFileName(null); }}
-                    className="text-rose-500 hover:text-rose-600 transition-colors flex items-center gap-1 font-black text-[10px] uppercase tracking-widest"
+                    className="text-rose-500 hover:text-rose-600 transition-colors flex items-center gap-1 font-normal text-[10px] uppercase tracking-widest"
                   >
                     <X size={14} /> Clear Content
                   </button>
@@ -349,7 +349,7 @@ export default function AtsChecker() {
               {!resume ? (
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="group relative min-h-[220px] md:h-80 bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl flex flex-col items-center justify-center p-8 text-center cursor-pointer hover:border-emerald-500/50 hover:bg-emerald-50/10 dark:hover:bg-emerald-500/5 transition-all shadow-sm"
+                  className="group relative min-h-[220px] md:h-80 bg-canvas-card border-2 border-dashed border-hairline rounded-sm flex flex-col items-center justify-center p-8 text-center cursor-pointer hover:border-white/30 hover:bg-canvas-soft transition-all"
                 >
                   <input 
                     type="file" 
@@ -358,13 +358,13 @@ export default function AtsChecker() {
                     accept=".pdf,.docx"
                     className="hidden" 
                   />
-                  <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800 rounded-3xl flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:scale-110 transition-all mb-6">
+                  <div className="w-20 h-20 bg-canvas-soft rounded-sm flex items-center justify-center text-body-mid group-hover:text-white group-hover:scale-110 transition-all mb-6">
                     {isExtracting ? <Loader2 size={36} className="animate-spin" /> : <Upload size={36} />}
                   </div>
-                  <h4 className="text-base md:text-lg font-black text-slate-900 dark:text-white mb-2">
+                  <h4 className="text-base md:text-lg font-normal text-ink mb-2">
                     {isExtracting ? 'Extracting text...' : 'Upload Resume'}
                   </h4>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 max-w-[240px] leading-relaxed">Select PDF or DOCX file. All data is processed locally in your browser.</p>
+                  <p className="text-xs text-body-mid max-w-[240px] leading-relaxed">Select PDF or DOCX file. All data is processed locally in your browser.</p>
                 </div>
               ) : (
                 <div className="relative group">
@@ -372,15 +372,15 @@ export default function AtsChecker() {
                     value={resume}
                     onChange={(e) => setResume(e.target.value)}
                     placeholder="Paste or edit your resume text here..."
-                    className={`w-full h-64 md:h-80 px-6 py-6 bg-white dark:bg-slate-900 border rounded-3xl text-sm focus:outline-none focus:ring-8 transition-all resize-none dark:text-white leading-relaxed font-medium ${
+                    className={`w-full h-64 md:h-80 px-6 py-6 bg-canvas border rounded-sm text-sm focus:outline-none focus:ring-8 transition-all resize-none text-ink leading-relaxed font-normal ${
                       validationErrors.resume 
                         ? 'border-rose-500 focus:ring-rose-500/5 focus:border-rose-500' 
-                        : 'border-slate-200 dark:border-slate-800 focus:ring-emerald-500/5 focus:border-emerald-500'
+                        : 'border-hairline focus:ring-white/20 focus:border-white'
                     }`}
                   />
                   {validationErrors.resume && (
-                    <div className="mt-2 px-3 py-2 bg-rose-50 dark:bg-rose-900/20 rounded-xl">
-                      <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">{validationErrors.resume}</p>
+                    <div className="mt-2 px-3 py-2 bg-rose-500/10 rounded-sm">
+                      <p className="text-xs text-rose-400 font-normal">{validationErrors.resume}</p>
                     </div>
                   )}
                 </div>
@@ -389,18 +389,18 @@ export default function AtsChecker() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-2 px-1">
-                  <Search size={16} className="text-emerald-500" /> Job Description
+                <label className="text-[10px] md:text-xs font-normal uppercase tracking-widest text-body-mid flex items-center gap-2 px-1">
+                  <Search size={16} className="text-white" /> Job Description
                 </label>
                 <div className="flex items-center gap-2">
-                  <label className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                  <label className="flex items-center gap-2 text-xs text-body-mid">
                     <input
                       type="checkbox"
                       checked={useAI}
                       onChange={(e) => setUseAI(e.target.checked)}
-                      className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                      className="rounded border-hairline text-white focus:ring-white/20"
                     />
-                    <span className="font-medium">Enable AI Analysis</span>
+                    <span className="font-normal">Enable AI Analysis</span>
                   </label>
                 </div>
               </div>
@@ -408,21 +408,21 @@ export default function AtsChecker() {
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
                 placeholder="Paste the target job description for semantic analysis and skill matching..."
-                className={`w-full h-40 md:h-48 px-6 py-6 bg-white dark:bg-slate-900 border rounded-3xl text-sm focus:outline-none focus:ring-8 transition-all resize-none dark:text-white leading-relaxed font-medium ${
+                className={`w-full h-40 md:h-48 px-6 py-6 bg-canvas border rounded-sm text-sm focus:outline-none focus:ring-8 transition-all resize-none text-ink leading-relaxed font-normal ${
                   validationErrors.jobDescription 
                     ? 'border-rose-500 focus:ring-rose-500/5 focus:border-rose-500' 
-                    : 'border-slate-200 dark:border-slate-800 focus:ring-emerald-500/5 focus:border-emerald-500'
+                    : 'border-hairline focus:ring-white/20 focus:border-white'
                 }`}
               />
               {validationErrors.jobDescription && (
-                <div className="mt-2 px-3 py-2 bg-rose-50 dark:bg-rose-900/20 rounded-xl">
-                  <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">{validationErrors.jobDescription}</p>
+                <div className="mt-2 px-3 py-2 bg-rose-500/10 rounded-sm">
+                  <p className="text-xs text-rose-400 font-normal">{validationErrors.jobDescription}</p>
                 </div>
               )}
               {useAI && (
-                <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl">
-                  <Brain size={14} className="text-emerald-600 dark:text-emerald-400" />
-                  <span className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">
+                <div className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-sm">
+                  <Brain size={14} className="text-white" />
+                  <span className="text-xs text-white font-normal">
                     AI-powered semantic analysis enabled for deeper insights
                   </span>
                 </div>
@@ -432,10 +432,9 @@ export default function AtsChecker() {
             <button 
               onClick={handleAnalyze}
               disabled={isAnalyzing || !resume}
-              className="w-full h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[20px] font-black uppercase tracking-[3px] text-xs hover:opacity-95 active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/10 group overflow-hidden relative"
+              className="w-full h-16 bg-white hover:bg-gray-100 text-black rounded-sm font-normal uppercase tracking-[3px] text-xs active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
             >
-              <div className="absolute inset-0 bg-emerald-600 translate-y-full group-hover:translate-y-0 transition-transform" />
-              <span className="relative z-10 flex items-center gap-2 group-hover:text-white transition-colors">
+              <span className="flex items-center gap-2">
                 {isAnalyzing ? <Loader2 size={20} className="animate-spin" /> : <Target size={20} className="fill-current" />}
                 {isAnalyzing ? 'Analyzing...' : 'Start Analysis'}
               </span>
@@ -444,12 +443,12 @@ export default function AtsChecker() {
 
           <div className="relative min-h-[400px]">
             {error && (
-              <div className="mb-6 p-4 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-2xl">
+              <div className="mb-6 p-4 bg-rose-500/10 border border-rose-500/30 rounded-sm">
                 <div className="flex items-center gap-3">
-                  <AlertCircle size={20} className="text-rose-600 dark:text-rose-400" />
+                  <AlertCircle size={20} className="text-rose-400" />
                   <div>
-                    <h4 className="text-sm font-bold text-rose-900 dark:text-rose-100">Analysis Error</h4>
-                    <p className="text-xs text-rose-700 dark:text-rose-300 mt-1">{error}</p>
+                    <h4 className="text-sm font-normal text-ink">Analysis Error</h4>
+                    <p className="text-xs text-rose-400 mt-1">{error}</p>
                   </div>
                 </div>
               </div>
@@ -460,13 +459,13 @@ export default function AtsChecker() {
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="h-full min-h-[400px] flex flex-col items-center justify-center text-center p-8 md:p-12 border-4 border-dashed border-slate-100 dark:border-slate-800/50 rounded-[48px] bg-slate-50/50 dark:bg-transparent"
+                  className="h-full min-h-[400px] flex flex-col items-center justify-center text-center p-8 md:p-12 border-4 border-dashed border-hairline rounded-sm bg-canvas-soft"
                 >
-                  <div className="w-24 h-24 bg-white dark:bg-slate-900 rounded-[32px] flex items-center justify-center text-slate-200 dark:text-slate-800 mb-8 shadow-sm">
+                  <div className="w-24 h-24 bg-canvas-card rounded-sm flex items-center justify-center text-body-mid mb-8">
                     <Brain size={48} />
                   </div>
-                  <h3 className="text-xl font-black text-slate-400 dark:text-slate-700 uppercase tracking-[4px]">AI-Powered Analysis</h3>
-                  <p className="text-slate-400 dark:text-slate-600 text-sm mt-3 font-medium max-w-[280px] leading-relaxed">Upload your resume for production-grade ATS evaluation with semantic understanding.</p>
+                  <h3 className="text-xl font-normal text-body-mid uppercase tracking-[4px]">AI-Powered Analysis</h3>
+                  <p className="text-body-mid text-sm mt-3 font-normal max-w-[280px] leading-relaxed">Upload your resume for production-grade ATS evaluation with semantic understanding.</p>
                 </motion.div>
               )}
 
@@ -474,32 +473,32 @@ export default function AtsChecker() {
                 <motion.div 
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="h-full min-h-[400px] flex flex-col items-center justify-center text-center p-12 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[48px] shadow-2xl shadow-emerald-500/5"
+                  className="h-full min-h-[400px] flex flex-col items-center justify-center text-center p-12 bg-canvas-card border border-hairline rounded-sm"
                 >
                   <div className="relative w-28 h-28 mb-8">
-                    <div className="absolute inset-0 border-4 border-emerald-50 dark:border-emerald-900/10 rounded-full" />
+                    <div className="absolute inset-0 border-4 border-canvas-soft rounded-full" />
                     <div 
-                      className="absolute inset-0 border-4 border-emerald-500 rounded-full border-t-transparent transition-all duration-500"
+                      className="absolute inset-0 border-4 border-white rounded-full border-t-transparent transition-all duration-500"
                       style={{ 
                         borderRightColor: analysisProgress.progress >= 100 ? '#10b981' : '#e5e7eb',
                         borderBottomColor: analysisProgress.progress >= 100 ? '#10b981' : '#e5e7eb',
                         borderLeftColor: analysisProgress.progress >= 100 ? '#10b981' : '#e5e7eb'
                       }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center text-emerald-500">
+                    <div className="absolute inset-0 flex items-center justify-center text-white">
                       <Brain size={40} className="animate-pulse" />
                     </div>
                     <div className="absolute -bottom-2 left-0 right-0 text-center">
-                      <span className="text-xs font-black text-emerald-600">{analysisProgress.progress}%</span>
+                      <span className="text-xs font-normal text-white">{analysisProgress.progress}%</span>
                     </div>
                   </div>
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-[4px] mb-4">Production Analysis</h3>
+                  <h3 className="text-xl font-normal text-ink uppercase tracking-[4px] mb-4">Production Analysis</h3>
                   <div className="space-y-2">
-                    <p className="text-emerald-500 text-xs font-black uppercase tracking-widest">{useAI ? 'AI-Powered Analysis' : 'Advanced Analysis'}</p>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm font-bold mb-2">
+                    <p className="text-white text-xs font-normal uppercase tracking-widest">{useAI ? 'AI-Powered Analysis' : 'Advanced Analysis'}</p>
+                    <p className="text-body-mid text-sm font-normal mb-2">
                       {analysisProgress.step}
                     </p>
-                    <p className="text-slate-400 dark:text-slate-600 text-xs uppercase tracking-widest max-w-[300px]">
+                    <p className="text-body-mid text-xs uppercase tracking-widest max-w-[300px]">
                       {analysisProgress.message}
                     </p>
                   </div>
@@ -512,7 +511,7 @@ export default function AtsChecker() {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6 md:space-y-8"
                 >
-                  <div className="p-8 md:p-12 bg-white dark:bg-slate-900 rounded-[48px] border border-slate-100 dark:border-slate-800 shadow-xl relative overflow-hidden">
+                  <div className="p-8 md:p-12 bg-canvas-card rounded-sm border border-hairline relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none hidden lg:block">
                       <Brain size={200} />
                     </div>
@@ -520,32 +519,32 @@ export default function AtsChecker() {
                     <div className="flex flex-col items-center gap-8 mb-12">
                       <div className="relative w-32 h-32 md:w-36 md:h-36 flex items-center justify-center shrink-0">
                         <svg className="w-full h-full -rotate-90">
-                          <circle cx="64" cy="64" r="60" fill="none" stroke="currentColor" strokeWidth="8" className="text-slate-100 dark:text-slate-800" />
-                          <circle cx="64" cy="64" r="60" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray={377} strokeDashoffset={377 - (377 * result.score.overallScore) / 100} className="text-emerald-500 transition-all duration-1000 ease-out" />
+                          <circle cx="64" cy="64" r="60" fill="none" stroke="currentColor" strokeWidth="8" className="text-canvas-soft" />
+                          <circle cx="64" cy="64" r="60" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray={377} strokeDashoffset={377 - (377 * result.score.overallScore) / 100} className="text-white transition-all duration-1000 ease-out" />
                         </svg>
                         <div className="absolute flex flex-col items-center">
-                          <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-widest">{result.score.overallScore}%</span>
-                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Grade {result.score.grade}</span>
+                          <span className="text-3xl md:text-4xl font-normal text-ink tracking-widest">{result.score.overallScore}%</span>
+                          <span className="text-[10px] font-normal uppercase tracking-widest text-body-mid">Grade {result.score.grade}</span>
                         </div>
                       </div>
                       
                       <div className="text-center">
-                        <h4 className="text-[11px] font-black uppercase tracking-[5px] text-emerald-500 mb-4">Production-Grade Analysis</h4>
+                        <h4 className="text-[11px] font-normal uppercase tracking-[5px] text-white mb-4">Production-Grade Analysis</h4>
                         <div className="flex items-center justify-center gap-4 mb-4">
-                          <div className="flex items-center gap-2 px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 rounded-full">
-                            <Brain size={12} className="text-emerald-600 dark:text-emerald-400" />
-                            <span className="text-xs font-black text-emerald-700 dark:text-emerald-300">
+                          <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-sm">
+                            <Brain size={12} className="text-white" />
+                            <span className="text-xs font-normal text-white">
                               {result.mistralAnalysis.confidence > 0.7 ? 'AI Analysis' : 'Basic Analysis'}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-full">
-                            <TrendingUp size={12} className="text-slate-600 dark:text-slate-400" />
-                            <span className="text-xs font-black text-slate-700 dark:text-slate-300">
+                          <div className="flex items-center gap-2 px-3 py-1 bg-canvas-soft rounded-sm">
+                            <TrendingUp size={12} className="text-body-mid" />
+                            <span className="text-xs font-normal text-body-mid">
                               {result.processingTime}ms
                             </span>
                           </div>
                         </div>
-                        <p className="text-sm md:text-base font-bold text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+                        <p className="text-sm md:text-base font-normal text-body-mid max-w-sm leading-relaxed">
                           {result.score.recommendations.critical.length > 0 
                             ? `${result.score.recommendations.critical.length} critical issues found`
                             : 'Strong alignment with job requirements'
@@ -553,33 +552,33 @@ export default function AtsChecker() {
                         </p>
                       </div>
                       
-                      <div className="w-full p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
-                        <h5 className="text-[10px] font-black uppercase tracking-[3px] text-slate-500 dark:text-slate-400 mb-4">Scoring Breakdown</h5>
+                      <div className="w-full p-6 bg-canvas-soft rounded-sm border border-hairline">
+                        <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-body-mid mb-4">Scoring Breakdown</h5>
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Keyword Match</span>
-                            <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">{Math.round(result.score.factors.keywordMatch.score)}%</span>
+                            <span className="text-xs font-normal text-body-mid">Keyword Match</span>
+                            <span className="text-xs font-normal text-white">{Math.round(result.score.factors.keywordMatch.score)}%</span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Experience Relevance</span>
-                            <span className="text-xs font-black text-blue-600 dark:text-blue-400">{Math.round(result.score.factors.experienceRelevance.score)}%</span>
+                            <span className="text-xs font-normal text-body-mid">Experience Relevance</span>
+                            <span className="text-xs font-normal text-white">{Math.round(result.score.factors.experienceRelevance.score)}%</span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Semantic Alignment</span>
-                            <span className="text-xs font-black text-purple-600 dark:text-purple-400">{Math.round(result.score.factors.semanticAlignment.score)}%</span>
+                            <span className="text-xs font-normal text-body-mid">Semantic Alignment</span>
+                            <span className="text-xs font-normal text-white">{Math.round(result.score.factors.semanticAlignment.score)}%</span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Content Quality</span>
-                            <span className="text-xs font-black text-amber-600 dark:text-amber-400">{Math.round(result.score.factors.contentQuality.score)}%</span>
+                            <span className="text-xs font-normal text-body-mid">Content Quality</span>
+                            <span className="text-xs font-normal text-white">{Math.round(result.score.factors.contentQuality.score)}%</span>
                           </div>
                           <div className="flex justify-between items-center">
-                            <span className="text-xs font-medium text-slate-600 dark:text-slate-300">Formatting</span>
-                            <span className="text-xs font-black text-cyan-600 dark:text-cyan-400">{Math.round(result.score.factors.formattingCompatibility.score)}%</span>
+                            <span className="text-xs font-normal text-body-mid">Formatting</span>
+                            <span className="text-xs font-normal text-white">{Math.round(result.score.factors.formattingCompatibility.score)}%</span>
                           </div>
-                          <div className="h-px bg-slate-200 dark:bg-slate-600 my-3" />
+                          <div className="h-px bg-hairline my-3" />
                           <div className="flex justify-between items-center">
-                            <span className="text-xs font-black text-slate-700 dark:text-slate-200">Final Score</span>
-                            <span className="text-sm font-black text-slate-900 dark:text-white">{result.score.overallScore}%</span>
+                            <span className="text-xs font-normal text-ink">Final Score</span>
+                            <span className="text-sm font-normal text-ink">{result.score.overallScore}%</span>
                           </div>
                         </div>
                       </div>
@@ -587,13 +586,13 @@ export default function AtsChecker() {
 
                     <div className="grid grid-cols-1 gap-6">
                       {result.score.factors.keywordMatch.directMatches.length > 0 && (
-                        <div className="p-6 md:p-8 bg-emerald-50/50 dark:bg-emerald-900/10 rounded-[32px] border border-emerald-100 dark:border-emerald-900/20">
-                          <h5 className="text-[10px] font-black uppercase tracking-[3px] text-emerald-600 dark:text-emerald-400 mb-5 flex items-center gap-3">
+                        <div className="p-6 md:p-8 bg-emerald-500/10 rounded-sm border border-emerald-500/30">
+                          <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-emerald-400 mb-5 flex items-center gap-3">
                             <CheckCircle2 size={16} /> Direct Keyword Matches
                           </h5>
                           <div className="flex flex-wrap gap-2.5">
                             {result.score.factors.keywordMatch.directMatches.slice(0, 12).map((kw: string, i: number) => (
-                              <span key={i} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-white dark:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 border border-emerald-100 dark:border-emerald-900/30 shadow-sm">
+                              <span key={i} className="text-[10px] font-normal uppercase tracking-widest px-4 py-2 bg-canvas-card rounded-sm text-ink border border-emerald-500/30">
                                 {kw}
                               </span>
                             ))}
@@ -602,13 +601,13 @@ export default function AtsChecker() {
                       )}
                       
                       {result.score.factors.keywordMatch.semanticMatches.length > 0 && (
-                        <div className="p-6 md:p-8 bg-blue-50/50 dark:bg-blue-900/10 rounded-[32px] border border-blue-100 dark:border-blue-900/20">
-                          <h5 className="text-[10px] font-black uppercase tracking-[3px] text-blue-600 dark:text-blue-400 mb-5 flex items-center gap-3">
+                        <div className="p-6 md:p-8 bg-blue-500/10 rounded-sm border border-blue-500/30">
+                          <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-blue-400 mb-5 flex items-center gap-3">
                             <Brain size={16} /> Semantic Matches
                           </h5>
                           <div className="flex flex-wrap gap-2.5">
                             {result.score.factors.keywordMatch.semanticMatches.slice(0, 8).map((kw: string, i: number) => (
-                              <span key={i} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-white dark:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 border border-blue-100 dark:border-blue-900/30 shadow-sm">
+                              <span key={i} className="text-[10px] font-normal uppercase tracking-widest px-4 py-2 bg-canvas-card rounded-sm text-ink border border-blue-500/30">
                                 {kw}
                               </span>
                             ))}
@@ -617,13 +616,13 @@ export default function AtsChecker() {
                       )}
                       
                       {result.score.factors.keywordMatch.missingCritical.length > 0 && (
-                        <div className="p-6 md:p-8 bg-rose-50/50 dark:bg-rose-900/10 rounded-[32px] border border-rose-100 dark:border-rose-900/20">
-                          <h5 className="text-[10px] font-black uppercase tracking-[3px] text-rose-600 dark:text-rose-400 mb-5 flex items-center gap-3">
+                        <div className="p-6 md:p-8 bg-rose-500/10 rounded-sm border border-rose-500/30">
+                          <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-rose-400 mb-5 flex items-center gap-3">
                             <AlertCircle size={16} /> Missing Critical Skills
                           </h5>
                           <div className="flex flex-wrap gap-2.5">
                             {result.score.factors.keywordMatch.missingCritical.slice(0, 8).map((kw: string, i: number) => (
-                              <span key={i} className="text-[10px] font-black uppercase tracking-widest px-4 py-2 bg-white dark:bg-slate-800 rounded-xl text-slate-700 dark:text-slate-300 border border-rose-100 dark:border-rose-900/30 shadow-sm">
+                              <span key={i} className="text-[10px] font-normal uppercase tracking-widest px-4 py-2 bg-canvas-card rounded-sm text-ink border border-rose-500/30">
                                 {kw}
                               </span>
                             ))}
@@ -633,21 +632,20 @@ export default function AtsChecker() {
                     </div>
                   </div>
 
-                  <div className="p-8 md:p-12 bg-slate-900 dark:bg-slate-100 rounded-[48px] shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 left-0 w-full h-full bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors" />
-                    <h4 className="text-[10px] font-black uppercase tracking-[5px] text-slate-400 dark:text-slate-500 mb-8 flex items-center gap-3 relative z-10">
-                      <Target size={18} className="text-emerald-500" /> Intelligent Recommendations
+                  <div className="p-8 md:p-12 bg-canvas-card rounded-sm relative overflow-hidden group">
+                    <h4 className="text-[10px] font-normal uppercase tracking-[5px] text-body-mid mb-8 flex items-center gap-3 relative z-10">
+                      <Target size={18} className="text-white" /> Intelligent Recommendations
                     </h4>
                     <div className="space-y-6 relative z-10">
                       {result.score.recommendations.critical.length > 0 && (
                         <div>
-                          <h5 className="text-[10px] font-black uppercase tracking-[3px] text-rose-400 mb-4">Critical Issues</h5>
+                          <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-rose-400 mb-4">Critical Issues</h5>
                           {result.score.recommendations.critical.map((tip: string, i: number) => (
                             <div key={i} className="flex gap-6 items-start group/tip mb-4">
-                              <span className="flex-shrink-0 w-8 h-8 rounded-2xl bg-rose-500/20 text-rose-400 text-[12px] font-black flex items-center justify-center group-hover/tip:scale-110 transition-transform">
+                              <span className="flex-shrink-0 w-8 h-8 rounded-sm bg-rose-500/20 text-rose-400 text-[12px] font-normal flex items-center justify-center group-hover/tip:scale-110 transition-transform">
                                 C{i + 1}
                               </span>
-                              <p className="text-sm text-slate-300 dark:text-slate-600 font-bold leading-relaxed pt-1 flex-1">
+                              <p className="text-sm text-body-mid font-normal leading-relaxed pt-1 flex-1">
                                 {tip}
                               </p>
                             </div>
@@ -657,13 +655,13 @@ export default function AtsChecker() {
                       
                       {result.score.recommendations.important.length > 0 && (
                         <div>
-                          <h5 className="text-[10px] font-black uppercase tracking-[3px] text-amber-400 mb-4">Important Improvements</h5>
+                          <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-amber-400 mb-4">Important Improvements</h5>
                           {result.score.recommendations.important.map((tip: string, i: number) => (
                             <div key={i} className="flex gap-6 items-start group/tip mb-4">
-                              <span className="flex-shrink-0 w-8 h-8 rounded-2xl bg-amber-500/20 text-amber-400 text-[12px] font-black flex items-center justify-center group-hover/tip:scale-110 transition-transform">
+                              <span className="flex-shrink-0 w-8 h-8 rounded-sm bg-amber-500/20 text-amber-400 text-[12px] font-normal flex items-center justify-center group-hover/tip:scale-110 transition-transform">
                                 I{i + 1}
                               </span>
-                              <p className="text-sm text-slate-300 dark:text-slate-600 font-bold leading-relaxed pt-1 flex-1">
+                              <p className="text-sm text-body-mid font-normal leading-relaxed pt-1 flex-1">
                                 {tip}
                               </p>
                             </div>
@@ -673,13 +671,13 @@ export default function AtsChecker() {
                       
                       {result.score.recommendations.suggested.length > 0 && (
                         <div>
-                          <h5 className="text-[10px] font-black uppercase tracking-[3px] text-emerald-400 mb-4">Suggested Enhancements</h5>
+                          <h5 className="text-[10px] font-normal uppercase tracking-[3px] text-emerald-400 mb-4">Suggested Enhancements</h5>
                           {result.score.recommendations.suggested.slice(0, 4).map((tip: string, i: number) => (
                             <div key={i} className="flex gap-6 items-start group/tip mb-4">
-                              <span className="flex-shrink-0 w-8 h-8 rounded-2xl bg-emerald-500/20 text-emerald-400 text-[12px] font-black flex items-center justify-center group-hover/tip:scale-110 transition-transform">
+                              <span className="flex-shrink-0 w-8 h-8 rounded-sm bg-emerald-500/20 text-emerald-400 text-[12px] font-normal flex items-center justify-center group-hover/tip:scale-110 transition-transform">
                                 S{i + 1}
                               </span>
-                              <p className="text-sm text-slate-300 dark:text-slate-600 font-bold leading-relaxed pt-1 flex-1">
+                              <p className="text-sm text-body-mid font-normal leading-relaxed pt-1 flex-1">
                                 {tip}
                               </p>
                             </div>

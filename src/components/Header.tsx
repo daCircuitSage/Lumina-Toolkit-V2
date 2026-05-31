@@ -45,14 +45,14 @@ export default function Header({ title, subtitle }: HeaderProps) {
   };
 
   return (
-    <header className="border-b border-border bg-surface">
+    <header className="border-b border-hairline bg-canvas">
       <div className="px-6 py-4">
         <Breadcrumbs items={getBreadcrumbItems()} />
         {title && (
           <div className="mt-2">
-            <h1 className="text-2xl font-bold text-white">{title}</h1>
+            <h1 className="text-2xl font-normal text-ink">{title}</h1>
             {subtitle && (
-              <p className="text-text-secondary mt-1">{subtitle}</p>
+              <p className="text-body-mid mt-1">{subtitle}</p>
             )}
           </div>
         )}

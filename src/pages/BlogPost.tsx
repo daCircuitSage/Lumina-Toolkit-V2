@@ -25,9 +25,9 @@ export default function BlogPost() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <BookOpen size={64} className="text-text-secondary mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white mb-2">Article not found</h1>
-          <Link to="/blog" className="text-accent hover:underline">Back to Blog</Link>
+          <BookOpen size={64} className="text-body-mid mx-auto mb-4" />
+          <h1 className="text-2xl font-normal text-ink mb-2">Article not found</h1>
+          <Link to="/blog" className="text-white hover:underline">Back to Blog</Link>
         </div>
       </div>
     );
@@ -98,7 +98,7 @@ export default function BlogPost() {
       
       {/* Article Header */}
       <article className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-accent/10 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-canvas-soft pointer-events-none" />
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           {/* Back Button */}
@@ -106,10 +106,10 @@ export default function BlogPost() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-text-secondary hover:text-white mb-8 transition-colors"
+            className="flex items-center gap-2 text-body-mid hover:text-ink mb-8 transition-colors"
           >
             <ArrowLeft size={20} />
-            <span className="text-sm font-bold">Back to Blog</span>
+            <span className="text-sm font-normal">Back to Blog</span>
           </motion.button>
           
           {/* Meta Information */}
@@ -120,10 +120,10 @@ export default function BlogPost() {
             className="mb-8"
           >
             <div className="flex flex-wrap items-center gap-4 mb-6">
-              <span className="px-4 py-2 bg-accent/20 text-accent rounded-full text-xs font-black uppercase tracking-wider">
+              <span className="px-4 py-2 bg-white/10 text-white rounded-sm text-xs font-normal uppercase tracking-wider">
                 {post.category}
               </span>
-              <div className="flex items-center gap-2 text-sm font-bold text-text-secondary">
+              <div className="flex items-center gap-2 text-sm font-normal text-body-mid">
                 <Calendar size={16} />
                 {new Date(post.publishedAt).toLocaleDateString('en-US', { 
                   month: 'long', 
@@ -131,34 +131,34 @@ export default function BlogPost() {
                   year: 'numeric' 
                 })}
               </div>
-              <div className="flex items-center gap-2 text-sm font-bold text-text-secondary">
+              <div className="flex items-center gap-2 text-sm font-normal text-body-mid">
                 <Clock size={16} />
                 {post.readingTime} min read
               </div>
             </div>
             
-            <h1 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
+            <h1 className="text-3xl md:text-5xl font-normal text-ink mb-6 leading-tight">
               {post.title}
             </h1>
             
-            <p className="text-lg text-text-secondary mb-6 leading-relaxed">
+            <p className="text-lg text-body-mid mb-6 leading-relaxed">
               {post.excerpt}
             </p>
             
-            <div className="flex items-center justify-between pt-6 border-t border-border">
+            <div className="flex items-center justify-between pt-6 border-t border-hairline">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center">
-                  <User size={20} className="text-accent" />
+                <div className="w-12 h-12 bg-white/10 rounded-sm flex items-center justify-center">
+                  <User size={20} className="text-white" />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-white">{post.author}</div>
-                  <div className="text-xs text-text-secondary">Author</div>
+                  <div className="text-sm font-normal text-ink">{post.author}</div>
+                  <div className="text-xs text-body-mid">Author</div>
                 </div>
               </div>
               
               <button
                 onClick={handleShare}
-                className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-xl text-sm font-bold text-text-secondary hover:bg-accent/20 hover:text-accent transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-canvas border border-hairline rounded-sm text-sm font-normal text-body-mid hover:bg-canvas-soft hover:text-white transition-all"
               >
                 <Share2 size={16} />
                 Share
@@ -171,26 +171,26 @@ export default function BlogPost() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="bg-surface border border-border rounded-2xl p-8 md:p-12"
+            className="bg-canvas-card border border-hairline rounded-sm p-8 md:p-12"
           >
             <div className="prose prose-invert prose-lg max-w-none">
               <ReactMarkdown
                 components={{
-                  h1: ({children}) => <h1 className="text-3xl font-black text-white mb-6 mt-8 first:mt-0">{children}</h1>,
-                  h2: ({children}) => <h2 className="text-2xl font-black text-white mb-4 mt-8">{children}</h2>,
-                  h3: ({children}) => <h3 className="text-xl font-bold text-white mb-3 mt-6">{children}</h3>,
-                  h4: ({children}) => <h4 className="text-lg font-bold text-white mb-2 mt-4">{children}</h4>,
-                  p: ({children}) => <p className="text-text-secondary leading-relaxed mb-4">{children}</p>,
-                  ul: ({children}) => <ul className="list-disc list-inside space-y-2 mb-4 text-text-secondary">{children}</ul>,
-                  ol: ({children}) => <ol className="list-decimal list-inside space-y-2 mb-4 text-text-secondary">{children}</ol>,
-                  li: ({children}) => <li className="flex items-start gap-2"><CheckCircle2 size={16} className="text-accent shrink-0 mt-1" /><span>{children}</span></li>,
-                  strong: ({children}) => <strong className="font-bold text-white">{children}</strong>,
-                  em: ({children}) => <em className="italic text-text-secondary">{children}</em>,
-                  code: ({children}) => <code className="bg-hover px-2 py-1 rounded text-sm font-mono text-accent">{children}</code>,
-                  a: ({children, href}) => <a href={href} className="text-accent hover:underline">{children}</a>,
+                  h1: ({children}) => <h1 className="text-3xl font-normal text-ink mb-6 mt-8 first:mt-0">{children}</h1>,
+                  h2: ({children}) => <h2 className="text-2xl font-normal text-ink mb-4 mt-8">{children}</h2>,
+                  h3: ({children}) => <h3 className="text-xl font-normal text-ink mb-3 mt-6">{children}</h3>,
+                  h4: ({children}) => <h4 className="text-lg font-normal text-ink mb-2 mt-4">{children}</h4>,
+                  p: ({children}) => <p className="text-body-mid leading-relaxed mb-4">{children}</p>,
+                  ul: ({children}) => <ul className="list-disc list-inside space-y-2 mb-4 text-body-mid">{children}</ul>,
+                  ol: ({children}) => <ol className="list-decimal list-inside space-y-2 mb-4 text-body-mid">{children}</ol>,
+                  li: ({children}) => <li className="flex items-start gap-2"><CheckCircle2 size={16} className="text-white shrink-0 mt-1" /><span>{children}</span></li>,
+                  strong: ({children}) => <strong className="font-normal text-ink">{children}</strong>,
+                  em: ({children}) => <em className="italic text-body-mid">{children}</em>,
+                  code: ({children}) => <code className="bg-canvas-soft px-2 py-1 rounded-sm text-sm font-mono text-white">{children}</code>,
+                  a: ({children, href}) => <a href={href} className="text-white hover:underline">{children}</a>,
                   blockquote: ({children}) => (
-                    <blockquote className="border-l-4 border-accent pl-4 py-2 my-6 bg-accent/5 rounded-r-lg">
-                      <p className="text-text-secondary italic">{children}</p>
+                    <blockquote className="border-l-4 border-white pl-4 py-2 my-6 bg-white/5 rounded-sm">
+                      <p className="text-body-mid italic">{children}</p>
                     </blockquote>
                   )
                 }}
@@ -211,7 +211,7 @@ export default function BlogPost() {
               <Link
                 key={tag}
                 to={`/blog?tag=${tag}`}
-                className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-xl text-xs font-bold text-text-secondary hover:bg-accent/20 hover:text-accent transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-canvas border border-hairline rounded-sm text-xs font-normal text-body-mid hover:bg-canvas-soft hover:text-white transition-all"
               >
                 <Tag size={12} />
                 {tag}
@@ -229,7 +229,7 @@ export default function BlogPost() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <h2 className="text-2xl font-black text-white mb-8">Related Articles</h2>
+            <h2 className="text-2xl font-normal text-ink mb-8">Related Articles</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {relatedPosts.map((relatedPost, index) => (
                 <motion.div
@@ -240,19 +240,19 @@ export default function BlogPost() {
                 >
                   <Link
                     to={`/blog/${relatedPost.slug}`}
-                    className="block h-full bg-surface border border-border rounded-2xl overflow-hidden hover:border-accent/50 transition-all group"
+                    className="block h-full bg-canvas-card border border-hairline rounded-sm overflow-hidden hover:border-white/30 transition-all group"
                   >
-                    <div className="relative bg-gradient-to-br from-accent/10 to-transparent h-32 flex items-center justify-center">
-                      <BookOpen size={48} className="text-accent/30 group-hover:scale-110 transition-transform" />
+                    <div className="relative bg-canvas-soft h-32 flex items-center justify-center">
+                      <BookOpen size={48} className="text-white/30 group-hover:scale-110 transition-transform" />
                     </div>
                     <div className="p-4">
-                      <span className="px-2 py-1 bg-accent/20 text-accent rounded-full text-[10px] font-black uppercase tracking-wider mb-2 inline-block">
+                      <span className="px-2 py-1 bg-white/10 text-white rounded-sm text-[10px] font-normal uppercase tracking-wider mb-2 inline-block">
                         {relatedPost.category}
                       </span>
-                      <h3 className="text-sm font-black text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">
+                      <h3 className="text-sm font-normal text-ink mb-2 line-clamp-2 group-hover:text-white transition-colors">
                         {relatedPost.title}
                       </h3>
-                      <div className="flex items-center gap-1 text-[10px] font-bold text-text-secondary">
+                      <div className="flex items-center gap-1 text-[10px] font-normal text-body-mid">
                         <Clock size={10} />
                         {relatedPost.readingTime} min read
                       </div>
@@ -271,13 +271,13 @@ export default function BlogPost() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="bg-gradient-to-r from-accent/20 to-accent/10 border border-accent/30 rounded-2xl p-8 text-center"
+          className="bg-white/10 border border-hairline rounded-sm p-8 text-center"
         >
-          <h2 className="text-2xl font-black text-white mb-4">Ready to Ace Your Next Interview?</h2>
-          <p className="text-text-secondary mb-6">Use our AI-powered tools to prepare smarter and land your dream job.</p>
+          <h2 className="text-2xl font-normal text-ink mb-4">Ready to Ace Your Next Interview?</h2>
+          <p className="text-body-mid mb-6">Use our AI-powered tools to prepare smarter and land your dream job.</p>
           <Link
             to="/interview-prep"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-all"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-white hover:bg-gray-100 text-black rounded-sm text-sm font-normal uppercase tracking-wider transition-all"
           >
             Start Practicing
             <ArrowLeft size={16} className="rotate-180" />

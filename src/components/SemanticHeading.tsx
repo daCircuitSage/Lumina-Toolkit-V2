@@ -12,15 +12,16 @@ export default function SemanticHeading({
   children, 
   className 
 }: SemanticHeadingProps) {
-  const baseClasses = "font-bold tracking-tight";
+  // xAI design: weight 400 only, negative letter-spacing for larger headings
+  const baseClasses = "font-normal text-ink";
   
   const sizeClasses = {
-    1: "text-4xl sm:text-5xl lg:text-6xl",
-    2: "text-3xl sm:text-4xl", 
-    3: "text-2xl sm:text-3xl",
-    4: "text-xl sm:text-2xl",
-    5: "text-lg sm:text-xl",
-    6: "text-base sm:text-lg"
+    1: "text-5xl sm:text-6xl lg:text-7xl leading-tight tracking-tight",
+    2: "text-4xl sm:text-5xl leading-tight tracking-tight", 
+    3: "text-3xl sm:text-4xl leading-tight tracking-tight",
+    4: "text-2xl sm:text-3xl leading-tight",
+    5: "text-xl sm:text-2xl leading-tight",
+    6: "text-lg sm:text-xl leading-tight"
   };
 
   const HeadingTag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';

@@ -194,7 +194,7 @@ export default function Layout({ children }: LayoutProps) {
 
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-black">
+    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-canvas">
       <ModernSidebar 
         activeTool={activeTool}
         onSelect={handleToolSelect}
@@ -208,7 +208,8 @@ export default function Layout({ children }: LayoutProps) {
         getRouteForTool={getRouteForTool}
       />
 
-      <main className="flex-1 overflow-hidden bg-black flex flex-col pt-16 md:pt-0">
+      {/* xAI design: canvas background, no gradients */}
+      <main className="flex-1 overflow-hidden bg-canvas flex flex-col pt-16 md:pt-0">
         <Header />
         <div className="flex-1 overflow-y-auto">
           {children}

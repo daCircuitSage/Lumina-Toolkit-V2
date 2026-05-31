@@ -47,17 +47,10 @@ export default function Homepage() {
 
 
   return (
-    <div className="relative bg-black text-white selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="relative bg-canvas text-ink selection:bg-white/10 overflow-x-hidden">
       <CustomCursor />
-      {/* Animated Gradient Mesh Background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-black">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s', animationDelay: '2s' }} />
-          <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '12s', animationDelay: '4s' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black" />
-        </div>
-      </div>
+      {/* xAI design: solid canvas background, no gradients */}
+      <div className="fixed inset-0 pointer-events-none bg-canvas" />
 
       {/* Navigation */}
       <nav className="relative z-50 px-4 py-6 md:px-8 md:py-8">
@@ -69,31 +62,31 @@ export default function Homepage() {
             transition={{ type: "spring", stiffness: 400 }}
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-accent to-purple-500 rounded-xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-              <div className="relative w-10 h-10 bg-gradient-to-br from-accent to-accent/70 rounded-xl flex items-center justify-center shadow-lg">
-                <Terminal className="w-5 h-5 text-white" />
+              {/* xAI design: simple white square, no gradients or shadows */}
+              <div className="relative w-10 h-10 bg-white rounded-sm flex items-center justify-center">
+                <Terminal className="w-5 h-5 text-black" />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-lg md:text-xl tracking-tight">Lumina</span>
-              <span className="text-xs text-text-secondary hidden md:block">Toolkit</span>
+              <span className="font-normal text-lg md:text-xl tracking-tight">Lumina</span>
+              <span className="text-xs text-body-mid hidden md:block">Toolkit</span>
             </div>
           </motion.div>
           
           <div className="flex items-center gap-3">
             {authLoading ? (
-              <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : user ? (
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex items-center gap-2">
-                  <div className="w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-white/10 rounded-sm flex items-center justify-center">
                     {user?.photoURL ? (
-                      <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-full" />
+                      <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-sm" />
                     ) : (
-                      <User className="w-4 h-4 text-accent" />
+                      <User className="w-4 h-4 text-white" />
                     )}
                   </div>
-                  <span className="text-sm text-white/80 hidden md:block">
+                  <span className="text-sm text-body-mid hidden md:block">
                     {user?.displayName || user?.email || 'User'}
                   </span>
                 </div>
@@ -101,7 +94,7 @@ export default function Homepage() {
                   onClick={() => navigate('/all-tools')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 bg-surface/50 border border-border/30 rounded-xl hover:bg-surface transition-all duration-200 text-sm font-medium"
+                  className="px-4 py-2 bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-all duration-200 text-sm font-normal"
                 >
                   All Tools
                 </motion.button>
@@ -109,7 +102,7 @@ export default function Homepage() {
                   onClick={signOut}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-white/80 hover:text-white transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm text-body-mid hover:text-ink transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Sign Out</span>
@@ -121,7 +114,7 @@ export default function Homepage() {
                   onClick={() => navigate('/all-tools')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 bg-surface/50 border border-border/30 rounded-xl hover:bg-surface transition-all duration-200 text-sm font-medium"
+                  className="px-4 py-2 bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-all duration-200 text-sm font-normal"
                 >
                   All Tools
                 </motion.button>
@@ -129,7 +122,7 @@ export default function Homepage() {
                   onClick={signIn}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl transition-all duration-200 text-sm font-medium shadow-lg shadow-accent/30"
+                  className="flex items-center gap-2 px-4 py-2 bg-white text-black rounded-sm transition-all duration-200 text-sm font-normal"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -156,10 +149,10 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-surface/50 border border-border/30 rounded-full"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-canvas-soft border border-hairline rounded-full"
             >
-              <Sparkles className="w-4 h-4 text-accent" />
-              <span className="text-sm text-text-secondary">14+ Free AI Tools</span>
+              <Sparkles className="w-4 h-4 text-white" />
+              <span className="text-sm text-body-mid">14+ Free AI Tools</span>
             </motion.div>
 
             {/* Main Heading */}
@@ -167,15 +160,15 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-tight"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight leading-tight"
             >
               <span className="block mb-2">
-                <span className="bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                <span className="text-ink">
                   Supercharge Your
                 </span>
               </span>
               <span className="block">
-                <span className="bg-gradient-to-r from-accent via-purple-400 to-blue-500 bg-clip-text text-transparent animate-gradient">
+                <span className="text-white">
                   Productivity
                 </span>
               </span>
@@ -186,10 +179,10 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl text-text-secondary max-w-3xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl text-body-mid max-w-3xl mx-auto leading-relaxed"
             >
               AI-powered tools for resume building, job search, PDF conversion, and more. 
-              <span className="text-white font-medium"> Free forever. No registration required.</span>
+              <span className="text-ink font-normal"> Free forever. No registration required.</span>
             </motion.p>
 
             {/* CTA Buttons */}
@@ -203,7 +196,7 @@ export default function Homepage() {
                 onClick={() => navigate('/all-tools')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group relative px-6 py-3 bg-white text-black font-medium rounded-lg transition-all duration-200 hover:bg-gray-100 text-base"
+                className="group relative px-6 py-3 bg-white text-black font-normal rounded-sm transition-all duration-200 hover:bg-gray-100 text-base"
               >
                 <span className="flex items-center gap-2">
                   <Rocket className="w-4 h-4" />
@@ -216,7 +209,7 @@ export default function Homepage() {
                 onClick={() => navigate('/resume-builder')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-6 py-3 bg-white/10 border border-white/20 hover:bg-white/15 text-white font-medium rounded-lg transition-all duration-200 text-base"
+                className="px-6 py-3 bg-canvas border border-hairline hover:bg-canvas-soft text-ink font-normal rounded-sm transition-all duration-200 text-base"
               >
                 <span className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
@@ -232,13 +225,13 @@ export default function Homepage() {
               transition={{ duration: 1, delay: 1 }}
               className="flex flex-col items-center gap-2 mt-16"
             >
-              <span className="text-sm text-text-secondary">Scroll to explore</span>
+              <span className="text-sm text-body-mid">Scroll to explore</span>
               <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 1.5, repeat: 9999 }}
-                className="w-6 h-10 border-2 border-border/50 rounded-full flex justify-center pt-2"
+                className="w-6 h-10 border-2 border-hairline rounded-sm flex justify-center pt-2"
               >
-                <div className="w-1.5 h-3 bg-accent/50 rounded-full" />
+                <div className="w-1.5 h-3 bg-white/50 rounded-full" />
               </motion.div>
             </motion.div>
           </motion.div>
@@ -246,7 +239,7 @@ export default function Homepage() {
       </section>
 
       {/* Marquee Section */}
-      <section className="py-12 border-y border-border/20 overflow-hidden">
+      <section className="py-12 border-y border-hairline overflow-hidden">
         <div className="relative">
           <motion.div
             animate={{ x: [0, -1000] }}
@@ -255,29 +248,29 @@ export default function Homepage() {
           >
             {[...Array(4)].map((_, i) => (
               <React.Fragment key={i}>
-                <div className="flex items-center gap-2 px-6 py-3 bg-surface/30 border border-border/30 rounded-full">
-                  <Zap className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium">Lightning Fast</span>
+                <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
+                  <Zap className="w-4 h-4 text-white" />
+                  <span className="text-sm font-normal">Lightning Fast</span>
                 </div>
-                <div className="flex items-center gap-2 px-6 py-3 bg-surface/30 border border-border/30 rounded-full">
-                  <Shield className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium">100% Secure</span>
+                <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
+                  <Shield className="w-4 h-4 text-white" />
+                  <span className="text-sm font-normal">100% Secure</span>
                 </div>
-                <div className="flex items-center gap-2 px-6 py-3 bg-surface/30 border border-border/30 rounded-full">
-                  <Infinity className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium">Free Forever</span>
+                <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
+                  <Infinity className="w-4 h-4 text-white" />
+                  <span className="text-sm font-normal">Free Forever</span>
                 </div>
-                <div className="flex items-center gap-2 px-6 py-3 bg-surface/30 border border-border/30 rounded-full">
-                  <Users className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium">10K+ Users</span>
+                <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
+                  <Users className="w-4 h-4 text-white" />
+                  <span className="text-sm font-normal">10K+ Users</span>
                 </div>
-                <div className="flex items-center gap-2 px-6 py-3 bg-surface/30 border border-border/30 rounded-full">
-                  <Star className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium">5-Star Rated</span>
+                <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
+                  <Star className="w-4 h-4 text-white" />
+                  <span className="text-sm font-normal">5-Star Rated</span>
                 </div>
-                <div className="flex items-center gap-2 px-6 py-3 bg-surface/30 border border-border/30 rounded-full">
-                  <Globe className="w-4 h-4 text-accent" />
-                  <span className="text-sm font-medium">Available Worldwide</span>
+                <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
+                  <Globe className="w-4 h-4 text-white" />
+                  <span className="text-sm font-normal">Available Worldwide</span>
                 </div>
               </React.Fragment>
             ))}
@@ -294,10 +287,10 @@ export default function Homepage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <h2 className="text-4xl md:text-5xl font-normal mb-4">
               Everything You Need
             </h2>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+            <p className="text-body-mid text-lg max-w-2xl mx-auto">
               A complete toolkit for productivity, career growth, and content creation
             </p>
           </motion.div>
@@ -312,23 +305,22 @@ export default function Homepage() {
               transition={{ delay: 0.1 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => navigate('/ai-assistant')}
-              className="group relative md:col-span-2 bg-gradient-to-br from-accent/10 to-purple-500/10 border border-accent/20 rounded-3xl p-8 cursor-pointer overflow-hidden"
+              className="group relative md:col-span-2 bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative">
-                <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Bot className="w-8 h-8 text-accent" />
+                <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Bot className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">AI Assistant</h3>
-                <p className="text-text-secondary mb-4 max-w-md">
+                <h3 className="text-2xl font-normal mb-2">AI Assistant</h3>
+                <p className="text-body-mid mb-4 max-w-md">
                   Your intelligent companion for writing, brainstorming, coding help, and productivity tasks. Get instant answers and boost your workflow.
                 </p>
-                <div className="flex items-center gap-2 text-accent group-hover:gap-3 transition-all">
-                  <span className="font-medium">Start Chatting</span>
+                <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
+                  <span className="font-normal">Start Chatting</span>
                   <ArrowRight className="w-5 h-5" />
                 </div>
               </div>
-              <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-accent/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-500" />
             </motion.div>
 
             {/* Resume Builder Card */}
@@ -339,17 +331,17 @@ export default function Homepage() {
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => navigate('/resume-builder')}
-              className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
+              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <FileText className="w-8 h-8 text-accent" />
+              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <FileText className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Resume Builder</h3>
-              <p className="text-text-secondary mb-4">
+              <h3 className="text-xl font-normal mb-2">Resume Builder</h3>
+              <p className="text-body-mid mb-4">
                 Create professional resumes in minutes with multiple templates and AI-powered suggestions.
               </p>
-              <div className="flex items-center gap-2 text-accent group-hover:gap-3 transition-all">
-                <span className="font-medium">Build Now</span>
+              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
+                <span className="font-normal">Build Now</span>
                 <ArrowRight className="w-5 h-5" />
               </div>
             </motion.div>
@@ -362,17 +354,17 @@ export default function Homepage() {
               transition={{ delay: 0.3 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => navigate('/ats-resume-checker')}
-              className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
+              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BarChart3 className="w-8 h-8 text-accent" />
+              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BarChart3 className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-2">ATS Checker</h3>
-              <p className="text-text-secondary mb-4">
+              <h3 className="text-xl font-normal mb-2">ATS Checker</h3>
+              <p className="text-body-mid mb-4">
                 Optimize your resume for Applicant Tracking Systems and increase interview chances.
               </p>
-              <div className="flex items-center gap-2 text-accent group-hover:gap-3 transition-all">
-                <span className="font-medium">Check Now</span>
+              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
+                <span className="font-normal">Check Now</span>
                 <ArrowRight className="w-5 h-5" />
               </div>
             </motion.div>
@@ -385,17 +377,17 @@ export default function Homepage() {
               transition={{ delay: 0.4 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => navigate('/interview-prep')}
-              className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
+              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BrainCircuit className="w-8 h-8 text-accent" />
+              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BrainCircuit className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-2">Interview Prep</h3>
-              <p className="text-text-secondary mb-4">
+              <h3 className="text-xl font-normal mb-2">Interview Prep</h3>
+              <p className="text-body-mid mb-4">
                 Practice with AI-powered mock interviews and master the STAR method.
               </p>
-              <div className="flex items-center gap-2 text-accent group-hover:gap-3 transition-all">
-                <span className="font-medium">Practice</span>
+              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
+                <span className="font-normal">Practice</span>
                 <ArrowRight className="w-5 h-5" />
               </div>
             </motion.div>
@@ -408,17 +400,17 @@ export default function Homepage() {
               transition={{ delay: 0.5 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => navigate('/pdf-converter')}
-              className="group bg-surface/30 border border-border/30 rounded-3xl p-8 cursor-pointer hover:border-accent/30 transition-all duration-300"
+              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-transparent rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <FileUp className="w-8 h-8 text-accent" />
+              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <FileUp className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-2">PDF Converter</h3>
-              <p className="text-text-secondary mb-4">
+              <h3 className="text-xl font-normal mb-2">PDF Converter</h3>
+              <p className="text-body-mid mb-4">
                 Convert images and documents to high-quality PDF files instantly.
               </p>
-              <div className="flex items-center gap-2 text-accent group-hover:gap-3 transition-all">
-                <span className="font-medium">Convert</span>
+              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
+                <span className="font-normal">Convert</span>
                 <ArrowRight className="w-5 h-5" />
               </div>
             </motion.div>
@@ -435,7 +427,7 @@ export default function Homepage() {
               onClick={() => navigate('/all-tools')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-surface/50 border border-border/30 hover:bg-surface text-white font-semibold rounded-2xl transition-all duration-300"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-canvas-soft border border-hairline hover:bg-canvas text-ink font-normal rounded-sm transition-all duration-300"
             >
               View All 14+ Tools
               <ArrowRight className="w-5 h-5" />
@@ -453,10 +445,10 @@ export default function Homepage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Why Choose <span className="text-accent">Lumina</span>?
+            <h2 className="text-4xl md:text-5xl font-normal mb-4">
+              Why Choose <span className="text-white">Lumina</span>?
             </h2>
-            <p className="text-text-secondary text-lg max-w-2xl mx-auto">
+            <p className="text-body-mid text-lg max-w-2xl mx-auto">
               Built for modern professionals who want to achieve more
             </p>
           </motion.div>
@@ -475,13 +467,13 @@ export default function Homepage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="bg-surface/30 border border-border/30 rounded-2xl p-6 hover:border-accent/30 transition-all duration-300"
+                className="bg-canvas-card border border-hairline rounded-sm p-6 hover:border-white/30 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-accent" />
+                <div className="w-12 h-12 bg-white/10 rounded-sm flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
-                <p className="text-text-secondary text-sm">{feature.description}</p>
+                <h3 className="font-normal text-lg mb-2">{feature.title}</h3>
+                <p className="text-body-mid text-sm">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -495,26 +487,23 @@ export default function Homepage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative bg-gradient-to-br from-accent/10 to-purple-500/10 border border-accent/20 rounded-3xl p-8 md:p-16 text-center overflow-hidden"
+            className="relative bg-canvas-card border border-hairline rounded-sm p-8 md:p-16 text-center overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-50" />
-            <div className="absolute -top-20 -right-20 w-60 h-60 bg-accent/20 rounded-full blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-purple-500/20 rounded-full blur-3xl" />
             
             <div className="relative">
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="w-16 h-16 bg-gradient-to-br from-accent to-accent/70 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                className="w-16 h-16 bg-white rounded-sm flex items-center justify-center mx-auto mb-6"
               >
-                <Flame className="w-8 h-8 text-white" />
+                <Flame className="w-8 h-8 text-black" />
               </motion.div>
               
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-                Ready to Transform Your <span className="text-accent">Workflow</span>?
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal mb-6">
+                Ready to Transform Your <span className="text-white">Workflow</span>?
               </h2>
-              <p className="text-text-secondary text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-body-mid text-lg mb-8 max-w-2xl mx-auto">
                 Join thousands of professionals who are already using Lumina Toolkit to achieve more in less time.
               </p>
               
@@ -523,7 +512,7 @@ export default function Homepage() {
                   onClick={() => navigate('/all-tools')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-accent hover:bg-accent/90 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg shadow-accent/30 text-lg"
+                  className="px-8 py-4 bg-white hover:bg-gray-100 text-black font-normal rounded-sm transition-all duration-300 text-lg"
                 >
                   Get Started Free
                 </motion.button>
@@ -531,7 +520,7 @@ export default function Homepage() {
                   onClick={() => navigate('/contact')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-surface/50 border border-border/30 hover:bg-surface text-white font-semibold rounded-2xl transition-all duration-300 text-lg"
+                  className="px-8 py-4 bg-canvas border border-hairline hover:bg-canvas-soft text-ink font-normal rounded-sm transition-all duration-300 text-lg"
                 >
                   Contact Us
                 </motion.button>

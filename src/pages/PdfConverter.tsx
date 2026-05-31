@@ -102,15 +102,15 @@ export default function PdfConverter() {
   return (
     <div className="tool-container">
       <header className="mb-10">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">PDF Forge</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400 transition-colors">Transform your documents and images into clean PDFs.</p>
+        <h1 className="text-3xl font-normal text-ink mb-2">PDF Forge</h1>
+        <p className="text-sm text-body-mid">Transform your documents and images into clean PDFs.</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         <div className="lg:col-span-8 flex flex-col gap-6">
           <div 
             onClick={() => fileInputRef.current?.click()}
-            className="group relative border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-8 md:p-12 flex flex-col items-center justify-center bg-white dark:bg-slate-900 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50/10 transition-all cursor-pointer"
+            className="group relative border-2 border-dashed border-hairline rounded-sm p-8 md:p-12 flex flex-col items-center justify-center bg-canvas-card hover:border-white/30 hover:bg-canvas-soft transition-all cursor-pointer"
           >
             <input 
               type="file" 
@@ -120,21 +120,21 @@ export default function PdfConverter() {
               onChange={handleFileChange}
               className="hidden" 
             />
-            <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-4 md:mb-6 group-hover:scale-110 transition-transform text-center flex-col">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-sm bg-white/10 flex items-center justify-center text-white mb-4 md:mb-6 group-hover:scale-110 transition-transform text-center flex-col">
                <FileUp size={32} />
             </div>
-            <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white mb-2 transition-colors">Choose Images</h3>
-            <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 text-center max-w-sm px-6 transition-colors">
+            <h3 className="text-base md:text-lg font-normal text-ink mb-2">Choose Images</h3>
+            <p className="text-xs md:text-sm text-body-mid text-center max-w-sm px-6">
               Select one or multiple images to combine into a single PDF document. Drag and drop supported.
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl shadow-sm overflow-hidden flex-1 flex flex-col min-h-[300px] md:min-h-[400px] transition-colors">
-            <div className="p-4 md:p-6 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center bg-slate-50/30 dark:bg-slate-800/20">
-              <h4 className="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2 transition-colors">
-                <FileImage size={18} className="text-slate-400 dark:text-slate-500" /> Image Queue
+          <div className="bg-canvas-card border border-hairline rounded-sm overflow-hidden flex-1 flex flex-col min-h-[300px] md:min-h-[400px]">
+            <div className="p-4 md:p-6 border-b border-hairline flex justify-between items-center bg-canvas-soft">
+              <h4 className="font-normal text-ink flex items-center gap-2">
+                <FileImage size={18} className="text-body-mid" /> Image Queue
               </h4>
-              <span className="text-[10px] md:text-xs font-bold text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded uppercase tracking-wider transition-colors">
+              <span className="text-[10px] md:text-xs font-normal text-body-mid bg-canvas px-2 py-1 rounded-sm uppercase tracking-wider">
                 {images.length} Files Selected
               </span>
             </div>
@@ -147,18 +147,18 @@ export default function PdfConverter() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 10 }}
-                    className="flex items-center gap-3 md:gap-4 p-3 md:p-4 border border-slate-50 dark:border-slate-800 rounded-2xl hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors"
+                    className="flex items-center gap-3 md:gap-4 p-3 md:p-4 border border-hairline rounded-sm hover:bg-canvas-soft transition-colors"
                   >
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg object-cover bg-slate-100 dark:bg-slate-800 flex-shrink-0 overflow-hidden border dark:border-slate-700">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-sm object-cover bg-canvas-soft flex-shrink-0 overflow-hidden border border-hairline">
                        <img src={img.url} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1 min-w-0">
-                       <div className="text-xs md:text-sm font-bold text-slate-900 dark:text-white truncate transition-colors">{img.name}</div>
-                       <div className="text-[10px] md:text-xs text-slate-400 dark:text-slate-500 transition-colors">{img.size}</div>
+                       <div className="text-xs md:text-sm font-normal text-ink truncate">{img.name}</div>
+                       <div className="text-[10px] md:text-xs text-body-mid">{img.size}</div>
                     </div>
                     <button 
                        onClick={() => removeImage(img.id)}
-                       className="p-2 text-slate-300 dark:text-slate-600 hover:text-red-500 transition-colors"
+                       className="p-2 text-body-mid hover:text-red-500 transition-colors"
                     >
                        <Trash2 size={16} className="w-4 h-4 md:w-4 md:h-4" />
                     </button>
@@ -166,9 +166,9 @@ export default function PdfConverter() {
                 ))}
               </AnimatePresence>
               {images.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-10 md:py-20 text-slate-300 dark:text-slate-700">
-                   <div className="w-10 h-10 md:w-12 md:h-12 border-2 border-dashed rounded-xl mb-4 border-slate-200 dark:border-slate-800" />
-                   <p className="text-xs md:text-sm font-medium">Your queue is empty</p>
+                <div className="flex flex-col items-center justify-center py-10 md:py-20 text-body-mid">
+                   <div className="w-10 h-10 md:w-12 md:h-12 border-2 border-dashed rounded-sm mb-4 border-hairline" />
+                   <p className="text-xs md:text-sm font-normal">Your queue is empty</p>
                 </div>
               )}
             </div>
@@ -176,24 +176,24 @@ export default function PdfConverter() {
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm p-6 md:p-8 transition-colors">
-              <h3 className="font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2 transition-colors">
-                <Settings size={18} className="text-slate-400 dark:text-slate-500" /> Settings
+           <div className="bg-canvas-card rounded-sm border border-hairline p-6 md:p-8">
+              <h3 className="font-normal text-ink mb-6 flex items-center gap-2">
+                <Settings size={18} className="text-body-mid" /> Settings
               </h3>
               
               <div className="space-y-6">
                  <div>
-                    <label className="text-[10px] md:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-3 transition-colors">Page Size</label>
+                    <label className="text-[10px] md:text-xs font-normal text-body-mid uppercase tracking-widest block mb-3">Page Size</label>
                     <div className="grid grid-cols-2 gap-2">
                        {['a4', 'letter', 'legal', 'tabloid'].map(p => (
                          <button 
                            key={p}
                            onClick={() => setPageSize(p)}
                            className={cn(
-                             "px-3 md:px-4 py-2 text-[10px] md:text-xs font-bold rounded-xl border transition-all uppercase tracking-wider",
+                             "px-3 md:px-4 py-2 text-[10px] md:text-xs font-normal rounded-sm border transition-all uppercase tracking-wider",
                              pageSize === p 
-                               ? "bg-indigo-600 border-indigo-600 text-white shadow-md" 
-                               : "border-slate-100 dark:border-slate-800 text-slate-400 dark:text-slate-500 hover:border-slate-300 dark:hover:border-slate-600"
+                               ? "bg-white text-black" 
+                               : "border-hairline text-body-mid hover:border-white/30"
                            )}
                          >
                            {p}
@@ -203,18 +203,18 @@ export default function PdfConverter() {
                  </div>
 
                  <div>
-                    <label className="text-[10px] md:text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest block mb-3 transition-colors">Margins</label>
+                    <label className="text-[10px] md:text-xs font-normal text-body-mid uppercase tracking-widest block mb-3">Margins</label>
                     <button 
                       onClick={() => setNoMargins(!noMargins)}
-                      className="w-full p-3 md:p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl flex items-center justify-between transition-all hover:bg-slate-100 dark:hover:bg-slate-800 group"
+                      className="w-full p-3 md:p-4 bg-canvas-soft rounded-sm flex items-center justify-between transition-all hover:bg-canvas group"
                     >
-                       <span className="text-xs md:text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors">No Margins</span>
+                       <span className="text-xs md:text-sm font-normal text-body-mid">No Margins</span>
                        <div className={cn(
-                          "w-10 h-5 rounded-full relative transition-all duration-300",
-                          noMargins ? "bg-indigo-600" : "bg-slate-200 dark:bg-slate-700"
+                          "w-10 h-5 rounded-sm relative transition-all duration-300",
+                          noMargins ? "bg-white" : "bg-canvas"
                        )}>
                           <div className={cn(
-                            "absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-300",
+                            "absolute top-1 w-3 h-3 bg-black rounded-sm transition-all duration-300",
                             noMargins ? "right-1" : "left-1"
                           )} />
                        </div>
@@ -226,21 +226,21 @@ export default function PdfConverter() {
                  <button 
                     disabled={images.length === 0 || isProcessing}
                     onClick={generatePdf}
-                    className="w-full bg-slate-900 dark:bg-indigo-600 text-white h-14 rounded-2xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black dark:hover:bg-indigo-700 active:scale-[0.98] transition-all"
+                    className="w-full bg-white hover:bg-gray-100 text-black h-14 rounded-sm font-normal flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
                  >
-                    {isProcessing ? <Loader2 className="animate-spin text-white" /> : <Download size={20} />}
+                    {isProcessing ? <Loader2 className="animate-spin text-black" /> : <Download size={20} />}
                     {isProcessing ? 'Processing...' : 'Generate PDF'}
                  </button>
               </div>
            </div>
 
-           <div className="bg-indigo-50 dark:bg-indigo-900/30 rounded-3xl p-8 border border-indigo-100 dark:border-indigo-900/50 transition-colors">
-              <h4 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 mb-4 flex items-center gap-2 transition-colors">
+           <div className="bg-white/10 rounded-sm p-8 border border-hairline">
+              <h4 className="text-sm font-normal text-white mb-4 flex items-center gap-2">
                 <ArrowRightLeft size={16} /> Other Tools coming soon
               </h4>
               <div className="space-y-2 opacity-60">
-                 <div className="p-3 bg-white/50 dark:bg-slate-800/50 rounded-xl text-xs font-bold text-indigo-700 dark:text-indigo-400 transition-colors">PDF to Word</div>
-                 <div className="p-3 bg-white/50 dark:bg-slate-800/50 rounded-xl text-xs font-bold text-indigo-700 dark:text-indigo-400 transition-colors">Compress PDF</div>
+                 <div className="p-3 bg-canvas-card rounded-sm text-xs font-normal text-body-mid">PDF to Word</div>
+                 <div className="p-3 bg-canvas-card rounded-sm text-xs font-normal text-body-mid">Compress PDF</div>
               </div>
            </div>
         </div>
