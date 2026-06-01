@@ -67,6 +67,7 @@ export default function Homepage() {
   const { scrollY } = useScroll();
   const heroSectionRef = useRef<HTMLElement>(null);
   const toolsSectionRef = useRef<HTMLElement>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Hero exit animation based on scroll
   const heroScale = useTransform(scrollY, [0, 300], [1, 0.95]);
@@ -108,6 +109,16 @@ export default function Homepage() {
           </motion.div>
           
           <div className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <motion.button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="lg:hidden flex items-center gap-2 px-3 py-2 text-sm body-sm-strong text-ink hover:text-primary transition-colors cursor-pointer"
+            >
+              <Command className="w-5 h-5" />
+            </motion.button>
+
             {authLoading ? (
               <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             ) : user ? (
@@ -168,8 +179,66 @@ export default function Homepage() {
                 </motion.button>
               </div>
             )}
+
+            {/* Navigation Links - Desktop */}
+            <div className="hidden lg:flex items-center gap-2 ml-4">
+              <motion.button
+                onClick={() => navigate('/about')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-3 py-2 text-sm body-sm-strong text-ink hover:text-primary transition-colors cursor-pointer"
+              >
+                About Us
+              </motion.button>
+              <motion.button
+                onClick={() => navigate('/terms')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-3 py-2 text-sm body-sm-strong text-ink hover:text-primary transition-colors cursor-pointer"
+              >
+                Terms
+              </motion.button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden mt-4 pt-4 border-t border-hairline"
+            >
+              <div className="flex flex-col gap-2">
+                <motion.button
+                  onClick={() => {
+                    navigate('/about');
+                    setMobileMenuOpen(false);
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-4 py-3 text-sm body-sm-strong text-ink hover:text-primary hover:bg-canvas-soft transition-all cursor-pointer rounded-xl text-left"
+                >
+                  About Us
+                </motion.button>
+                <motion.button
+                  onClick={() => {
+                    navigate('/terms');
+                    setMobileMenuOpen(false);
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-4 py-3 text-sm body-sm-strong text-ink hover:text-primary hover:bg-canvas-soft transition-all cursor-pointer rounded-xl text-left"
+                >
+                  Terms and Conditions
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section */}

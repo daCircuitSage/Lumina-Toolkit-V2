@@ -63,6 +63,10 @@ const Blog = React.lazy(() => import('../pages/Blog'));
 
 const BlogPost = React.lazy(() => import('../pages/BlogPost'));
 
+const About = React.lazy(() => import('../pages/About'));
+
+const Terms = React.lazy(() => import('../pages/Terms'));
+
 
 
 
@@ -618,6 +622,62 @@ const AppRoutes = () => {
             <BlogPost />
 
           </LazyLoadWrapper>
+
+        </AnimatedPage>
+
+      } />
+
+      
+
+      <Route path="/about" element={
+
+        <AnimatedPage>
+
+          <Layout>
+
+            <SeoHead
+
+              title="About Us - Lumina Toolkit Mission & Values"
+
+              description="Learn about Lumina Toolkit's mission to provide free AI-powered productivity tools. Discover our values and commitment to accessibility."
+
+            />
+
+            <LazyLoadWrapper>
+
+              <About />
+
+            </LazyLoadWrapper>
+
+          </Layout>
+
+        </AnimatedPage>
+
+      } />
+
+      
+
+      <Route path="/terms" element={
+
+        <AnimatedPage>
+
+          <Layout>
+
+            <SeoHead
+
+              title="Terms and Conditions | Lumina Toolkit"
+
+              description="Read Lumina Toolkit's terms and conditions. Understand your rights and responsibilities when using our free AI-powered tools."
+
+            />
+
+            <LazyLoadWrapper>
+
+              <Terms />
+
+            </LazyLoadWrapper>
+
+          </Layout>
 
         </AnimatedPage>
 
