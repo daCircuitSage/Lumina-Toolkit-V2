@@ -139,11 +139,14 @@ export default function ToolPreviewCard({
             muted
             loop
             playsInline
-            preload="metadata"
+            autoPlay={isHovered}
+            preload="auto"
             onError={() => {
               console.error('Video load error:', videoPreview);
               setVideoError(true);
             }}
+            onLoadStart={() => console.log('Video loading:', videoPreview)}
+            onCanPlay={() => console.log('Video can play:', videoPreview)}
             className="w-full h-full object-cover opacity-35"
           />
         </motion.div>
