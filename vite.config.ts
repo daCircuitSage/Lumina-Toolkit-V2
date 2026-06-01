@@ -118,7 +118,7 @@ export default defineConfig(({mode}) => {
 
         compress: {
 
-          drop_console: isProduction,
+          drop_console: false,
 
           drop_debugger: isProduction
 

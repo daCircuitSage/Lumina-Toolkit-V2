@@ -61,6 +61,8 @@ export default function ToolPreviewCard({
 
   const handleMouseEnter = () => {
     setIsHovered(true);
+    console.log('Video source:', videoPreview);
+    console.log('Video load state before play:', videoRef.current?.readyState);
     if (videoRef.current) {
       videoRef.current.play().catch((error) => {
         console.error('Video play error:', error);
@@ -141,12 +143,23 @@ export default function ToolPreviewCard({
             playsInline
             autoPlay={isHovered}
             preload="auto"
-            onError={() => {
-              console.error('Video load error:', videoPreview);
+            onError={(e) => {
+              console.error('Video failed to load', e);
+              console.error('Video source:', videoPreview);
               setVideoError(true);
             }}
-            onLoadStart={() => console.log('Video loading:', videoPreview)}
-            onCanPlay={() => console.log('Video can play:', videoPreview)}
+            onLoadStart={() => {
+              console.log('Video loading:', videoPreview);
+              console.log('Video readyState on load start:', videoRef.current?.readyState);
+            }}
+            onCanPlay={() => {
+              console.log('Video loaded successfully:', videoPreview);
+              console.log('Video readyState on can play:', videoRef.current?.readyState);
+            }}
+            onLoadedData={() => {
+              console.log('Video data loaded:', videoPreview);
+              console.log('Video load state:', videoRef.current?.readyState);
+            }}
             className="w-full h-full object-cover opacity-35"
           />
         </motion.div>
