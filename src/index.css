@@ -155,9 +155,9 @@ input, textarea, select, [contenteditable] {
 /* Typography styles - Wise Design System */
 .display-mega {
   font-family: var(--font-heading);
-  font-size: 126px;
+  font-size: clamp(48px, 8vw, 126px);
   font-weight: 900;
-  line-height: 107.1px;
+  line-height: clamp(40px, 6.5vw, 107.1px);
 }
 
 .display-xxl {

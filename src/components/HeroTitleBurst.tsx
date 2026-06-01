@@ -23,6 +23,7 @@ interface IconConfig {
   size: number;
   floatSpeed: number;
   floatRange: number;
+  zIndex: number;
 }
 
 type Breakpoint = 'mobile' | 'tablet' | 'desktop';
@@ -59,6 +60,8 @@ const HeroTitleBurst: React.FC = () => {
     
     visibleIcons.forEach((key, index) => {
       const angle = (index / visibleIcons.length) * 360;
+      // Give 1-2 icons higher z-index to appear over the title (title has z-10)
+      const zIndex = index < 2 ? 20 : 0;
       iconList.push({
         id: key,
         src: iconImports[key],
@@ -68,6 +71,7 @@ const HeroTitleBurst: React.FC = () => {
         size: currentConfig.size[0] + Math.random() * (currentConfig.size[1] - currentConfig.size[0]),
         floatSpeed: 2 + Math.random() * 2,
         floatRange: 5 + Math.random() * 10,
+        zIndex,
       });
     });
 
@@ -93,6 +97,7 @@ const HeroTitleBurst: React.FC = () => {
               width: icon.size,
               height: icon.size,
               willChange: 'transform',
+              zIndex: icon.zIndex,
             }}
             initial={{
               x: 0,

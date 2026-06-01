@@ -242,10 +242,10 @@ export default function Homepage() {
       </nav>
 
       {/* Hero Section */}
-      <section ref={heroSectionRef} className="relative min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-12 bg-canvas-soft">
+      <section ref={heroSectionRef} className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-12 pb-16 bg-canvas-soft">
         <div className="max-w-7xl mx-auto w-full">
           <motion.div 
-            className="text-center space-y-8 md:space-y-12 relative"
+            className="text-center space-y-10 md:space-y-16 relative"
             style={{
               scale: heroScale,
               opacity: heroOpacity,
@@ -273,7 +273,7 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight leading-tight relative z-10"
+              className="display-mega relative z-10"
             >
               <span className="block mb-2">
                 <span className="text-ink">
