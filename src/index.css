@@ -1,33 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* xAI Design System - Font Family */
-  --font-sans: "Inter", universalSans, ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Inter", universalSans, ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", GeistMono, ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  /* Wise Design System - Font Family */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-heading: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
   
-  /* xAI Design System - Colors */
-  --color-primary: #ffffff;
-  --color-on-primary: #0a0a0a;
-  --color-ink: #ffffff;
-  --color-ink-hover: #fafaf7;
-  --color-body: #dadbdf;
-  --color-body-mid: #7d8187;
-  --color-mute: #7d8187;
-  --color-hairline: #212327;
-  --color-canvas: #0a0a0a;
-  --color-canvas-soft: #1a1c20;
-  --color-canvas-card: #191919;
-  --color-canvas-mid: #363a3f;
-  --color-accent-sunset: #ff7a17;
-  --color-accent-sunset-soft: #ffc285;
-  --color-accent-dusk: #7c3aed;
-  --color-accent-twilight: #c4b5fd;
-  --color-accent-breeze: #a0c3ec;
-  --color-accent-midnight: #0d1726;
+  /* Wise Design System - Colors */
+  --color-primary: #9fe870;
+  --color-on-primary: #0e0f0c;
+  --color-primary-active: #cdffad;
+  --color-primary-neutral: #c5edab;
+  --color-primary-pale: #e2f6d5;
+  --color-ink: #0e0f0c;
+  --color-ink-deep: #163300;
+  --color-body: #454745;
+  --color-mute: #868685;
+  --color-canvas: #ffffff;
+  --color-canvas-soft: #e8ebe6;
+  --color-positive: #2ead4b;
+  --color-positive-deep: #054d28;
+  --color-warning: #ffd11a;
+  --color-warning-deep: #b86700;
+  --color-warning-content: #4a3b1c;
+  --color-negative: #d03238;
+  --color-negative-deep: #a72027;
+  --color-negative-darkest: #a7000d;
+  --color-negative-bg: #320707;
+  --color-accent-orange: #ffc091;
+  --color-accent-cyan: #38c8ff;
+  --color-hairline: #0e0f0c;
   
-  /* xAI Design System - Spacing */
+  /* Wise Design System - Spacing */
   --spacing-xxs: 2px;
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -36,18 +41,19 @@
   --spacing-xl: 24px;
   --spacing-2xl: 32px;
   --spacing-3xl: 48px;
-  --spacing-4xl: 64px;
   
-  /* xAI Design System - Border Radius */
+  /* Wise Design System - Border Radius */
   --rounded-none: 0px;
   --rounded-sm: 8px;
+  --rounded-md: 12px;
+  --rounded-lg: 16px;
+  --rounded-xl: 24px;
   --rounded-pill: 9999px;
   --rounded-full: 9999px;
 }
 
-/* xAI Design System - Base Styles */
+/* Wise Design System - Base Styles */
 html {
-  /* xAI is dark-canvas only */
   background-color: var(--color-canvas);
   color: var(--color-ink);
   scroll-behavior: smooth;
@@ -61,127 +67,162 @@ html {
   }
 }
 
-/* xAI Design System - Component Utilities */
+/* Wise Design System - Component Utilities */
 
-/* Card styles - hairline borders, no shadows */
+/* Card styles - rounded-xl, surface contrast */
 .card-content {
-  background-color: var(--color-canvas-card);
+  background-color: var(--color-canvas);
   color: var(--color-ink);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--rounded-sm);
+  border-radius: var(--rounded-xl);
   padding: var(--spacing-xl);
 }
 
-.card-feature-product {
-  background-color: var(--color-canvas-card);
+.card-feature-sage {
+  background-color: var(--color-canvas-soft);
   color: var(--color-ink);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--rounded-sm);
+  border-radius: var(--rounded-xl);
   padding: var(--spacing-xl);
 }
 
-/* Button styles - pill shape, outline on dark */
+.card-feature-green {
+  background-color: var(--color-primary-pale);
+  color: var(--color-ink);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-xl);
+}
+
+.card-feature-dark {
+  background-color: var(--color-ink);
+  color: var(--color-primary);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-xl);
+}
+
+/* Button styles - pill shape, rounded-xl */
 .button-primary {
   background-color: var(--color-primary);
   color: var(--color-on-primary);
-  border: 1px solid var(--color-primary);
-  border-radius: var(--rounded-pill);
-  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-md) var(--spacing-xl);
   font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
-.button-outline-on-dark {
-  background-color: var(--color-canvas);
+.button-secondary {
+  background-color: var(--color-canvas-soft);
   color: var(--color-ink);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--rounded-pill);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-md) var(--spacing-xl);
   font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
-.button-outline-sm {
+.button-tertiary {
   background-color: var(--color-canvas);
   color: var(--color-ink);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--rounded-pill);
-  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--rounded-xl);
+  padding: var(--spacing-md) var(--spacing-xl);
   font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }
 
 /* Text input styles */
 .text-input {
-  background-color: var(--color-canvas-soft);
+  background-color: var(--color-canvas);
   color: var(--color-ink);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--rounded-sm);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--rounded-md);
   padding: var(--spacing-md) var(--spacing-lg);
   font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+  caret-color: var(--color-ink);
 }
 
-/* Typography styles */
-.display-xl {
-  font-family: var(--font-sans);
+/* Cursor visibility for all interactive elements */
+input, textarea, select, [contenteditable] {
+  caret-color: var(--color-ink);
+}
+
+/* Typography styles - Wise Design System */
+.display-mega {
+  font-family: var(--font-heading);
+  font-size: 126px;
+  font-weight: 900;
+  line-height: 107.1px;
+}
+
+.display-xxl {
+  font-family: var(--font-heading);
   font-size: 96px;
-  font-weight: 400;
-  line-height: 96px;
-  letter-spacing: -2.4px;
+  font-weight: 900;
+  line-height: 81.6px;
+}
+
+.display-xl {
+  font-family: var(--font-heading);
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 54.4px;
 }
 
 .display-lg {
-  font-family: var(--font-sans);
-  font-size: 72px;
+  font-family: var(--font-heading);
+  font-size: 47px;
   font-weight: 400;
-  line-height: 72px;
-  letter-spacing: -1.8px;
+  line-height: 70.5px;
+  letter-spacing: -0.108px;
 }
 
 .display-md {
-  font-family: var(--font-sans);
-  font-size: 48px;
-  font-weight: 400;
-  line-height: 48px;
-  letter-spacing: -1.2px;
+  font-family: var(--font-heading);
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 34px;
 }
 
 .display-sm {
   font-family: var(--font-sans);
   font-size: 32px;
-  font-weight: 400;
-  line-height: 36px;
-  letter-spacing: -0.6px;
+  font-weight: 600;
+  line-height: 38.4px;
+  letter-spacing: -0.96px;
 }
 
 .display-xs {
   font-family: var(--font-sans);
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 28px;
-  letter-spacing: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 31.2px;
+  letter-spacing: -0.48px;
 }
 
 .body-lg {
   font-family: var(--font-sans);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 400;
-  line-height: 28px;
+  line-height: 30px;
 }
 
 .body-md {
   font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 400;
+  line-height: 24px;
+}
+
+.body-md-strong {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
   line-height: 24px;
 }
 
@@ -192,27 +233,30 @@ html {
   line-height: 20px;
 }
 
-.caption-mono {
-  font-family: var(--font-mono);
+.body-sm-strong {
+  font-family: var(--font-sans);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 20px;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
 }
 
-.caption-mono-sm {
-  font-family: var(--font-mono);
+.caption {
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 400;
   line-height: 16px;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
 }
 
-/* Layout utilities */
+.button-md {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+/* Layout utilities - Wise Design System */
 .tool-container {
-  max-width: 5xl;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   padding-left: var(--spacing-lg);
@@ -232,11 +276,11 @@ html {
 
 /* Divider */
 .divider-hairline {
-  border-color: var(--color-hairline);
+  border-color: var(--color-ink);
   border-width: 1px;
 }
 
-/* xAI Design System - Minimal Scrollbar Styling */
+/* Wise Design System - Minimal Scrollbar Styling */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
@@ -246,20 +290,20 @@ html {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-canvas-mid);
+  background-color: var(--color-mute);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-body-mid);
+  background-color: var(--color-body);
 }
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-canvas-mid) transparent;
+  scrollbar-color: var(--color-mute) transparent;
 }
 
-/* xAI Design System - Essential Animations Only */
+/* Wise Design System - Essential Animations Only */
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -272,6 +316,22 @@ html {
 /* Loading spinner */
 .loading-spinner {
   animation: spin 1s linear infinite;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .loading-spinner {
+    animation: none;
+  }
 }
 
 /* Global responsive fixes */

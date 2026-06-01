@@ -88,24 +88,24 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 z-50 flex items-center px-4 justify-between transition-colors">
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-canvas backdrop-blur-md border-b border-hairline z-50 flex items-center px-4 justify-between transition-colors">
         <Logo onClick={handleLogoClick} />
         <div className="flex items-center gap-2">
           <button 
             onClick={onSearchOpen}
-            className="p-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-200 border border-transparent dark:border-slate-800"
+            className="p-2.5 text-body hover:bg-canvas-soft rounded-xl transition-all duration-200 border border-hairline"
           >
             <Search size={20} />
           </button>
           <button 
             onClick={toggleTheme}
-            className="p-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-200 border border-transparent dark:border-slate-800"
+            className="p-2.5 text-body hover:bg-canvas-soft rounded-xl transition-all duration-200 border border-hairline"
           >
-            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            <Moon size={20} />
           </button>
           <button 
             onClick={() => setIsMobileOpen(true)}
-            className="p-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all duration-200"
+            className="p-2.5 text-body hover:bg-canvas-soft rounded-xl transition-all duration-200"
           >
             <Menu size={24} />
           </button>
@@ -120,7 +120,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsMobileOpen(false)}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] md:hidden"
+            className="fixed inset-0 bg-ink/40 backdrop-blur-sm z-[60] md:hidden"
           />
         )}
       </AnimatePresence>
@@ -133,17 +133,17 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-0 bottom-0 h-[100vh] max-h-[100vh] w-72 bg-white dark:bg-slate-900 z-[70] md:hidden flex flex-col shadow-2xl transition-colors"
+            className="fixed left-0 top-0 bottom-0 h-[100vh] max-h-[100vh] w-72 bg-canvas z-[70] md:hidden flex flex-col shadow-2xl transition-colors"
           >
-            <div className="p-6 flex items-center justify-between border-b border-slate-50 dark:border-slate-800">
+            <div className="p-6 flex items-center justify-between border-b border-hairline">
               <Logo onClick={handleLogoClick} />
-              <button onClick={() => setIsMobileOpen(false)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+              <button onClick={() => setIsMobileOpen(false)} className="p-2 text-mute hover:text-ink transition-colors">
                 <X size={20} />
               </button>
             </div>
             <nav className="flex-1 min-h-0 p-4 space-y-6 overflow-y-auto">
               <div>
-                <p className="px-4 text-[10px] font-black uppercase tracking-[3px] text-slate-400 mb-3">General</p>
+                <p className="px-4 caption uppercase tracking-[3px] text-mute mb-3">General</p>
                 <div className="space-y-1">
                   {TOOLS.filter(t => !t.category).map((tool) => {
                     const Icon = tool.icon;
@@ -169,7 +169,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
               </div>
 
               <div>
-                <p className="px-4 text-[10px] font-black uppercase tracking-[3px] text-lumina-blue mb-3 flex items-center gap-2">
+                <p className="px-4 caption uppercase tracking-[3px] text-primary mb-3 flex items-center gap-2">
                   <Briefcase size={12} /> Job Toolkit
                 </p>
                 <div className="space-y-1">
@@ -197,7 +197,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
               </div>
 
               <div>
-                <p className="px-4 text-[10px] font-black uppercase tracking-[3px] text-slate-400 mb-3 flex items-center gap-2">
+                <p className="px-4 caption uppercase tracking-[3px] text-mute mb-3 flex items-center gap-2">
                    System
                 </p>
                 <div className="space-y-1">
@@ -225,11 +225,11 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
               </div>
             </nav>
 
-            <div className="p-4 border-t border-slate-50 dark:border-slate-800">
+            <div className="p-4 border-t border-hairline">
                <Link 
                 to={getRoute('contact')}
                 onClick={() => handleSelect('contact')}
-                className="w-full py-3 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-700 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 bg-primary text-on-primary caption font-black uppercase tracking-widest rounded-xl hover:bg-primary-active transition-all flex items-center justify-center gap-2"
                >
                  <MessageSquare size={14} /> Contact Support
                </Link>
@@ -244,19 +244,19 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
         initial={false}
         animate={{ width: isOpen ? 288 : 72 }}
         className={cn(
-          "hidden md:flex fixed left-0 top-0 h-screen bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-r border-slate-200/40 dark:border-slate-800/40 z-40 flex-col transition-all duration-300 ease-out shadow-2xl",
-          "supports-[backdrop-filter]:bg-white/85 supports-[backdrop-filter]:dark:bg-slate-900/85",
+          "hidden md:flex fixed left-0 top-0 h-screen bg-canvas backdrop-blur-xl border-r border-hairline z-40 flex-col transition-all duration-300 ease-out shadow-2xl",
+          "supports-[backdrop-filter]:bg-canvas/85",
           "lg:block" // Always show on large screens
         )}
       >
         {/* Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/10 to-purple-500/5 pointer-events-none z-0"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none z-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 pointer-events-none z-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-canvas/10 to-transparent pointer-events-none z-0"></div>
         
         {/* Sidebar Header */}
-        <div className="relative h-16 shrink-0 border-b border-slate-200/40 dark:border-slate-800/40 overflow-hidden z-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-blue-500/8 to-purple-500/10 dark:from-indigo-500/20 dark:via-blue-500/15 dark:to-purple-500/20 animate-pulse"></div>
-          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent dark:from-white/5 dark:to-transparent"></div>
+        <div className="relative h-16 shrink-0 border-b border-hairline overflow-hidden z-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/8 to-primary/10 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-canvas/20 to-transparent"></div>
           <div className={cn(
             "relative h-full flex items-center transition-all duration-250",
             isOpen ? "px-6 justify-between" : "px-0 justify-center"
@@ -265,7 +265,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
             {isOpen && (
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 rounded-lg transition-all duration-200 border border-transparent hover:border-slate-200/60 dark:hover:border-slate-700/60"
+                className="p-2 text-mute hover:text-ink hover:bg-canvas-soft rounded-lg transition-all duration-200 border border-hairline"
               >
                 <ChevronRight className={cn("transition-transform duration-200", !isOpen && "rotate-180")} size={14} />
               </button>
@@ -281,18 +281,18 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
           <motion.button
             onClick={onSearchOpen}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group border border-slate-200/40 dark:border-slate-700/40 bg-slate-50/60 dark:bg-slate-800/40 hover:border-indigo-300/60 dark:hover:border-indigo-600/60 hover:bg-white dark:hover:bg-slate-800/60 shadow-sm hover:shadow-lg relative overflow-hidden",
+              "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 group border border-hairline bg-canvas-soft hover:border-primary/60 hover:bg-canvas shadow-sm hover:shadow-lg relative overflow-hidden",
               isOpen ? "w-full" : "w-12 h-12 justify-center"
             )}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Search size={16} className="text-slate-400/60 group-hover:text-indigo-500 transition-colors duration-300 flex-shrink-0 relative z-10" />
+              <Search size={16} className="text-mute/60 group-hover:text-primary transition-colors duration-300 flex-shrink-0 relative z-10" />
             </motion.div>
             {isOpen && (
               <motion.div 
@@ -301,24 +301,24 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Search tools...</span>
+                <span className="text-sm font-medium text-body">Search tools...</span>
                 <motion.div 
                   className="flex items-center gap-1"
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <kbd className="px-2 py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] font-semibold text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-200">⌘</kbd>
-                  <kbd className="px-2 py-1 rounded-md bg-white dark:bg-slate-900 text-[10px] font-semibold text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-all duration-200">K</kbd>
+                  <kbd className="px-2 py-1 rounded-md bg-canvas text-[10px] font-semibold text-mute border border-hairline shadow-sm hover:shadow-md transition-all duration-200">⌘</kbd>
+                  <kbd className="px-2 py-1 rounded-md bg-canvas text-[10px] font-semibold text-mute border border-hairline shadow-sm hover:shadow-md transition-all duration-200">K</kbd>
                 </motion.div>
               </motion.div>
             )}
             {!isOpen && (
                <motion.div 
-                 className="absolute left-full ml-3 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white text-[11px] rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-[-6px] group-hover:translate-x-0 pointer-events-none z-50 shadow-xl border border-slate-700 dark:border-slate-600 font-semibold uppercase tracking-wider whitespace-nowrap"
+                 className="absolute left-full ml-3 px-3 py-2 bg-ink text-on-primary caption rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-[-6px] group-hover:translate-x-0 pointer-events-none z-50 shadow-xl border border-hairline font-semibold uppercase tracking-wider whitespace-nowrap"
                  initial={{ opacity: 0, scale: 0.8 }}
                  whileHover={{ opacity: 1, scale: 1 }}
                >
-                <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-slate-900 dark:bg-slate-800 rotate-45 border-l border-b border-slate-700 dark:border-slate-600"></div>
+                <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-ink rotate-45 border-l border-b border-hairline"></div>
                 Search (⌘K)
               </motion.div>
             )}
@@ -335,7 +335,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
           >
           <div className={cn("space-y-6", isOpen ? "px-4 py-6" : "px-2 py-4 space-y-1")}>
             <motion.div 
-              className={cn("text-[11px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
+              className={cn("caption font-bold text-mute uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
@@ -344,9 +344,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                 animate={{ rotate: 360 }}
                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               >
-                <Sparkles size={12} className="text-indigo-500" />
+                <Sparkles size={12} className="text-primary" />
               </motion.div>
-              <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Utility Tools</span>
+              <span className="bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">Utility Tools</span>
             </motion.div>
             <div className="space-y-1">
               {TOOLS.filter(t => !t.category).map((tool) => {
@@ -372,7 +372,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 
           <div>
              <motion.div 
-               className={cn("text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
+               className={cn("caption font-bold text-primary uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
                initial={{ opacity: 0, y: -10 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.3, delay: 0.2 }}
@@ -381,9 +381,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                  animate={{ scale: [1, 1.2, 1] }}
                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                >
-                 <Briefcase size={12} className="text-indigo-600 dark:text-indigo-400" />
+                 <Briefcase size={12} className="text-primary" />
                </motion.div>
-               <span className="bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">Job Toolkit</span>
+               <span className="bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">Job Toolkit</span>
              </motion.div>
              <div className="space-y-1">
                {TOOLS.filter(t => t.category === 'Job Toolkit').map((tool) => {
@@ -409,7 +409,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 
           <div>
              <motion.div 
-               className={cn("text-[11px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
+               className={cn("caption font-bold text-mute uppercase tracking-[3px] px-3 mb-4 transition-all duration-300 flex items-center gap-2", !isOpen ? "opacity-0 invisible w-0" : "opacity-100 visible w-auto")}
                initial={{ opacity: 0, y: -10 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.3, delay: 0.3 }}
@@ -418,9 +418,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                  animate={{ rotate: [0, 180, 360] }}
                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                >
-                 <Settings size={12} className="text-slate-500 dark:text-slate-500" />
+                 <Settings size={12} className="text-mute" />
                </motion.div>
-               <span className="bg-gradient-to-r from-slate-500 to-slate-600 bg-clip-text text-transparent">System</span>
+               <span className="bg-gradient-to-r from-body to-mute bg-clip-text text-transparent">System</span>
              </motion.div>
              <div className="space-y-1">
                {TOOLS.filter(t => t.category === 'System').map((tool) => {
@@ -448,7 +448,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 
         {/* Sidebar Footer */}
         <div className={cn(
-          "p-4 border-t border-slate-200/40 dark:border-slate-800/40 shrink-0 transition-all duration-300 relative z-10",
+          "p-4 border-t border-hairline shrink-0 transition-all duration-300 relative z-10",
           !isOpen && "p-2"
         )}>
            {isOpen && (
@@ -456,12 +456,12 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                initial={{ opacity: 0, y: 10 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.4, delay: 0.4 }}
-               className="relative bg-gradient-to-br from-slate-50/80 to-slate-100/80 dark:from-slate-800/60 dark:to-slate-900/60 rounded-2xl p-4 mb-4 border border-slate-200/40 dark:border-slate-700/40 backdrop-blur-sm"
+               className="relative bg-gradient-to-br from-canvas-soft/80 to-canvas-soft/80 rounded-2xl p-4 mb-4 border border-hairline backdrop-blur-sm"
                whileHover={{ scale: 1.02, y: -2 }}
              >
                 <div className="flex items-center justify-between mb-3">
                    <motion.p 
-                     className="text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider"
+                     className="caption font-bold text-body uppercase tracking-wider"
                      animate={{ opacity: [0.7, 1, 0.7] }}
                      transition={{ duration: 2, repeat: Infinity }}
                    >
@@ -469,25 +469,25 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                    </motion.p>
                    <motion.button 
                     onClick={toggleTheme}
-                    className="p-2 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-all duration-300 border border-slate-200/40 dark:border-slate-700/40"
+                    className="p-2 hover:bg-canvas-soft rounded-lg transition-all duration-300 border border-hairline"
                     whileHover={{ scale: 1.1, rotate: 180 }}
                     whileTap={{ scale: 0.9 }}
                    >
                      <motion.div
-                       animate={{ rotate: theme === 'light' ? 0 : 360 }}
+                       animate={{ rotate: 0 }}
                        transition={{ duration: 0.5 }}
                      >
-                       {theme === 'light' ? <Moon size={12} /> : <Sun size={12} />}
+                       <Moon size={12} />
                      </motion.div>
                    </motion.button>
                 </div>
                 <motion.div 
-                  className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400 mb-3"
+                  className="flex items-center gap-2 text-xs font-medium text-body mb-3"
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 >
                   <motion.div 
-                    className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"
+                    className="w-2 h-2 rounded-full bg-positive shadow-sm shadow-positive/50"
                     animate={{ scale: [1, 1.5, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   ></motion.div> System Active
@@ -499,9 +499,9 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                   <Link 
                     to={getRoute('contact')}
                     onClick={() => handleSelect('contact')}
-                    className="w-full py-2.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] relative overflow-hidden group"
+                    className="w-full py-2.5 bg-gradient-to-r from-primary via-primary to-primary hover:from-primary-active hover:via-primary-active hover:to-primary-active text-on-primary caption font-bold uppercase tracking-wider rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] relative overflow-hidden group"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-canvas/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <span className="relative z-10 flex items-center justify-center gap-2">
                       <motion.div
                         animate={{ x: [0, 5, 0] }}
@@ -526,7 +526,7 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
              <motion.button 
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                  "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-all duration-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/40 dark:border-slate-700/40",
+                  "text-body hover:text-ink transition-all duration-300 rounded-xl hover:bg-canvas-soft border border-hairline",
                   isOpen ? "flex-1 py-3" : "w-12 h-12 flex items-center justify-center"
                 )}
                 whileHover={{ scale: 1.05 }}
@@ -542,15 +542,15 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
              {!isOpen && (
               <motion.button 
                 onClick={toggleTheme}
-                className="w-12 h-12 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-all duration-300 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/40 dark:border-slate-700/40"
+                className="w-12 h-12 flex items-center justify-center text-body hover:text-ink transition-all duration-300 rounded-xl hover:bg-canvas-soft border border-hairline"
                 whileHover={{ scale: 1.1, rotate: 180 }}
                 whileTap={{ scale: 0.9 }}
               >
                 <motion.div
-                  animate={{ rotate: theme === 'light' ? 0 : 360 }}
+                  animate={{ rotate: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+                  <Moon size={16} />
                 </motion.div>
               </motion.button>
              )}
@@ -570,7 +570,6 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
 
 function NavButton({ tool, isActive, isOpen }: any) {
   const Icon = tool.icon;
-  const { theme } = useTheme();
   const [isHovered, setIsHovered] = useState(false);
   
   return (
@@ -590,30 +589,30 @@ function NavButton({ tool, isActive, isOpen }: any) {
       style={{
         backgroundColor: isActive 
           ? isOpen 
-            ? theme === 'dark' ? 'rgb(30 58 138)' : 'rgb(238 242 255)' // indigo-900 dark, indigo-50 light
-            : 'rgb(99 102 241)' // indigo-500
+            ? 'var(--color-primary-pale)'
+            : 'var(--color-primary)'
           : isOpen
           ? 'transparent'
           : 'transparent',
         color: isActive 
           ? isOpen 
-            ? theme === 'dark' ? 'rgb(165 180 252)' : 'rgb(79 70 229)' // indigo-400 dark, indigo-600 light
-            : 'white'
+            ? 'var(--color-ink)'
+            : 'var(--color-on-primary)'
           : isOpen
-          ? theme === 'dark' ? 'rgb(148 163 184)' : 'rgb(71 85 105)' // slate-400 dark, slate-600 light
-          : theme === 'dark' ? 'rgb(148 163 184)' : 'rgb(71 85 105)',
+          ? 'var(--color-body)'
+          : 'var(--color-body)',
         border: isActive 
           ? isOpen
-            ? theme === 'dark' ? '1px solid rgb(55 48 163)' : '1px solid rgb(165 180 252)' // indigo-800 dark, indigo-200 light
-            : '1px solid rgb(99 102 241)'
+            ? '1px solid var(--color-primary)'
+            : '1px solid var(--color-primary)'
           : isOpen
           ? '1px solid transparent'
           : '1px solid transparent',
         opacity: isActive ? 1 : 0.8,
         boxShadow: isActive 
           ? isOpen 
-            ? '0 0 20px rgba(99, 102, 241, 0.3)' 
-            : '0 0 15px rgba(99, 102, 241, 0.4)'
+            ? '0 0 20px rgba(159, 232, 112, 0.3)' 
+            : '0 0 15px rgba(159, 232, 112, 0.4)'
           : isHovered 
             ? '0 4px 20px rgba(0, 0, 0, 0.1)' 
             : 'none',
@@ -621,12 +620,12 @@ function NavButton({ tool, isActive, isOpen }: any) {
       onMouseEnter={(e) => {
         if (!isActive) {
           e.currentTarget.style.backgroundColor = isOpen 
-            ? theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)' // slate-800 dark, slate-100 light
-            : theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)';
+            ? 'var(--color-canvas-soft)'
+            : 'var(--color-canvas-soft)';
           e.currentTarget.style.borderColor = isOpen
-            ? theme === 'dark' ? 'rgb(51 65 85)' : 'rgb(226 232 240)' // slate-700 dark, slate-200 light
-            : theme === 'dark' ? 'rgb(51 65 85)' : 'rgb(226 232 240)';
-          e.currentTarget.style.color = theme === 'dark' ? 'rgb(226 232 240)' : 'rgb(30 41 59)'; // slate-200 dark, slate-800 light
+            ? 'var(--color-hairline)'
+            : 'var(--color-hairline)';
+          e.currentTarget.style.color = 'var(--color-ink)';
           e.currentTarget.style.opacity = '1';
         }
       }}
@@ -634,7 +633,7 @@ function NavButton({ tool, isActive, isOpen }: any) {
         if (!isActive) {
           e.currentTarget.style.backgroundColor = 'transparent';
           e.currentTarget.style.borderColor = 'transparent';
-          e.currentTarget.style.color = theme === 'dark' ? 'rgb(148 163 184)' : 'rgb(71 85 105)';
+          e.currentTarget.style.color = 'var(--color-body)';
           e.currentTarget.style.opacity = '0.8';
         }
       }}
@@ -652,22 +651,22 @@ function NavButton({ tool, isActive, isOpen }: any) {
         style={{
           backgroundColor: isActive 
             ? isOpen 
-              ? theme === 'dark' ? 'rgb(30 58 138)' : 'rgb(224 231 255)' // indigo-900 dark, indigo-100 light
+              ? 'var(--color-primary)'
               : 'rgba(255, 255, 255, 0.2)'
             : isOpen
-            ? theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)' // slate-800 dark, slate-100 light
-            : theme === 'dark' ? 'rgb(30 41 59)' : 'rgb(241 245 249)',
+            ? 'var(--color-canvas-soft)'
+            : 'var(--color-canvas-soft)',
           color: isActive 
             ? isOpen 
-              ? theme === 'dark' ? 'rgb(165 180 252)' : 'rgb(79 70 229)' // indigo-400 dark, indigo-600 light
-              : 'white'
+              ? 'var(--color-on-primary)'
+              : 'var(--color-on-primary)'
             : isOpen
-            ? theme === 'dark' ? 'rgb(100 116 139)' : 'rgb(100 116 139)' // slate-500
-            : theme === 'dark' ? 'rgb(100 116 139)' : 'rgb(100 116 139)',
+            ? 'var(--color-body)'
+            : 'var(--color-body)',
           boxShadow: isActive 
-            ? '0 0 15px rgba(99, 102, 241, 0.4)' 
+            ? '0 0 15px rgba(159, 232, 112, 0.4)' 
             : isHovered 
-            ? '0 0 10px rgba(99, 102, 241, 0.2)' 
+            ? '0 0 10px rgba(159, 232, 112, 0.2)' 
             : 'none',
         }}>
         <Icon size={isOpen ? 16 : 14} className="transition-colors duration-300" />
@@ -682,8 +681,8 @@ function NavButton({ tool, isActive, isOpen }: any) {
           <span className={cn(
             "text-sm font-semibold tracking-tight whitespace-nowrap",
             isActive 
-              ? theme === 'dark' ? "text-indigo-400" : "text-indigo-600 font-bold"
-              : theme === 'dark' ? "text-slate-300" : "text-slate-700"
+              ? "text-ink font-bold"
+              : "text-body"
           )}>
             {tool.name}
           </span>
@@ -694,19 +693,16 @@ function NavButton({ tool, isActive, isOpen }: any) {
               transition={{ duration: 0.2 }}
               className="flex items-center gap-1"
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>
-              <div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div>
-              <div className="w-1.5 h-1.5 rounded-full bg-indigo-300"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-primary-neutral"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-primary-pale"></div>
             </motion.div>
           )}
         </motion.div>
       )}
       {!isOpen && (
-        <div className="absolute left-full ml-3 px-3 py-2 bg-slate-900 dark:bg-slate-800 text-white text-[11px] rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-[-6px] group-hover:translate-x-0 pointer-events-none z-50 shadow-xl border border-slate-700 dark:border-slate-600 font-semibold uppercase tracking-wider whitespace-nowrap">
-          <div className={cn(
-            "absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 rotate-45 border-l border-b",
-            theme === 'dark' ? "bg-slate-800 border-slate-600" : "bg-slate-900 border-slate-700"
-          )}></div>
+        <div className="absolute left-full ml-3 px-3 py-2 bg-ink text-on-primary caption rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 transform translate-x-[-6px] group-hover:translate-x-0 pointer-events-none z-50 shadow-xl border border-hairline font-semibold uppercase tracking-wider whitespace-nowrap">
+          <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 rotate-45 border-l border-b bg-ink border-hairline"></div>
           {tool.name}
         </div>
       )}

@@ -88,7 +88,7 @@ export default function ToolPreviewCard({
         rotateY,
         transformStyle: 'preserve-3d'
       }}
-      className={`group relative bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer overflow-hidden ${
+      className={`group relative card-content cursor-pointer overflow-hidden ${
         isLarge ? 'md:col-span-2' : ''
       }`}
     >
@@ -119,18 +119,18 @@ export default function ToolPreviewCard({
 
       {/* Border glow on hover */}
       <motion.div
-        className="absolute inset-0 rounded-sm pointer-events-none"
+        className="absolute inset-0 rounded-xl pointer-events-none"
         initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
         style={{
-          boxShadow: 'inset 0 0 20px rgba(255,255,255,0.05)'
+          boxShadow: 'inset 0 0 20px rgba(159,232,112,0.1)'
         }}
       />
 
       {/* Video overlay - only loaded when near viewport */}
       {isVideoLoaded && (
         <motion.div
-          className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          className="absolute inset-0 bg-ink/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered ? 1 : 0 }}
           transition={{ duration: 0.3 }}
@@ -172,23 +172,23 @@ export default function ToolPreviewCard({
         transition={{ duration: 0.3 }}
       >
         <motion.div
-          className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6"
+          className="w-14 h-14 bg-transparent rounded-xl flex items-center justify-center mb-6"
           whileHover={{ scale: 1.1 }}
           transition={{ duration: 0.3 }}
         >
-          <Icon className="w-8 h-8 text-white" />
+          <Icon className="w-8 h-8 text-ink" />
         </motion.div>
         
         <h3 className={`font-normal mb-2 ${isLarge ? 'text-2xl' : 'text-xl'}`}>
           {title}
         </h3>
         
-        <p className="text-body-mid mb-4 max-w-md">
+        <p className="body-md mb-4 max-w-md">
           {description}
         </p>
         
         <motion.div
-          className="flex items-center gap-2 text-white"
+          className="flex items-center gap-2 text-ink"
           animate={{ gap: isHovered ? 12 : 8 }}
           transition={{ duration: 0.3 }}
         >

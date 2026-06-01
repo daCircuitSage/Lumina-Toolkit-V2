@@ -67,9 +67,9 @@ export default function Homepage() {
   ];
 
   return (
-    <div className="relative bg-canvas text-ink selection:bg-white/10 overflow-x-hidden">
+    <div className="relative bg-canvas text-ink selection:bg-primary/20 overflow-x-hidden">
       <CustomCursor />
-      {/* xAI design: solid canvas background, no gradients */}
+      {/* Wise design: canvas background */}
       <div className="fixed inset-0 pointer-events-none bg-canvas" />
 
       {/* Navigation */}
@@ -82,14 +82,14 @@ export default function Homepage() {
             transition={{ type: "spring", stiffness: 400 }}
           >
             <div className="relative">
-              {/* xAI design: simple white square, no gradients or shadows */}
-              <div className="relative w-10 h-10 bg-white rounded-sm flex items-center justify-center">
-                <Terminal className="w-5 h-5 text-black" />
+              {/* Wise design: primary green square with rounded-xl */}
+              <div className="relative w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <Terminal className="w-5 h-5 text-on-primary" />
               </div>
             </div>
             <div className="flex flex-col">
               <span className="font-normal text-lg md:text-xl tracking-tight">Lumina</span>
-              <span className="text-xs text-body-mid hidden md:block">Toolkit</span>
+              <span className="text-xs body-sm hidden md:block">Toolkit</span>
             </div>
           </motion.div>
           
@@ -99,14 +99,14 @@ export default function Homepage() {
             ) : user ? (
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex items-center gap-2">
-                  <div className="w-8 h-8 bg-white/10 rounded-sm flex items-center justify-center">
+                  <div className="w-8 h-8 bg-primary/10 rounded-xl flex items-center justify-center">
                     {user?.photoURL ? (
-                      <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-sm" />
+                      <img src={user.photoURL} alt="Profile" className="w-6 h-6 rounded-xl" />
                     ) : (
-                      <User className="w-4 h-4 text-white" />
+                      <User className="w-4 h-4 text-ink" />
                     )}
                   </div>
-                  <span className="text-sm text-body-mid hidden md:block">
+                  <span className="text-sm body-sm hidden md:block">
                     {user?.displayName || user?.email || 'User'}
                   </span>
                 </div>
@@ -114,7 +114,7 @@ export default function Homepage() {
                   onClick={() => navigate('/all-tools')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-all duration-200 text-sm font-normal"
+                  className="px-4 py-2 bg-canvas-soft border border-hairline rounded-xl hover:bg-canvas transition-all duration-200 text-sm font-normal"
                 >
                   All Tools
                 </motion.button>
@@ -122,7 +122,7 @@ export default function Homepage() {
                   onClick={signOut}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-body-mid hover:text-ink transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm body-sm hover:text-ink transition-colors cursor-pointer border border-transparent hover:border-hairline rounded-xl"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Sign Out</span>
@@ -134,7 +134,7 @@ export default function Homepage() {
                   onClick={() => navigate('/all-tools')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-4 py-2 bg-canvas-soft border border-hairline rounded-sm hover:bg-canvas transition-all duration-200 text-sm font-normal"
+                  className="px-4 py-2 bg-canvas-soft border border-hairline rounded-xl hover:bg-canvas hover:border-white/50 transition-all duration-200 text-sm font-normal cursor-pointer shadow-sm hover:shadow-md"
                 >
                   All Tools
                 </motion.button>
@@ -142,7 +142,7 @@ export default function Homepage() {
                   onClick={signIn}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-2 px-4 py-2 bg-white text-black rounded-sm transition-all duration-200 text-sm font-normal"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-xl border-2 border-primary hover:border-primary-active transition-all duration-200 text-sm font-normal cursor-pointer shadow-md hover:shadow-lg"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -159,7 +159,7 @@ export default function Homepage() {
       </nav>
 
       {/* Hero Section */}
-      <section ref={heroSectionRef} className="relative min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+      <section ref={heroSectionRef} className="relative min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-12 bg-canvas-soft">
         <div className="max-w-7xl mx-auto w-full">
           <motion.div 
             className="text-center space-y-8 md:space-y-12"
@@ -174,10 +174,10 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-canvas-soft border border-hairline rounded-full"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-pale border border-primary rounded-full"
             >
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-sm text-body-mid">14+ Free AI Tools</span>
+              <Sparkles className="w-4 h-4 text-positive-deep" />
+              <span className="text-sm body-sm-strong text-positive-deep">14+ Free AI Tools</span>
             </motion.div>
 
             {/* Main Heading */}
@@ -193,7 +193,7 @@ export default function Homepage() {
                 </span>
               </span>
               <span className="block">
-                <span className="text-white">
+                <span className="text-primary">
                   Productivity
                 </span>
               </span>
@@ -204,7 +204,7 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl text-body-mid max-w-3xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl body-md max-w-3xl mx-auto leading-relaxed"
             >
               AI-powered tools for resume building, job search, PDF conversion, and more. 
               <span className="text-ink font-normal"> Free forever. No registration required.</span>
@@ -221,7 +221,7 @@ export default function Homepage() {
                 onClick={() => navigate('/all-tools')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group relative px-6 py-3 bg-white text-black font-normal rounded-sm transition-all duration-200 hover:bg-gray-100 text-base"
+                className="group relative px-6 py-3 bg-primary text-on-primary font-normal rounded-xl transition-all duration-200 hover:bg-primary-active text-base border-2 border-primary cursor-pointer shadow-lg hover:shadow-xl"
               >
                 <span className="flex items-center gap-2">
                   <Rocket className="w-4 h-4" />
@@ -229,12 +229,12 @@ export default function Homepage() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
                 </span>
               </motion.button>
-              
+
               <motion.button
                 onClick={() => navigate('/resume-builder')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-6 py-3 bg-canvas border border-hairline hover:bg-canvas-soft text-ink font-normal rounded-sm transition-all duration-200 text-base"
+                className="px-6 py-3 bg-canvas border-2 border-hairline hover:bg-canvas-soft hover:border-white/50 text-ink font-normal rounded-xl transition-all duration-200 text-base cursor-pointer shadow-md hover:shadow-lg"
               >
                 <span className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
@@ -250,13 +250,13 @@ export default function Homepage() {
               transition={{ duration: 1, delay: 1 }}
               className="flex flex-col items-center gap-2 mt-16"
             >
-              <span className="text-sm text-body-mid">Scroll to explore</span>
+              <span className="text-sm body-sm">Scroll to explore</span>
               <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 1.5, repeat: 9999 }}
-                className="w-6 h-10 border-2 border-hairline rounded-sm flex justify-center pt-2"
+                className="w-6 h-10 border-2 border-hairline rounded-xl flex justify-center pt-2"
               >
-                <div className="w-1.5 h-3 bg-white/50 rounded-full" />
+                <div className="w-1.5 h-3 bg-primary/50 rounded-full" />
               </motion.div>
             </motion.div>
           </motion.div>
@@ -274,27 +274,27 @@ export default function Homepage() {
             {[...Array(4)].map((_, i) => (
               <React.Fragment key={i}>
                 <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
-                  <Zap className="w-4 h-4 text-white" />
+                  <Zap className="w-4 h-4 text-ink" />
                   <span className="text-sm font-normal">Lightning Fast</span>
                 </div>
                 <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
-                  <Shield className="w-4 h-4 text-white" />
+                  <Shield className="w-4 h-4 text-ink" />
                   <span className="text-sm font-normal">100% Secure</span>
                 </div>
                 <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
-                  <Infinity className="w-4 h-4 text-white" />
+                  <Infinity className="w-4 h-4 text-ink" />
                   <span className="text-sm font-normal">Free Forever</span>
                 </div>
                 <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
-                  <Users className="w-4 h-4 text-white" />
+                  <Users className="w-4 h-4 text-ink" />
                   <span className="text-sm font-normal">10K+ Users</span>
                 </div>
                 <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
-                  <Star className="w-4 h-4 text-white" />
+                  <Star className="w-4 h-4 text-ink" />
                   <span className="text-sm font-normal">5-Star Rated</span>
                 </div>
                 <div className="flex items-center gap-2 px-6 py-3 bg-canvas-soft border border-hairline rounded-full">
-                  <Globe className="w-4 h-4 text-white" />
+                  <Globe className="w-4 h-4 text-ink" />
                   <span className="text-sm font-normal">Available Worldwide</span>
                 </div>
               </React.Fragment>
@@ -347,7 +347,7 @@ export default function Homepage() {
               ))}
             </motion.h2>
             <motion.p 
-              className="text-body-mid text-lg max-w-2xl mx-auto"
+              className="body-md text-lg max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -393,7 +393,7 @@ export default function Homepage() {
               onClick={() => navigate('/all-tools')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-canvas-soft border border-hairline hover:bg-canvas text-ink font-normal rounded-sm transition-all duration-300"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-canvas-soft border-2 border-hairline hover:bg-canvas hover:border-white/50 text-ink font-normal rounded-xl transition-all duration-300 cursor-pointer shadow-md hover:shadow-lg"
             >
               View All 14+ Tools
               <ArrowRight className="w-5 h-5" />
@@ -403,7 +403,7 @@ export default function Homepage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 md:py-32 relative">
+      <section className="py-20 md:py-32 relative bg-canvas-soft">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -412,9 +412,9 @@ export default function Homepage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-normal mb-4">
-              Why Choose <span className="text-white">Lumina</span>?
+              Why Choose <span className="text-primary">Lumina</span>?
             </h2>
-            <p className="text-body-mid text-lg max-w-2xl mx-auto">
+            <p className="body-md text-lg max-w-2xl mx-auto">
               Built for modern professionals who want to achieve more
             </p>
           </motion.div>
@@ -438,19 +438,135 @@ export default function Homepage() {
                   damping: 15
                 }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                className="bg-canvas-card border border-hairline rounded-sm p-6 hover:border-white/30 transition-all duration-300"
+                className="card-content p-6 hover:border-primary/30 transition-all duration-300"
               >
                 <motion.div 
-                  className="w-12 h-12 bg-white/10 rounded-sm flex items-center justify-center mb-4"
+                  className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4"
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <feature.icon className="w-6 h-6 text-white" />
+                  <feature.icon className="w-6 h-6 text-ink" />
                 </motion.div>
                 <h3 className="font-normal text-lg mb-2">{feature.title}</h3>
-                <p className="text-body-mid text-sm">{feature.description}</p>
+                <p className="body-sm">{feature.description}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Section with Lock Image */}
+      <section className="py-20 md:py-32 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.img
+                src="/src/assets/wise_images/imgi_143_lock-large@2x.webp"
+                alt="Secure and trusted"
+                className="w-full max-w-md mx-auto"
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.2 }}
+              />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-normal mb-6">
+                Your Data is <span className="text-primary">Secure</span>
+              </h2>
+              <p className="body-md mb-6">
+                We use enterprise-grade encryption and never share your personal information. Your documents and data stay private and protected.
+              </p>
+              <ul className="space-y-4">
+                {[
+                  "End-to-end encryption",
+                  "GDPR compliant",
+                  "No data selling",
+                  "Local processing options"
+                ].map((item, index) => (
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="flex items-center gap-3"
+                  >
+                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-4 h-4 text-on-primary" />
+                    </div>
+                    <span className="body-md">{item}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Global Reach Section with Globe Image */}
+      <section className="py-20 md:py-32 relative bg-canvas-soft">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="order-2 md:order-1"
+            >
+              <h2 className="text-3xl md:text-4xl font-normal mb-6">
+                Available <span className="text-primary">Worldwide</span>
+              </h2>
+              <p className="body-md mb-6">
+                Access Lumina Toolkit from anywhere in the world. Our platform supports multiple languages and currencies, making it easy for professionals globally.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-8">
+                {['US', 'GB', 'DE', 'AU', 'IN', 'JP'].map((country, index) => (
+                  <motion.div
+                    key={country}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="w-12 h-12 bg-canvas rounded-xl flex items-center justify-center"
+                  >
+                    <img
+                      src={`/src/assets/wise_images/imgi_${country.toLowerCase()}.svg`}
+                      alt={country}
+                      className="w-8 h-8"
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="order-1 md:order-2"
+            >
+              <motion.img
+                src="/src/assets/wise_images/imgi_144_globe-large@2x.webp"
+                alt="Global reach"
+                className="w-full max-w-md mx-auto"
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, delay: 0.4 }}
+              />
+            </motion.div>
           </div>
         </div>
       </section>
@@ -462,7 +578,7 @@ export default function Homepage() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative bg-canvas-card border border-hairline rounded-sm p-8 md:p-16 text-center overflow-hidden"
+            className="relative card-feature-dark p-8 md:p-16 text-center overflow-hidden"
           >
             
             <div className="relative">
@@ -470,15 +586,15 @@ export default function Homepage() {
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="w-16 h-16 bg-white rounded-sm flex items-center justify-center mx-auto mb-6"
+                className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mx-auto mb-6"
               >
-                <Flame className="w-8 h-8 text-black" />
+                <Flame className="w-8 h-8 text-on-primary" />
               </motion.div>
               
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-normal mb-6">
-                Ready to Transform Your <span className="text-white">Workflow</span>?
+                Ready to Transform Your <span className="text-primary">Workflow</span>?
               </h2>
-              <p className="text-body-mid text-lg mb-8 max-w-2xl mx-auto">
+              <p className="body-md text-lg mb-8 max-w-2xl mx-auto">
                 Join thousands of professionals who are already using Lumina Toolkit to achieve more in less time.
               </p>
               
@@ -487,7 +603,7 @@ export default function Homepage() {
                   onClick={() => navigate('/all-tools')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-white hover:bg-gray-100 text-black font-normal rounded-sm transition-all duration-300 text-lg"
+                  className="px-8 py-4 bg-primary hover:bg-primary-active text-on-primary font-normal rounded-xl transition-all duration-300 text-lg border-2 border-primary cursor-pointer shadow-lg hover:shadow-xl"
                 >
                   Get Started Free
                 </motion.button>
@@ -495,7 +611,7 @@ export default function Homepage() {
                   onClick={() => navigate('/contact')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-canvas border border-hairline hover:bg-canvas-soft text-ink font-normal rounded-sm transition-all duration-300 text-lg"
+                  className="px-8 py-4 bg-canvas border-2 border-hairline hover:bg-canvas-soft hover:border-white/50 text-ink font-normal rounded-xl transition-all duration-300 text-lg cursor-pointer shadow-md hover:shadow-lg"
                 >
                   Contact Us
                 </motion.button>

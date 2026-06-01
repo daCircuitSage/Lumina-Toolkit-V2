@@ -563,7 +563,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
              
              {/* Search suggestions dropdown */}
              {showSuggestions && getSearchSuggestions.length > 0 && (
-               <div className="absolute top-full left-0 right-0 mt-2 bg-canvas-card border border-hairline rounded-sm z-50 overflow-hidden">
+               <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-hairline rounded-sm z-[9999] overflow-hidden shadow-xl">
                  <div className="p-2">
                    <p className="text-xs font-normal text-body-mid px-3 py-2">Did you mean:</p>
                    {getSearchSuggestions.slice(0, 5).map((suggestion, index) => (
@@ -573,7 +573,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                          setRole(suggestion.title);
                          setShowSuggestions(false);
                        }}
-                       className="w-full text-left px-3 py-2 hover:bg-canvas-soft rounded-sm transition-colors"
+                       className="w-full text-left px-3 py-2 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer"
                      >
                        <div className="text-sm font-normal text-ink">{suggestion.title}</div>
                        <div className="text-xs text-body-mid">{suggestion.description}</div>
@@ -603,10 +603,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                  key={level}
                  onClick={() => setDifficulty(level)}
                  className={cn(
-                   "flex-1 px-4 py-3 rounded-sm text-xs font-normal uppercase tracking-wider transition-all",
+                   "flex-1 px-4 py-3 rounded-sm text-xs font-normal uppercase tracking-wider transition-all border cursor-pointer active:scale-95",
                    difficulty === level 
-                     ? "bg-white text-black" 
-                     : "bg-canvas text-body-mid hover:bg-canvas-soft"
+                     ? "bg-white text-black border-white" 
+                     : "bg-canvas text-body-mid border-hairline hover:border-white/50 hover:bg-canvas-soft"
                  )}
                >
                  {level}
@@ -625,10 +625,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                  key={mode.id}
                  onClick={() => setPracticeMode(mode.id as any)}
                  className={cn(
-                   "flex-1 px-4 py-3 rounded-sm text-xs font-normal uppercase tracking-wider transition-all flex items-center justify-center gap-2",
+                   "flex-1 px-4 py-3 rounded-sm text-xs font-normal uppercase tracking-wider transition-all border cursor-pointer active:scale-95 flex items-center justify-center gap-2",
                    practiceMode === mode.id 
-                     ? "bg-white text-black" 
-                     : "bg-canvas text-body-mid hover:bg-canvas-soft"
+                     ? "bg-white text-black border-white" 
+                     : "bg-canvas text-body-mid border-hairline hover:border-white/50 hover:bg-canvas-soft"
                  )}
                >
                  <mode.icon size={14} />
@@ -672,14 +672,14 @@ Do not include any markdown formatting, explanations, or additional text. Only t
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowStats(!showStats)}
-              className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 hover:bg-canvas transition-colors"
+              className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 hover:bg-canvas transition-colors cursor-pointer active:scale-95 border border-transparent hover:border-hairline"
             >
               <BarChart3 size={14} />
               Stats
             </button>
             <button
               onClick={exportSession}
-              className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 hover:bg-canvas transition-colors"
+              className="px-4 py-2 bg-canvas-soft rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 hover:bg-canvas transition-colors cursor-pointer active:scale-95 border border-transparent hover:border-hairline"
             >
               <Download size={14} />
               Export
@@ -793,15 +793,15 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                            {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60).toString().padStart(2, '0')}
                          </span>
                          {!showTimer ? (
-                           <button onClick={startTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors">
+                           <button onClick={startTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer active:scale-95">
                              <Play size={14} className="text-white" />
                            </button>
                          ) : (
                            <div className="flex gap-1">
-                             <button onClick={stopTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors">
+                             <button onClick={stopTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer active:scale-95">
                                <Pause size={14} className="text-white" />
                              </button>
-                             <button onClick={resetTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors">
+                             <button onClick={resetTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer active:scale-95">
                                <RotateCcw size={14} className="text-white" />
                              </button>
                            </div>
@@ -814,7 +814,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                          <span className="text-sm font-normal text-red-400">
                            Recording {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}
                          </span>
-                         <button onClick={stopRecording} className="p-1 hover:bg-red-500/30 rounded-sm transition-colors">
+                         <button onClick={stopRecording} className="p-1 hover:bg-red-500/30 rounded-sm transition-colors cursor-pointer active:scale-95">
                            <MicOff size={14} className="text-red-400" />
                          </button>
                        </div>
@@ -838,7 +838,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                    {searchQuery && (
                      <button
                        onClick={clearSearch}
-                       className="absolute right-3 top-1/2 -translate-y-1/2 text-body-mid hover:text-ink transition-colors"
+                       className="absolute right-3 top-1/2 -translate-y-1/2 text-body-mid hover:text-ink transition-colors cursor-pointer active:scale-95"
                      >
                        <X size={16} />
                      </button>
@@ -984,10 +984,10 @@ function TabButton({ active, onClick, icon: Icon, title, desc, count }: any) {
     <button 
       onClick={onClick}
       className={cn(
-        "flex lg:flex items-center gap-3 p-4 md:p-6 rounded-sm border-2 transition-all text-left relative",
+        "flex lg:flex items-center gap-3 p-4 md:p-6 rounded-sm border-2 transition-all text-left relative cursor-pointer active:scale-95",
         active 
           ? "bg-canvas-card border-white" 
-          : "bg-canvas border-hairline hover:border-white/30"
+          : "bg-canvas border-hairline hover:border-white/50 hover:bg-canvas-soft"
       )}
     >
       <div className={cn(
@@ -1039,7 +1039,7 @@ function QaCard({
     <div className="bg-canvas-card rounded-sm border border-hairline overflow-hidden group hover:border-white/30 transition-all">
       <button 
         onClick={onToggle}
-        className="w-full flex items-start justify-between p-5 md:p-8 text-left gap-4"
+        className="w-full flex items-start justify-between p-5 md:p-8 text-left gap-4 cursor-pointer active:scale-98 transition-transform"
       >
         <div className="flex gap-3 md:gap-4 items-start flex-1 min-w-0">
            <div className={cn(
@@ -1094,7 +1094,7 @@ function QaCard({
               onBookmark();
             }}
             className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0",
+              "w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0 cursor-pointer active:scale-95",
               q.isBookmarked ? "text-yellow-400 bg-yellow-400/20" : "text-body-mid hover:text-yellow-400 hover:bg-yellow-400/10"
             )}
           >
@@ -1121,7 +1121,7 @@ function QaCard({
                    {!isRecording ? (
                      <button
                        onClick={onStartRecording}
-                       className="px-4 py-2 bg-white hover:bg-gray-100 text-black rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 transition-all"
+                       className="px-4 py-2 bg-white hover:bg-gray-100 text-black rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer active:scale-95"
                      >
                        <Mic size={14} />
                        Record Answer
@@ -1129,7 +1129,7 @@ function QaCard({
                    ) : (
                      <button
                        onClick={onStopRecording}
-                       className="px-4 py-2 bg-red-500 hover:bg-red-500/90 text-white rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 transition-all animate-pulse"
+                       className="px-4 py-2 bg-red-500 hover:bg-red-500/90 text-white rounded-sm text-xs font-normal uppercase tracking-wider flex items-center gap-2 transition-all animate-pulse cursor-pointer active:scale-95"
                      >
                        <MicOff size={14} />
                        Stop Recording
@@ -1150,7 +1150,7 @@ function QaCard({
                        key={rating}
                        onClick={() => onRate(rating)}
                        className={cn(
-                         "transition-all hover:scale-110",
+                         "transition-all hover:scale-110 cursor-pointer active:scale-95",
                          (q.rating || 0) >= rating ? "text-yellow-400" : "text-body-mid hover:text-yellow-400"
                        )}
                      >

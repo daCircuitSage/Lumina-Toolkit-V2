@@ -156,8 +156,8 @@ export default function Profile() {
     return (
       <div className="min-h-screen bg-canvas flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-body-mid">Loading profile...</p>
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-body">Loading profile...</p>
         </div>
       </div>
     );
@@ -173,7 +173,7 @@ export default function Profile() {
           className="mb-8"
         >
           <h1 className="text-4xl font-normal text-ink mb-2">Account Settings</h1>
-          <p className="text-body-mid">Manage your profile, security, and preferences</p>
+          <p className="text-body">Manage your profile, security, and preferences</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -182,15 +182,15 @@ export default function Profile() {
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-canvas-card border border-hairline rounded-sm p-4"
+              className="bg-canvas border border-hairline rounded-sm p-4"
             >
               <nav className="space-y-2">
                 <button
                   onClick={() => setActiveSection('overview')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors cursor-pointer active:scale-95 border border-transparent ${
                     activeSection === 'overview' 
-                      ? 'bg-white text-black' 
-                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
+                      ? 'bg-canvas text-ink border-hairline' 
+                      : 'text-body hover:bg-canvas-soft hover:text-ink hover:border-hairline'
                   }`}
                 >
                   <User size={16} />
@@ -199,10 +199,10 @@ export default function Profile() {
                 
                 <button
                   onClick={() => setActiveSection('personal')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors cursor-pointer active:scale-95 border border-transparent ${
                     activeSection === 'personal' 
-                      ? 'bg-white text-black' 
-                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
+                      ? 'bg-canvas text-ink border-hairline' 
+                      : 'text-body hover:bg-canvas-soft hover:text-ink hover:border-hairline'
                   }`}
                 >
                   <Edit2 size={16} />
@@ -211,10 +211,10 @@ export default function Profile() {
                 
                 <button
                   onClick={() => setActiveSection('security')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors cursor-pointer active:scale-95 border border-transparent ${
                     activeSection === 'security' 
-                      ? 'bg-white text-black' 
-                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
+                      ? 'bg-canvas text-ink border-hairline' 
+                      : 'text-body hover:bg-canvas-soft hover:text-ink hover:border-hairline'
                   }`}
                 >
                   <Shield size={16} />
@@ -223,10 +223,10 @@ export default function Profile() {
                 
                 <button
                   onClick={() => setActiveSection('email')}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-colors cursor-pointer active:scale-95 border border-transparent ${
                     activeSection === 'email' 
-                      ? 'bg-white text-black' 
-                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
+                      ? 'bg-canvas text-ink border-hairline' 
+                      : 'text-body hover:bg-canvas-soft hover:text-ink hover:border-hairline'
                   }`}
                 >
                   <Mail size={16} />
@@ -242,7 +242,7 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-canvas-card border border-hairline rounded-sm p-6"
+                className="bg-canvas border border-hairline rounded-sm p-6"
               >
                 <h2 className="text-2xl font-normal text-ink mb-6">Profile Overview</h2>
                 
@@ -269,11 +269,11 @@ export default function Profile() {
                     />
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full flex items-center justify-center border-2 border-canvas hover:bg-gray-100 transition-colors"
+                      className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full flex items-center justify-center border-2 border-canvas hover:bg-canvas-soft transition-colors cursor-pointer active:scale-95 shadow-md hover:shadow-lg"
                       disabled={isUploading}
                     >
                       {isUploading ? (
-                        <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin"></div>
                       ) : (
                         <Camera size={18} className="text-black" />
                       )}
@@ -286,13 +286,13 @@ export default function Profile() {
                       <h3 className="text-2xl font-normal text-ink">{user?.displayName}</h3>
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="p-2 text-body-mid hover:text-ink transition-colors rounded-sm hover:bg-canvas-soft"
+                        className="p-2 text-body hover:text-ink transition-colors rounded-sm hover:bg-canvas-soft cursor-pointer active:scale-95 border border-transparent hover:border-hairline"
                       >
                         <Edit2 size={16} />
                       </button>
                     </div>
                     
-                    <div className="space-y-3 text-body-mid">
+                    <div className="space-y-3 text-body">
                       <div className="flex items-center gap-2">
                         <Mail size={16} />
                         <span>{user?.email}</span>
@@ -316,7 +316,7 @@ export default function Profile() {
                       <span className="text-sm font-normal text-ink">Profile Completion</span>
                     </div>
                     <div className="text-2xl font-normal text-white">85%</div>
-                    <p className="text-xs text-body-mid">Profile filled out</p>
+                    <p className="text-xs text-body">Profile filled out</p>
                   </div>
                   
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
@@ -325,7 +325,7 @@ export default function Profile() {
                       <span className="text-sm font-normal text-ink">Security Level</span>
                     </div>
                     <div className="text-2xl font-normal text-white">High</div>
-                    <p className="text-xs text-body-mid">Account secured</p>
+                    <p className="text-xs text-body">Account secured</p>
                   </div>
                   
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
@@ -334,7 +334,7 @@ export default function Profile() {
                       <span className="text-sm font-normal text-ink">Member Since</span>
                     </div>
                     <div className="text-2xl font-normal text-white">{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).getFullYear() : '2024'}</div>
-                    <p className="text-xs text-body-mid">Years active</p>
+                    <p className="text-xs text-body">Years active</p>
                   </div>
                 </div>
               </motion.div>
@@ -344,43 +344,43 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-canvas-card border border-hairline rounded-sm p-6"
+                className="bg-canvas border border-hairline rounded-sm p-6"
               >
                 <h2 className="text-2xl font-normal text-ink mb-6">Personal Information</h2>
                 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-normal text-body-mid mb-2">Display Name</label>
+                    <label className="block text-sm font-normal text-body mb-2">Display Name</label>
                     <input
                       type="text"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
-                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors"
+                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-primary transition-colors"
                       placeholder="Enter your display name"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-normal text-body-mid mb-2">Bio</label>
+                    <label className="block text-sm font-normal text-body mb-2">Bio</label>
                     <textarea
-                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors resize-none"
+                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-primary transition-colors resize-none"
                       rows={4}
                       placeholder="Tell us about yourself..."
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-normal text-body-mid mb-2">Location</label>
+                    <label className="block text-sm font-normal text-body mb-2">Location</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors"
+                      className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-primary transition-colors"
                       placeholder="City, Country"
                     />
                   </div>
                   
                   <button
                     onClick={handleSaveProfile}
-                    className="w-full px-6 py-3 bg-white hover:bg-gray-100 text-black font-normal rounded-sm transition-colors"
+                    className="w-full px-6 py-3 bg-white hover:bg-canvas-soft text-black font-normal rounded-sm transition-colors cursor-pointer active:scale-95 border-2 border-white shadow-md hover:shadow-lg"
                   >
                     Save Changes
                   </button>
@@ -392,7 +392,7 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-canvas-card border border-hairline rounded-sm p-6"
+                className="bg-canvas border border-hairline rounded-sm p-6"
               >
                 <h2 className="text-2xl font-normal text-ink mb-6">Privacy & Security</h2>
                 
@@ -403,13 +403,13 @@ export default function Profile() {
                       Password Security
                     </h3>
                     <div className="space-y-3">
-                      <button className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors">
+                      <button className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors cursor-pointer active:scale-95 border border-transparent hover:border-hairline">
                         <span className="text-ink">Change Password</span>
-                        <ChevronRight size={16} className="text-body-mid" />
+                        <ChevronRight size={16} className="text-body" />
                       </button>
-                      <button className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors">
+                      <button className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors cursor-pointer active:scale-95 border border-transparent hover:border-hairline">
                         <span className="text-ink">Enable Two-Factor Authentication</span>
-                        <ChevronRight size={16} className="text-body-mid" />
+                        <ChevronRight size={16} className="text-body" />
                       </button>
                     </div>
                   </div>
@@ -422,15 +422,15 @@ export default function Profile() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between p-3">
                         <span className="text-ink">Profile Visibility</span>
-                        <button className="px-3 py-1 bg-white/10 text-white rounded-sm text-sm">Public</button>
+                        <button className="px-3 py-1 bg-primary/10 text-primary rounded-sm text-sm cursor-pointer active:scale-95 border border-primary/20 hover:border-primary/40">Public</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
                         <span className="text-ink">Show Email Publicly</span>
-                        <button className="px-3 py-1 bg-canvas text-body-mid rounded-sm text-sm">Hidden</button>
+                        <button className="px-3 py-1 bg-canvas text-body rounded-sm text-sm cursor-pointer active:scale-95 border border-hairline hover:border-white/30">Hidden</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
                         <span className="text-ink">Activity Status</span>
-                        <button className="px-3 py-1 bg-white/10 text-white rounded-sm text-sm">Active</button>
+                        <button className="px-3 py-1 bg-primary/10 text-primary rounded-sm text-sm cursor-pointer active:scale-95 border border-primary/20 hover:border-primary/40">Active</button>
                       </div>
                     </div>
                   </div>
@@ -443,10 +443,10 @@ export default function Profile() {
                     <div className="space-y-3">
                       <button 
                         onClick={handleDownloadData}
-                        className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors"
+                        className="w-full flex items-center justify-between p-3 rounded-sm hover:bg-canvas transition-colors cursor-pointer active:scale-95 border border-transparent hover:border-hairline"
                       >
                         <span className="text-ink">Download Your Data</span>
-                        <ChevronRight size={16} className="text-body-mid" />
+                        <ChevronRight size={16} className="text-body" />
                       </button>
                     </div>
                   </div>
@@ -458,7 +458,7 @@ export default function Profile() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-canvas-card border border-hairline rounded-sm p-6"
+                className="bg-canvas border border-hairline rounded-sm p-6"
               >
                 <h2 className="text-2xl font-normal text-ink mb-6">Email Preferences</h2>
                 
@@ -469,23 +469,23 @@ export default function Profile() {
                       <div className="flex items-center justify-between p-3">
                         <div>
                           <span className="text-ink block">Product Updates</span>
-                          <span className="text-body-mid text-sm">New features and announcements</span>
+                          <span className="text-body text-sm">New features and announcements</span>
                         </div>
-                        <button className="px-3 py-1 bg-white text-black rounded-sm text-sm">Enabled</button>
+                        <button className="px-3 py-1 bg-canvas text-ink rounded-sm text-sm">Enabled</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
                         <div>
                           <span className="text-ink block">Security Alerts</span>
-                          <span className="text-body-mid text-sm">Important security notifications</span>
+                          <span className="text-body text-sm">Important security notifications</span>
                         </div>
-                        <button className="px-3 py-1 bg-white text-black rounded-sm text-sm">Enabled</button>
+                        <button className="px-3 py-1 bg-canvas text-ink rounded-sm text-sm">Enabled</button>
                       </div>
                       <div className="flex items-center justify-between p-3">
                         <div>
                           <span className="text-ink block">Marketing Emails</span>
-                          <span className="text-body-mid text-sm">Tips and promotional content</span>
+                          <span className="text-body text-sm">Tips and promotional content</span>
                         </div>
-                        <button className="px-3 py-1 bg-canvas text-body-mid rounded-sm text-sm">Disabled</button>
+                        <button className="px-3 py-1 bg-canvas text-body rounded-sm text-sm">Disabled</button>
                       </div>
                     </div>
                   </div>
@@ -494,8 +494,8 @@ export default function Profile() {
                     <h3 className="text-lg font-normal text-ink mb-4">Communication Preferences</h3>
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-sm font-normal text-body-mid mb-2">Preferred Language</label>
-                        <select className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors">
+                        <label className="block text-sm font-normal text-body mb-2">Preferred Language</label>
+                        <select className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-primary transition-colors">
                           <option>English</option>
                           <option>Spanish</option>
                           <option>French</option>
@@ -503,8 +503,8 @@ export default function Profile() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-normal text-body-mid mb-2">Time Zone</label>
-                        <select className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-white transition-colors">
+                        <label className="block text-sm font-normal text-body mb-2">Time Zone</label>
+                        <select className="w-full px-4 py-3 bg-canvas border border-hairline rounded-sm text-ink focus:outline-none focus:border-primary transition-colors">
                           <option>UTC-08:00 Pacific Time</option>
                           <option>UTC-05:00 Eastern Time</option>
                           <option>UTC+00:00 London</option>

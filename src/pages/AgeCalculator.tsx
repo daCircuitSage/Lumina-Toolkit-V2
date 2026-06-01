@@ -43,21 +43,21 @@ export default function AgeCalculator() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-xl bg-canvas-card border border-hairline rounded-sm p-6 md:p-10"
+          className="w-full max-w-xl bg-canvas border border-hairline rounded-sm p-6 md:p-10"
         >
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-8 md:mb-10 text-center sm:text-left">
-            <div className="w-12 h-12 md:w-14 md:h-14 rounded-sm bg-white/10 flex items-center justify-center text-white shrink-0">
+            <div className="w-12 h-12 md:w-14 md:h-14 rounded-sm bg-primary/10 flex items-center justify-center text-primary shrink-0">
               <Calendar size={28} />
             </div>
             <div className="flex-1">
               <h1 className="text-2xl md:text-3xl font-normal text-ink tracking-tight">Chronological Age Calculator</h1>
-              <p className="text-xs md:text-sm font-normal text-body-mid">Use this online chronological age calculator to calculate your exact age and key life milestones</p>
+              <p className="text-xs md:text-sm font-normal text-body">Use this online chronological age calculator to calculate your exact age and key life milestones</p>
             </div>
           </div>
 
           <div className="space-y-6">
             <div className="space-y-4">
-              <label className="text-[11px] font-normal text-body-mid uppercase tracking-[2px] px-1 flex items-center gap-2">
+              <label className="text-[11px] font-normal text-body uppercase tracking-[2px] px-1 flex items-center gap-2">
                 <Calendar size={14} />
                 Select Your Birth Date
               </label>
@@ -68,14 +68,14 @@ export default function AgeCalculator() {
                   <select
                     value={day}
                     onChange={(e) => setDay(e.target.value)}
-                    className="w-full h-14 md:h-16 px-4 bg-canvas border border-hairline rounded-sm text-lg md:text-xl font-normal text-ink focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white transition-all appearance-none cursor-pointer hover:bg-canvas-soft"
+                    className="w-full h-14 md:h-16 px-4 bg-canvas border border-hairline rounded-sm text-lg md:text-xl font-normal text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer hover:bg-canvas-soft"
                   >
-                    <option value="" className="text-body-mid">Day</option>
+                    <option value="" className="text-body">Day</option>
                     {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
                       <option key={d} value={d} className="bg-canvas text-ink">{d.toString().padStart(2, '0')}</option>
                     ))}
                   </select>
-                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-white pointer-events-none" />
+                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
                 </div>
 
                 {/* Month Selector */}
@@ -83,14 +83,14 @@ export default function AgeCalculator() {
                   <select
                     value={month}
                     onChange={(e) => setMonth(e.target.value)}
-                    className="w-full h-14 md:h-16 px-4 bg-canvas border border-hairline rounded-sm text-lg md:text-xl font-normal text-ink focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white transition-all appearance-none cursor-pointer hover:bg-canvas-soft"
+                    className="w-full h-14 md:h-16 px-4 bg-canvas border border-hairline rounded-sm text-lg md:text-xl font-normal text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer hover:bg-canvas-soft"
                   >
-                    <option value="" className="text-body-mid">Month</option>
+                    <option value="" className="text-body">Month</option>
                     {Array.from({ length: 12 }, (_, i) => i + 1).map(m => (
                       <option key={m} value={m} className="bg-canvas text-ink">{format(new Date(2000, m - 1, 1), 'MMM')}</option>
                     ))}
                   </select>
-                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-white pointer-events-none" />
+                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
                 </div>
 
                 {/* Year Selector */}
@@ -98,14 +98,14 @@ export default function AgeCalculator() {
                   <select
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
-                    className="w-full h-14 md:h-16 px-4 bg-canvas border border-hairline rounded-sm text-lg md:text-xl font-normal text-ink focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white transition-all appearance-none cursor-pointer hover:bg-canvas-soft"
+                    className="w-full h-14 md:h-16 px-4 bg-canvas border border-hairline rounded-sm text-lg md:text-xl font-normal text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer hover:bg-canvas-soft"
                   >
-                    <option value="" className="text-body-mid">Year</option>
+                    <option value="" className="text-body">Year</option>
                     {Array.from({ length: 120 }, (_, i) => new Date().getFullYear() - i).map(y => (
                       <option key={y} value={y} className="bg-canvas text-ink">{y}</option>
                     ))}
                   </select>
-                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-white pointer-events-none" />
+                  <ChevronDown size={20} className="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none" />
                 </div>
               </div>
 
@@ -118,7 +118,7 @@ export default function AgeCalculator() {
                     setMonth((today.getMonth() + 1).toString());
                     setYear((today.getFullYear() - 25).toString());
                   }}
-                  className="px-3 py-1.5 text-xs font-normal bg-white text-black rounded-sm hover:bg-gray-100 transition-all transform hover:scale-105"
+                  className="px-3 py-1.5 text-xs font-normal bg-canvas text-ink rounded-sm hover:bg-canvas-soft transition-all transform hover:scale-105"
                 >
                   25 Years Ago
                 </button>
@@ -129,7 +129,7 @@ export default function AgeCalculator() {
                     setMonth((today.getMonth() + 1).toString());
                     setYear((today.getFullYear() - 18).toString());
                   }}
-                  className="px-3 py-1.5 text-xs font-normal bg-white text-black rounded-sm hover:bg-gray-100 transition-all transform hover:scale-105"
+                  className="px-3 py-1.5 text-xs font-normal bg-canvas text-ink rounded-sm hover:bg-canvas-soft transition-all transform hover:scale-105"
                 >
                   18 Years Ago
                 </button>
@@ -140,7 +140,7 @@ export default function AgeCalculator() {
                     setMonth((today.getMonth() + 1).toString());
                     setYear((today.getFullYear() - 30).toString());
                   }}
-                  className="px-3 py-1.5 text-xs font-normal bg-white text-black rounded-sm hover:bg-gray-100 transition-all transform hover:scale-105"
+                  className="px-3 py-1.5 text-xs font-normal bg-canvas text-ink rounded-sm hover:bg-canvas-soft transition-all transform hover:scale-105"
                 >
                   30 Years Ago
                 </button>
@@ -150,7 +150,7 @@ export default function AgeCalculator() {
             <motion.button 
               onClick={calculate}
               disabled={!day || !month || !year}
-              className="w-full h-14 md:h-16 bg-white text-black rounded-sm font-normal uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="w-full h-14 md:h-16 bg-canvas text-ink rounded-sm font-normal uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-canvas-soft active:scale-[0.98] transition-all disabled:opacity-50"
               whileHover={{ scale: day && month && year ? 1.02 : 1 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -167,41 +167,41 @@ export default function AgeCalculator() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-4 pt-4"
                 >
-                  <div className="p-6 md:p-8 bg-white text-black rounded-sm relative overflow-hidden group transition-all">
+                  <div className="p-6 md:p-8 bg-canvas text-ink rounded-sm relative overflow-hidden group transition-all">
                     
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                       <div className="text-center md:text-left">
-                        <div className="text-[10px] font-normal text-body-mid uppercase tracking-[3px] mb-2">Total Chronological Age</div>
+                        <div className="text-[10px] font-normal text-body uppercase tracking-[3px] mb-2">Total Chronological Age</div>
                         <div className="text-4xl md:text-5xl font-normal flex items-baseline justify-center md:justify-start gap-3">
                           {result.years} <span className="text-sm font-normal opacity-70 uppercase tracking-widest">Yrs</span>
                           {result.months > 0 && <>{result.months} <span className="text-sm font-normal opacity-70 uppercase tracking-widest">Mo</span></>}
                         </div>
-                        <p className="text-xs font-normal text-body-mid mt-2 opacity-80">
+                        <p className="text-xs font-normal text-body mt-2 opacity-80">
                           {result.days} days since your last birthday
                         </p>
                       </div>
-                      <div className="w-px h-12 bg-white/10 hidden md:block" />
+                      <div className="w-px h-12 bg-primary/10 hidden md:block" />
                       <div className="text-center md:text-right">
-                        <div className="text-[10px] font-normal text-body-mid uppercase tracking-[3px] mb-2">Birth Weekday</div>
+                        <div className="text-[10px] font-normal text-body uppercase tracking-[3px] mb-2">Birth Weekday</div>
                         <div className="text-xl md:text-2xl font-normal">{result.birthDay}</div>
                       </div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-6 border border-hairline rounded-sm bg-canvas-card transition-all hover:border-white/30">
-                      <div className="text-[10px] font-normal text-body-mid uppercase tracking-[3px] mb-3 flex items-center gap-2">
-                        <Star size={14} className="text-white fill-white" /> Countdown
+                    <div className="p-6 border border-hairline rounded-sm bg-canvas transition-all hover:border-primary/30">
+                      <div className="text-[10px] font-normal text-body uppercase tracking-[3px] mb-3 flex items-center gap-2">
+                        <Star size={14} className="text-primary fill-primary" /> Countdown
                       </div>
-                      <div className="text-2xl md:text-3xl font-normal text-ink">{result.nextDays} <span className="text-[10px] font-normal text-body-mid uppercase">Days Left</span></div>
-                      <p className="text-[10px] font-normal text-body-mid mt-1 uppercase">Until your next birthday</p>
+                      <div className="text-2xl md:text-3xl font-normal text-ink">{result.nextDays} <span className="text-[10px] font-normal text-body uppercase">Days Left</span></div>
+                      <p className="text-[10px] font-normal text-body mt-1 uppercase">Until your next birthday</p>
                     </div>
 
-                    <div className="p-6 border border-hairline rounded-sm bg-canvas-card transition-all hover:border-white/30">
-                      <div className="text-[10px] font-normal text-body-mid uppercase tracking-[3px] mb-3 flex items-center gap-2">
-                        <Info size={14} className="text-white" /> Life stats
+                    <div className="p-6 border border-hairline rounded-sm bg-canvas transition-all hover:border-primary/30">
+                      <div className="text-[10px] font-normal text-body uppercase tracking-[3px] mb-3 flex items-center gap-2">
+                        <Info size={14} className="text-primary" /> Life stats
                       </div>
-                      <div className="text-sm font-normal text-body-mid leading-relaxed">
+                      <div className="text-sm font-normal text-body leading-relaxed">
                         You have lived approximately <span className="text-ink font-normal">{(result.years * 365 + result.days).toLocaleString()}</span> days on Earth.
                       </div>
                     </div>
@@ -215,8 +215,8 @@ export default function AgeCalculator() {
                   className="mt-8 p-6 md:p-8 bg-canvas-soft rounded-sm flex items-center justify-center text-center border border-hairline"
                 >
                    <div className="space-y-2">
-                     <p className="text-sm font-normal text-body-mid">Ready to calculate?</p>
-                     <p className="text-[10px] font-normal text-body-mid uppercase tracking-widest leading-relaxed">
+                     <p className="text-sm font-normal text-body">Ready to calculate?</p>
+                     <p className="text-[10px] font-normal text-body uppercase tracking-widest leading-relaxed">
                        Input your birth data above to begin
                      </p>
                    </div>

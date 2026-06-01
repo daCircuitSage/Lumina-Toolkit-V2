@@ -85,14 +85,14 @@ export default function YoutubeTitles() {
                   <label className="text-[10px] font-normal text-body-mid uppercase px-1">Target Audience</label>
                   <div className="grid grid-cols-2 gap-2">
                     {['General', 'Tech-Savvy', 'Beginners', 'Experts'].map(a => (
-                      <button 
+                      <button
                         key={a}
                         onClick={() => setAudience(a)}
                         className={cn(
-                          "px-3 py-2 text-[11px] font-normal rounded-sm border transition-all",
-                          audience === a 
-                            ? "bg-white border-white text-black" 
-                            : "bg-canvas border-hairline text-body-mid hover:border-white/30 hover:text-ink"
+                          "px-3 py-2 text-[11px] font-normal rounded-sm border transition-all cursor-pointer active:scale-95",
+                          audience === a
+                            ? "bg-white border-white text-black"
+                            : "bg-canvas border-hairline text-body-mid hover:border-white/50 hover:text-ink hover:bg-canvas-soft"
                         )}
                       >
                         {a}
@@ -116,10 +116,10 @@ export default function YoutubeTitles() {
                   </select>
                 </div>
 
-                 <button 
+                 <button
                   disabled={!topic || isGenerating}
                   onClick={generate}
-                  className="w-full h-14 bg-white text-black rounded-sm font-normal flex items-center justify-center gap-3 hover:bg-gray-100 active:scale-[0.98] transition-all disabled:opacity-50 mt-4"
+                  className="w-full h-14 bg-white text-black rounded-sm font-normal flex items-center justify-center gap-3 hover:bg-gray-100 active:scale-95 transition-all disabled:opacity-50 mt-4 border-2 border-white cursor-pointer shadow-md hover:shadow-lg"
                 >
                   {isGenerating ? <Loader2 className="animate-spin text-white" /> : <Sparkles size={20} />}
                   Generate Titles
@@ -159,9 +159,9 @@ export default function YoutubeTitles() {
                           className="p-4 md:p-5 bg-canvas-card border border-hairline rounded-sm hover:border-white/30 transition-all flex items-center justify-between group"
                         >
                            <span className="text-ink font-normal text-xs md:text-sm lg:text-base leading-snug flex-1">{title}</span>
-                           <button 
+                           <button
                              onClick={() => copyToClipboard(title, idx)}
-                             className="p-2 ml-3 md:ml-4 text-body-mid hover:text-white hover:bg-canvas-soft rounded-sm transition-all shrink-0 border border-transparent"
+                             className="p-2 ml-3 md:ml-4 text-body-mid hover:text-white hover:bg-canvas-soft rounded-sm transition-all shrink-0 border border-transparent hover:border-hairline cursor-pointer active:scale-95"
                            >
                              {copiedIndex === idx ? <Check size={18} /> : <Copy size={16} />}
                            </button>

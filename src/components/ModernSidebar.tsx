@@ -83,12 +83,12 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
         <div className="h-full px-4 flex items-center justify-between">
           {/* Logo/Brand Section */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-sm bg-white flex items-center justify-center">
-              <span className="text-black font-normal text-lg">L</span>
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+              <span className="text-on-primary font-normal text-lg">L</span>
             </div>
             <div className="flex flex-col">
               <h2 className="text-ink font-normal text-sm leading-tight">Lumina</h2>
-              <p className="text-body-mid text-xs leading-tight">Toolkit</p>
+              <p className="body-sm text-xs leading-tight">Toolkit</p>
             </div>
           </div>
 
@@ -97,7 +97,7 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
             {/* Search Button */}
             <button
               onClick={onSearchOpen}
-              className="p-2.5 rounded-sm bg-canvas-soft border border-hairline text-body-mid hover:text-ink hover:bg-canvas transition-all duration-200 touch-target-enhanced"
+              className="p-2.5 rounded-xl bg-canvas-soft border border-hairline body-sm hover:text-ink hover:bg-canvas transition-all duration-200 touch-target-enhanced"
             >
               <Search size={18} />
             </button>
@@ -105,10 +105,10 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
             {/* Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`relative p-2.5 rounded-sm transition-all duration-300 touch-target-enhanced ${
+              className={`relative p-2.5 rounded-xl transition-all duration-300 touch-target-enhanced ${
                 isMobileMenuOpen 
-                  ? 'bg-white text-black' 
-                  : 'bg-canvas-soft border border-hairline text-body-mid hover:text-ink hover:bg-canvas'
+                  ? 'bg-primary text-on-primary' 
+                  : 'bg-canvas-soft border border-hairline body-sm hover:text-ink hover:bg-canvas'
               }`}
             >
               <div className="relative w-5 h-5 flex flex-col justify-center items-center">
@@ -168,15 +168,15 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
             <div className="h-full overflow-y-auto scrollbar-hide">
               {/* User Profile Section */}
               <div className="sticky top-0 bg-canvas border-b border-hairline p-4 z-10">
-                <div className="flex items-center gap-3 p-3 rounded-sm bg-canvas-soft border border-hairline">
-                  <div className="w-12 h-12 rounded-sm bg-white flex items-center justify-center">
-                    <span className="text-black font-normal text-lg">L</span>
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-canvas-soft border border-hairline">
+                  <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
+                    <span className="text-on-primary font-normal text-lg">L</span>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-ink font-normal text-lg">Lumina Toolkit</h3>
-                    <p className="text-body-mid text-sm">Your creative companion</p>
+                    <p className="body-sm text-sm">Your creative companion</p>
                   </div>
-                  <div className="w-2 h-2 bg-white rounded-full" />
+                  <div className="w-2 h-2 bg-primary rounded-full" />
                 </div>
               </div>
 
@@ -187,23 +187,23 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={onSearchOpen}
-                    className="flex flex-col items-center gap-2 p-4 rounded-sm bg-canvas-soft border border-hairline hover:border-white/30 transition-all duration-200"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl bg-canvas-soft border border-hairline hover:border-primary/30 transition-all duration-200"
                   >
-                    <div className="w-10 h-10 rounded-sm bg-white/20 flex items-center justify-center">
-                      <Search size={18} className="text-white" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                      <Search size={18} className="text-ink" />
                     </div>
-                    <span className="text-xs text-body-mid">Search</span>
+                    <span className="text-xs body-sm">Search</span>
                   </motion.button>
                   
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex flex-col items-center gap-2 p-4 rounded-sm bg-canvas-soft border border-hairline hover:border-white/30 transition-all duration-200"
+                    className="flex flex-col items-center gap-2 p-4 rounded-xl bg-canvas-soft border border-hairline hover:border-primary/30 transition-all duration-200"
                   >
-                    <div className="w-10 h-10 rounded-sm bg-white/20 flex items-center justify-center">
-                      <Home size={18} className="text-white" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                      <Home size={18} className="text-ink" />
                     </div>
-                    <span className="text-xs text-body-mid">Home</span>
+                    <span className="text-xs body-sm">Home</span>
                   </motion.button>
                 </div>
               </div>
@@ -221,13 +221,13 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                       onClick={() => setExpandedSection(
                         expandedSection === section.id ? null : section.id
                       )}
-                      className="w-full flex items-center justify-between px-4 py-3 text-body-mid hover:text-ink transition-all duration-200 hover:bg-canvas-soft rounded-sm group"
+                      className="w-full flex items-center justify-between px-4 py-3 body-sm hover:text-ink transition-all duration-200 hover:bg-canvas-soft rounded-xl group"
                     >
-                      <span className="text-sm font-normal uppercase tracking-wider group-hover:text-white transition-colors">
+                      <span className="text-sm font-normal uppercase tracking-wider group-hover:text-ink transition-colors">
                         {section.title}
                       </span>
                       <motion.div 
-                        className="w-4 h-4 flex items-center justify-center text-white transition-transform"
+                        className="w-4 h-4 flex items-center justify-center text-ink transition-transform"
                         animate={{ rotate: expandedSection === section.id ? 90 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
@@ -263,23 +263,23 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                                     onSelect(tool.id);
                                     setIsMobileMenuOpen(false);
                                   }}
-                                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-200 ${
+                                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                                     isActive 
-                                      ? 'bg-white/10 text-white border border-white/30' 
-                                      : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
+                                      ? 'bg-primary/10 text-ink border border-primary/30' 
+                                      : 'body-sm hover:bg-canvas-soft hover:text-ink'
                                   }`}
                                 >
-                                  <div className={`p-2.5 rounded-sm transition-all duration-200 ${
-                                    isActive ? 'bg-white/20' : 'bg-canvas-soft'
+                                  <div className={`p-2.5 rounded-xl transition-all duration-200 ${
+                                    isActive ? 'bg-primary/20' : 'bg-canvas-soft'
                                   }`}>
-                                    <Icon size={16} className={isActive ? 'text-white' : ''} />
+                                    <Icon size={16} className={isActive ? 'text-ink' : ''} />
                                   </div>
                                   <div className="flex-1">
                                     <span className="text-sm font-normal">{tool.name}</span>
                                   </div>
                                   {isActive && (
                                     <motion.div 
-                                      className="w-2 h-2 bg-white rounded-full"
+                                      className="w-2 h-2 bg-primary rounded-full"
                                       animate={{ scale: [1, 1.2, 1] }}
                                       transition={{ duration: 2, repeat: Infinity }}
                                     />
@@ -301,14 +301,14 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onSearchOpen}
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-white/10 text-ink hover:bg-white/20 rounded-sm transition-all duration-200 border border-hairline"
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-primary/10 text-ink hover:bg-primary/20 rounded-xl transition-all duration-200 border border-hairline"
                 >
-                  <div className="p-2.5 bg-white/20 rounded-sm">
-                    <Search size={18} className="text-white" />
+                  <div className="p-2.5 bg-primary/20 rounded-xl">
+                    <Search size={18} className="text-ink" />
                   </div>
                   <span className="text-sm font-normal">Search All Tools</span>
                   <div className="ml-auto">
-                    <kbd className="px-2 py-1 text-xs bg-canvas-soft rounded-sm border border-hairline">⌘K</kbd>
+                    <kbd className="px-2 py-1 text-xs bg-canvas-soft rounded-xl border border-hairline">⌘K</kbd>
                   </div>
                 </motion.button>
               </div>
@@ -334,16 +334,16 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                     setExpandedSection(expandedSection === 'general' ? null : 'general');
                   }
                 }}
-                className={`relative w-10 h-10 rounded-sm flex items-center justify-center transition-all ${
+                className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
                   isActive 
-                    ? 'bg-white text-black' 
-                    : 'text-body-mid hover:bg-canvas-soft hover:text-ink'
+                    ? 'bg-primary text-on-primary' 
+                    : 'body-sm hover:bg-canvas-soft hover:text-ink'
                 }`}
                 title={item.label}
               >
                 <Icon size={18} />
                 {isActive && (
-                  <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-6 bg-white rounded-full" />
+                  <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-full" />
                 )}
               </button>
             );
@@ -363,7 +363,7 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                   onClick={() => setExpandedSection(
                     expandedSection === section.id ? null : section.id
                   )}
-                  className="w-full flex items-center justify-between px-3 py-2 text-body-mid hover:text-ink transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 body-sm hover:text-ink transition-colors"
                 >
                   <span className="text-xs font-normal uppercase tracking-wider">
                     {section.title}
@@ -386,10 +386,10 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
                           key={tool.id}
                           to={getRouteForTool(tool.id)}
                           onClick={() => onSelect(tool.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-sm transition-all ${
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all ${
                             isActive 
-                              ? 'bg-white/10 text-white border-l-2 border-white' 
-                              : 'text-body-mid hover:bg-canvas hover:text-ink'
+                              ? 'bg-primary/10 text-ink border-l-2 border-primary' 
+                              : 'body-sm hover:bg-canvas hover:text-ink'
                           }`}
                         >
                           <Icon size={16} />
@@ -406,7 +406,7 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
           <div className="p-4 border-t border-hairline">
             <button
               onClick={onSearchOpen}
-              className="w-full flex items-center gap-3 px-3 py-2 bg-canvas text-body-mid hover:text-ink rounded-sm transition-all"
+              className="w-full flex items-center gap-3 px-3 py-2 bg-canvas body-sm hover:text-ink rounded-xl transition-all"
             >
               <Search size={16} />
               <span className="text-sm">Search</span>

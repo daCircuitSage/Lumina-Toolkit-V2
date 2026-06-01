@@ -92,15 +92,15 @@ export default function Dashboard() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-sm text-xs font-normal mb-4"
+          className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-on-primary rounded-sm text-xs font-normal mb-4"
         >
           <Sparkles size={14} />
           Complete Collection of 14+ Free Tools
         </motion.div>
         <h1 className="text-4xl md:text-5xl font-normal text-ink mb-4 max-w-3xl leading-tight">
-          All <span className="text-white">Productivity Tools</span> in One Place
+          All <span className="text-primary">Productivity Tools</span> in One Place
         </h1>
-        <p className="text-lg text-body-mid max-w-2xl leading-relaxed">
+        <p className="text-lg text-body max-w-2xl leading-relaxed">
           Browse our complete collection of AI-powered tools, professional builders, and utilities. 
           Everything you need for career growth, content creation, and productivity.
         </p>
@@ -112,7 +112,7 @@ export default function Dashboard() {
           <h2 className="text-2xl md:text-3xl font-normal text-ink mb-2">
             🤖 AI-Powered Tools
           </h2>
-          <p className="text-body-mid">
+          <p className="text-body">
             Smart tools that leverage artificial intelligence to deliver professional results instantly
           </p>
         </div>
@@ -124,21 +124,21 @@ export default function Dashboard() {
               <Link
                 key={tool.id}
                 to={getRouteFromToolId(tool.id)}
-                className="group p-4 md:p-6 bg-canvas-card border border-hairline rounded-sm hover:border-white/30 transition-all text-left relative overflow-hidden w-full"
+                className="group p-4 md:p-6 bg-canvas border border-hairline rounded-sm hover:border-primary/30 transition-all text-left relative overflow-hidden w-full"
               >
-                <div className="w-12 h-12 rounded-sm bg-white/10 flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Icon size={24} className="text-white" />
+                <div className="w-12 h-12 rounded-sm bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <Icon size={24} className="text-primary" />
                 </div>
-                <h3 className="text-lg font-normal text-ink mb-2 group-hover:text-white transition-colors">
+                <h3 className="text-lg font-normal text-ink mb-2 group-hover:text-primary transition-colors">
                   {tool.name}
                 </h3>
-                <p className="text-sm text-body-mid mb-4 leading-relaxed">
+                <p className="text-sm text-body mb-4 leading-relaxed">
                   {enhancedDesc?.short || tool.description}
                 </p>
-                <p className="text-xs text-body-mid/70 mb-6 leading-relaxed">
+                <p className="text-xs text-body/70 mb-6 leading-relaxed">
                   {enhancedDesc?.detailed}
                 </p>
-                <div className="flex items-center gap-2 text-sm font-normal text-white opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
+                <div className="flex items-center gap-2 text-sm font-normal text-primary opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
                   Launch tool <ArrowRight size={14} />
                 </div>
               </Link>
@@ -153,7 +153,7 @@ export default function Dashboard() {
           <h2 className="text-2xl md:text-3xl font-normal text-ink mb-2">
             💼 Job Search Toolkit
           </h2>
-          <p className="text-body-mid">
+          <p className="text-body">
             Professional tools to optimize your job search and advance your career
           </p>
         </div>
@@ -165,21 +165,21 @@ export default function Dashboard() {
               <Link
                 key={tool.id}
                 to={getRouteFromToolId(tool.id)}
-                className="group p-4 md:p-6 bg-canvas-card border border-hairline rounded-sm hover:border-white/30 transition-all text-left relative overflow-hidden w-full"
+                className="group p-4 md:p-6 bg-canvas border border-hairline rounded-sm hover:border-primary/30 transition-all text-left relative overflow-hidden w-full"
               >
-                <div className="w-12 h-12 rounded-sm bg-white/10 flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Icon size={24} className="text-white" />
+                <div className="w-12 h-12 rounded-sm bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <Icon size={24} className="text-primary" />
                 </div>
-                <h3 className="text-lg font-normal text-ink mb-2 group-hover:text-white transition-colors">
+                <h3 className="text-lg font-normal text-ink mb-2 group-hover:text-primary transition-colors">
                   {tool.name}
                 </h3>
-                <p className="text-sm text-body-mid mb-4 leading-relaxed">
+                <p className="text-sm text-body mb-4 leading-relaxed">
                   {enhancedDesc?.short || tool.description}
                 </p>
-                <p className="text-xs text-body-mid/70 mb-6 leading-relaxed">
+                <p className="text-xs text-body/70 mb-6 leading-relaxed">
                   {enhancedDesc?.detailed}
                 </p>
-                <div className="flex items-center gap-2 text-sm font-normal text-white opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
+                <div className="flex items-center gap-2 text-sm font-normal text-primary opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
                   Launch tool <ArrowRight size={14} />
                 </div>
               </Link>
@@ -194,7 +194,7 @@ export default function Dashboard() {
           <h2 className="text-2xl md:text-3xl font-normal text-ink mb-2">
             🛠️ Utility Tools
           </h2>
-          <p className="text-body-mid">
+          <p className="text-body">
             Essential calculators and converters for everyday productivity
           </p>
         </div>
@@ -206,21 +206,21 @@ export default function Dashboard() {
               <Link
                 key={tool.id}
                 to={getRouteFromToolId(tool.id)}
-                className="group p-4 md:p-6 bg-canvas-card border border-hairline rounded-sm hover:border-white/30 transition-all text-left relative overflow-hidden w-full"
+                className="group p-4 md:p-6 bg-canvas border border-hairline rounded-sm hover:border-primary/30 transition-all text-left relative overflow-hidden w-full"
               >
-                <div className="w-12 h-12 rounded-sm bg-white/10 flex items-center justify-center mb-6 group-hover:bg-white/20 transition-colors">
-                  <Icon size={24} className="text-white" />
+                <div className="w-12 h-12 rounded-sm bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <Icon size={24} className="text-primary" />
                 </div>
-                <h3 className="text-lg font-normal text-ink mb-2 group-hover:text-white transition-colors">
+                <h3 className="text-lg font-normal text-ink mb-2 group-hover:text-primary transition-colors">
                   {tool.name}
                 </h3>
-                <p className="text-sm text-body-mid mb-4 leading-relaxed">
+                <p className="text-sm text-body mb-4 leading-relaxed">
                   {enhancedDesc?.short || tool.description}
                 </p>
-                <p className="text-xs text-body-mid/70 mb-6 leading-relaxed">
+                <p className="text-xs text-body/70 mb-6 leading-relaxed">
                   {enhancedDesc?.detailed}
                 </p>
-                <div className="flex items-center gap-2 text-sm font-normal text-white opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
+                <div className="flex items-center gap-2 text-sm font-normal text-primary opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all">
                   Launch tool <ArrowRight size={14} />
                 </div>
               </Link>
@@ -230,13 +230,13 @@ export default function Dashboard() {
       </section>
 
       <footer className="mt-20 py-8 border-t border-hairline flex flex-col md:flex-row justify-between items-center gap-4">
-         <div className="flex items-center gap-2 text-body-mid text-sm">
-            <div className="w-5 h-5 bg-canvas-soft rounded-sm flex items-center justify-center">
-              <span className="text-[10px] font-normal text-white">L</span>
+         <div className="flex items-center gap-2 text-body text-sm">
+            <div className="w-5 h-5 bg-primary rounded-sm flex items-center justify-center">
+              <span className="text-[10px] font-normal text-on-primary">L</span>
             </div>
             © 2026 Lumina Toolkit. Made for the next generation.
          </div>
-         <div className="flex gap-6 text-sm text-body-mid">
+         <div className="flex gap-6 text-sm text-body">
            <Link to="/contact" className="hover:text-ink transition-colors">Feedback</Link>
            <Link to="/contact" className="hover:text-ink transition-colors">Report Bug</Link>
            <Link to="/contact" className="hover:text-ink transition-colors">Request Feature</Link>

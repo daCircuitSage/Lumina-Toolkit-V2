@@ -208,7 +208,7 @@ export default function Layout({ children }: LayoutProps) {
         getRouteForTool={getRouteForTool}
       />
 
-      {/* xAI design: canvas background, no gradients */}
+      {/* Wise design: canvas background */}
       <main className="flex-1 overflow-hidden bg-canvas flex flex-col pt-16 md:pt-0">
         <Header />
         <div className="flex-1 overflow-y-auto">

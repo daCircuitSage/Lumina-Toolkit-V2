@@ -113,7 +113,7 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/40 backdrop-blur-md z-[100] transition-all"
+            className="fixed inset-0 bg-ink/40 backdrop-blur-md z-[100] transition-all"
           />
           
           {/* Search Container */}
@@ -123,7 +123,7 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
             exit={isMobile ? { opacity: 0, y: '100%' } : { opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className={cn(
-              "bg-white dark:bg-slate-900 shadow-2xl z-[110] overflow-hidden border border-slate-200 dark:border-slate-800",
+              "bg-canvas shadow-2xl z-[110] overflow-hidden border border-hairline",
               isMobile 
                 ? "fixed inset-0 flex flex-col" 
                 : "fixed left-1/2 top-[15%] -translate-x-1/2 w-full max-w-2xl rounded-3xl"
@@ -131,19 +131,19 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
           >
             {/* Search Header */}
             <div className={cn(
-              "flex items-center border-b border-slate-100 dark:border-slate-800",
+              "flex items-center border-b border-hairline",
               isMobile ? "px-4 py-4" : "px-6 py-5"
             )}>
-              <Search className="text-slate-400 mr-3" size={isMobile ? 20 : 20} />
+              <Search className="text-mute mr-3" size={isMobile ? 20 : 20} />
               <input
                 ref={inputRef}
                 type="text"
                 placeholder="What tool do you need today?"
                 className={cn(
-                  "bg-transparent border-none outline-none placeholder-slate-400 font-medium",
+                  "bg-transparent border-none outline-none placeholder-mute font-medium",
                   isMobile 
-                    ? "flex-1 text-base text-slate-900 dark:text-white" 
-                    : "flex-1 text-lg text-slate-900 dark:text-white"
+                    ? "flex-1 text-base text-ink" 
+                    : "flex-1 text-lg text-ink"
                 )}
                 value={query}
                 onChange={(e) => {
@@ -153,13 +153,13 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
               />
               {!isMobile && (
                 <div className="flex items-center gap-1.5 ml-4">
-                  <kbd className="px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-500 uppercase tracking-widest border border-slate-200 dark:border-slate-700 leading-none">ESC</kbd>
+                  <kbd className="px-2 py-1 rounded bg-canvas-soft text-[10px] font-bold text-mute uppercase tracking-widest border border-hairline leading-none">ESC</kbd>
                 </div>
               )}
               {isMobile && (
                 <button
                   onClick={onClose}
-                  className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                  className="p-2 text-mute hover:text-ink transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -174,7 +174,7 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
               {query.trim() === '' ? (
                 <div className={cn("space-y-6", isMobile ? "p-4" : "p-4")}>
                    <div>
-                     <p className="text-[10px] font-black uppercase tracking-[3px] text-slate-400 mb-4 px-2">Popular Tools</p>
+                     <p className="caption font-black uppercase tracking-[3px] text-mute mb-4 px-2">Popular Tools</p>
                      <div className={cn("gap-2", isMobile ? "space-y-3" : "grid grid-cols-2 gap-2")}>
                        {TOOLS.slice(1, 5).map(tool => (
                          <QuickActionLink key={tool.id} tool={tool} getRoute={getRoute} onClick={() => handleSelect(tool.id)} isMobile={isMobile} />
@@ -183,11 +183,11 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
                    </div>
                    <div className="flex items-center justify-center py-10 text-center">
                       <div>
-                        <div className="w-12 h-12 bg-lumina-blue/10 rounded-2xl flex items-center justify-center text-lumina-blue mx-auto mb-4">
+                        <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-4">
                           <Command size={24} />
                         </div>
-                        <p className="text-sm font-medium text-slate-900 dark:text-white">Ready for your command</p>
-                        <p className="text-xs text-slate-400 mt-1">Start typing to find what you're looking for</p>
+                        <p className="text-sm font-medium text-ink">Ready for your command</p>
+                        <p className="text-xs text-mute mt-1">Start typing to find what you're looking for</p>
                       </div>
                    </div>
                 </div>
@@ -206,14 +206,14 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
                           "w-full flex items-center gap-4 transition-all text-left group",
                           isMobile ? "p-4 rounded-2xl" : "p-4 rounded-2xl",
                           isActive 
-                            ? "bg-lumina-blue text-white shadow-xl shadow-lumina-blue/20 dark:shadow-none" 
-                            : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                            ? "bg-primary text-on-primary shadow-xl shadow-primary/20" 
+                            : "hover:bg-canvas-soft"
                         )}
                       >
                         <div className={cn(
                           "rounded-xl flex items-center justify-center transition-colors flex-shrink-0",
                           isMobile ? "w-14 h-14" : "w-12 h-12",
-                          isActive ? "bg-white/20 text-white" : "bg-slate-100 dark:bg-slate-800 text-lumina-blue"
+                          isActive ? "bg-canvas/20 text-on-primary" : "bg-canvas-soft text-primary"
                         )}>
                           <Icon size={isMobile ? 28 : 24} />
                         </div>
@@ -221,13 +221,13 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
                           <div className={cn(
                             "font-heading font-bold truncate",
                             isMobile ? "text-lg" : "text-base",
-                            isActive ? "text-white" : "text-slate-900 dark:text-white"
+                            isActive ? "text-on-primary" : "text-ink"
                           )}>
                             {tool.name}
                           </div>
                           <div className={cn(
                             "text-sm line-clamp-2",
-                            isActive ? "text-blue-100" : "text-slate-500 dark:text-slate-400"
+                            isActive ? "text-primary-pale" : "text-body"
                           )}>
                             {tool.description}
                           </div>
@@ -236,8 +236,8 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
                           <div className={cn(
                             "px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest border shrink-0",
                             isActive 
-                              ? "bg-white/20 border-white/20 text-white" 
-                              : "bg-lumina-blue/10 border-lumina-blue/10 text-lumina-blue"
+                              ? "bg-canvas/20 border-canvas/20 text-on-primary" 
+                              : "bg-primary/10 border-primary/10 text-primary"
                           )}>
                             {tool.category === 'Job Toolkit' ? 'Career' : tool.category}
                           </div>
@@ -251,29 +251,29 @@ export default function GlobalSearch({ isOpen, onClose, onSelect, getRouteForToo
                 </div>
               ) : (
                 <div className={cn("py-12 text-center", isMobile ? "px-4" : "")}>
-                  <div className="w-16 h-16 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-700 mx-auto mb-4">
+                  <div className="w-16 h-16 bg-canvas-soft rounded-full flex items-center justify-center text-mute mx-auto mb-4">
                     <Search size={32} />
                   </div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">No tools found</p>
-                  <p className="text-xs text-slate-400 mt-1">Try a different search term or category</p>
+                  <p className="text-sm font-bold text-ink">No tools found</p>
+                  <p className="text-xs text-mute mt-1">Try a different search term or category</p>
                 </div>
               )}
             </div>
 
             {/* Footer - Desktop Only */}
             {!isMobile && (
-              <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="px-6 py-4 bg-canvas-soft border-t border-hairline flex items-center justify-between">
                 <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">Enter</span>
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-mute uppercase tracking-widest">
+                    <span className="px-1.5 py-0.5 rounded bg-canvas border border-hairline shadow-sm">Enter</span>
                     <span>Select</span>
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">↑↓</span>
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-mute uppercase tracking-widest">
+                    <span className="px-1.5 py-0.5 rounded bg-canvas border border-hairline shadow-sm">↑↓</span>
                     <span>Navigate</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-[10px] font-bold text-lumina-blue uppercase tracking-widest">
+                <div className="flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-widest">
                   Lumina Intelligence Platform
                 </div>
               </div>
@@ -297,18 +297,18 @@ function QuickActionLink({ tool, getRoute, onClick, isMobile }: any) {
       )}
     >
       <div className={cn(
-        "rounded-xl bg-lumina-blue/10 flex items-center justify-center text-lumina-blue group-hover:scale-110 transition-transform flex-shrink-0",
+        "rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform flex-shrink-0",
         isMobile ? "w-12 h-12" : "w-10 h-10"
       )}>
         <Icon size={isMobile ? 24 : 20} />
       </div>
       <div className="flex-1 min-w-0">
         <p className={cn(
-          "font-heading font-bold text-slate-900 dark:text-white truncate",
+          "font-heading font-bold text-ink truncate",
           isMobile ? "text-sm" : "text-xs"
         )}>{tool.name}</p>
         <p className={cn(
-          "text-slate-400 line-clamp-1",
+          "text-mute line-clamp-1",
           isMobile ? "text-xs" : "text-[10px]"
         )}>{tool.description}</p>
       </div>

@@ -80,14 +80,14 @@ export default function InternalLinks({ currentToolId, title = "Related Tools" }
   return (
     <nav className="internal-links" role="navigation" aria-label="Page navigation">
       {/* Structured Navigation Block */}
-      <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 mb-6 border border-slate-200 dark:border-slate-800">
-        <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+      <div className="bg-canvas-soft rounded-2xl p-4 mb-6 border border-hairline">
+        <h3 className="text-sm font-semibold text-ink mb-3 flex items-center gap-2">
           <span>Navigation</span>
         </h3>
         <div className="flex flex-wrap gap-2">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-lg transition-all text-sm font-medium border border-slate-200 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-600"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-canvas hover:bg-canvas-soft text-body hover:text-primary rounded-lg transition-all text-sm font-medium border border-hairline hover:border-primary/60"
             aria-label="Go to homepage"
           >
             <Home size={14} />
@@ -95,7 +95,7 @@ export default function InternalLinks({ currentToolId, title = "Related Tools" }
           </Link>
           <Link
             to="/all-tools"
-            className="inline-flex items-center gap-2 px-3 py-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg transition-all text-sm font-medium border border-slate-200 dark:border-slate-700"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-canvas hover:bg-canvas-soft text-body hover:text-ink rounded-lg transition-all text-sm font-medium border border-hairline"
             aria-label="View all tools"
           >
             <Grid3X3 size={14} />
@@ -105,26 +105,26 @@ export default function InternalLinks({ currentToolId, title = "Related Tools" }
       </div>
 
       {/* Navigation Breadcrumb */}
-      <div className="flex flex-wrap items-center gap-2 text-sm mb-6 pb-4 border-b border-slate-200 dark:border-slate-700">
+      <div className="flex flex-wrap items-center gap-2 text-sm mb-6 pb-4 border-b border-hairline">
         <Link
           to="/"
-          className="inline-flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+          className="inline-flex items-center gap-1 text-body hover:text-primary transition-colors"
           aria-label="Go to homepage"
         >
           <Home size={14} />
           Home
         </Link>
-        <ChevronRight size={14} className="text-slate-400" />
+        <ChevronRight size={14} className="text-mute" />
         <Link
           to="/all-tools"
-          className="inline-flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+          className="inline-flex items-center gap-1 text-body hover:text-primary transition-colors"
           aria-label="View all tools"
         >
           <Grid3X3 size={14} />
           All Tools
         </Link>
-        <ChevronRight size={14} className="text-slate-400" />
-        <span className="text-slate-900 dark:text-white font-medium">
+        <ChevronRight size={14} className="text-mute" />
+        <span className="text-ink font-medium">
           {TOOLS.find(t => t.id === currentToolId)?.name || 'Current Tool'}
         </span>
       </div>
@@ -132,9 +132,9 @@ export default function InternalLinks({ currentToolId, title = "Related Tools" }
       {/* Related Tools Section */}
       {relatedTools.length > 0 && (
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-ink mb-4 flex items-center gap-2">
             <span>{title}</span>
-            <span className="text-xs font-normal text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-normal text-mute">
               (You might also need)
             </span>
           </h3>
@@ -145,18 +145,18 @@ export default function InternalLinks({ currentToolId, title = "Related Tools" }
                 <Link
                   key={tool.id}
                   to={getRouteFromToolId(tool.id)}
-                  className="group p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-indigo-200 dark:hover:border-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition-all text-left"
+                  className="group p-4 bg-canvas border border-hairline rounded-xl hover:border-primary/60 hover:shadow-lg hover:shadow-primary/10 transition-all text-left"
                   aria-label={`Navigate to ${tool.name}`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-700 flex items-center justify-center group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/30 transition-colors flex-shrink-0">
-                      <Icon size={16} className="text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+                    <div className="w-8 h-8 rounded-lg bg-canvas-soft flex items-center justify-center group-hover:bg-primary/10 transition-colors flex-shrink-0">
+                      <Icon size={16} className="text-mute group-hover:text-primary transition-colors" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
+                      <h4 className="text-sm font-semibold text-ink mb-1 group-hover:text-primary transition-colors truncate">
                         {tool.name}
                       </h4>
-                      <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">
+                      <p className="text-xs text-body line-clamp-2">
                         {tool.description}
                       </p>
                     </div>

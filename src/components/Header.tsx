@@ -52,7 +52,7 @@ export default function Header({ title, subtitle }: HeaderProps) {
           <div className="mt-2">
             <h1 className="text-2xl font-normal text-ink">{title}</h1>
             {subtitle && (
-              <p className="text-body-mid mt-1">{subtitle}</p>
+              <p className="body-md mt-1">{subtitle}</p>
             )}
           </div>
         )}
