@@ -257,7 +257,7 @@ export default function Profile() {
                           className="w-full h-full rounded-full object-cover"
                         />
                       ) : (
-                        <User size={48} className="text-white" />
+                        <User size={48} className="text-ink" />
                       )}
                     </div>
                     <input
@@ -312,28 +312,28 @@ export default function Profile() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <div className="flex items-center gap-2 mb-2">
-                      <User className="w-5 h-5 text-white" />
+                      <User className="w-5 h-5 text-ink" />
                       <span className="text-sm font-normal text-ink">Profile Completion</span>
                     </div>
-                    <div className="text-2xl font-normal text-white">85%</div>
+                    <div className="text-2xl font-normal text-ink">85%</div>
                     <p className="text-xs text-body">Profile filled out</p>
                   </div>
                   
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <div className="flex items-center gap-2 mb-2">
-                      <Shield className="w-5 h-5 text-white" />
+                      <Shield className="w-5 h-5 text-ink" />
                       <span className="text-sm font-normal text-ink">Security Level</span>
                     </div>
-                    <div className="text-2xl font-normal text-white">High</div>
+                    <div className="text-2xl font-normal text-ink">High</div>
                     <p className="text-xs text-body">Account secured</p>
                   </div>
                   
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="w-5 h-5 text-white" />
+                      <Calendar className="w-5 h-5 text-ink" />
                       <span className="text-sm font-normal text-ink">Member Since</span>
                     </div>
-                    <div className="text-2xl font-normal text-white">{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).getFullYear() : '2024'}</div>
+                    <div className="text-2xl font-normal text-ink">{user?.metadata?.creationTime ? new Date(user.metadata.creationTime).getFullYear() : '2024'}</div>
                     <p className="text-xs text-body">Years active</p>
                   </div>
                 </div>
@@ -399,7 +399,7 @@ export default function Profile() {
                 <div className="space-y-6">
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
-                      <Shield size={18} className="text-white" />
+                      <Shield size={18} className="text-ink" />
                       Password Security
                     </h3>
                     <div className="space-y-3">
@@ -416,7 +416,7 @@ export default function Profile() {
                   
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
-                      <User size={18} className="text-white" />
+                      <User size={18} className="text-ink" />
                       Privacy Settings
                     </h3>
                     <div className="space-y-3">
@@ -437,7 +437,7 @@ export default function Profile() {
                   
                   <div className="bg-canvas-soft rounded-sm p-4 border border-hairline">
                     <h3 className="text-lg font-normal text-ink mb-4 flex items-center gap-2">
-                      <Settings size={18} className="text-white" />
+                      <Settings size={18} className="text-ink" />
                       Data & Storage
                     </h3>
                     <div className="space-y-3">

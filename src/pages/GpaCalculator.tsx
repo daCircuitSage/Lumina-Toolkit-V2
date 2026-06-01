@@ -65,7 +65,7 @@ export default function GpaCalculator() {
     <div className="tool-container">
       <header className="mb-12">
         <h1 className="text-3xl font-normal flex items-center gap-3 text-ink transition-colors">
-          <Calculator className="text-white" /> GPA & CGPA Calculator
+          <Calculator className="text-ink" /> GPA & CGPA Calculator
         </h1>
         <p className="text-body-mid mt-2">Professional academic performance tracking system.</p>
       </header>
@@ -77,7 +77,7 @@ export default function GpaCalculator() {
               <h2 className="font-normal text-ink">Course List</h2>
               <button 
                 onClick={addCourse}
-                className="flex items-center gap-2 text-sm font-normal text-white hover:text-ink transition-colors"
+                className="flex items-center gap-2 text-sm font-normal text-ink hover:text-primary transition-colors"
               >
                 <Plus size={16} /> <span className="hidden sm:inline">Add Course</span><span className="sm:hidden">Add</span>
               </button>
@@ -137,7 +137,7 @@ export default function GpaCalculator() {
 
           <div className="bg-canvas-card border border-hairline rounded-sm p-6 md:p-8 transition-colors">
             <h3 className="font-normal text-ink mb-6 flex items-center gap-2">
-              <Rocket size={18} className="text-white" /> Previous History (Optional)
+              <Rocket size={18} className="text-ink" /> Previous History (Optional)
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">

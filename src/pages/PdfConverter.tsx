@@ -120,7 +120,7 @@ export default function PdfConverter() {
               onChange={handleFileChange}
               className="hidden" 
             />
-            <div className="w-14 h-14 md:w-16 md:h-16 rounded-sm bg-white/10 flex items-center justify-center text-white mb-4 md:mb-6 group-hover:scale-110 transition-transform text-center flex-col">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-sm bg-white/10 flex items-center justify-center text-ink mb-4 md:mb-6 group-hover:scale-110 transition-transform text-center flex-col">
                <FileUp size={32} />
             </div>
             <h3 className="text-base md:text-lg font-normal text-ink mb-2">Choose Images</h3>
@@ -235,7 +235,7 @@ export default function PdfConverter() {
            </div>
 
            <div className="bg-white/10 rounded-sm p-8 border border-hairline">
-              <h4 className="text-sm font-normal text-white mb-4 flex items-center gap-2">
+              <h4 className="text-sm font-normal text-ink mb-4 flex items-center gap-2">
                 <ArrowRightLeft size={16} /> Other Tools coming soon
               </h4>
               <div className="space-y-2 opacity-60">

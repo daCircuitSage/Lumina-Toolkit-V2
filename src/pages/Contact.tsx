@@ -71,10 +71,10 @@ export default function Contact() {
     <div className="tool-container pb-20">
       <div className="max-w-4xl mx-auto pt-12 md:pt-20 px-4">
         <header className="text-center mb-16 md:mb-24">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center justify-center w-16 h-16 rounded-sm bg-white/10 text-white mb-6"
+            className="inline-flex items-center justify-center w-16 h-16 rounded-sm bg-white/10 text-ink mb-6"
           >
             <MessageSquare size={32} />
           </motion.div>
@@ -83,7 +83,7 @@ export default function Contact() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-6xl font-normal text-ink tracking-widest uppercase mb-6"
           >
-            Shape the <span className="text-white">Future</span>
+            Shape the <span className="text-ink">Future</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
@@ -105,7 +105,7 @@ export default function Contact() {
                 href="mailto:hello@jobtoolkit.io"
                 className="flex items-center gap-4 p-4 lg:p-0 bg-canvas-card border border-hairline lg:border-0 rounded-sm group transition-all"
               >
-                <div className="w-12 h-12 rounded-sm bg-canvas-soft lg:bg-canvas-card border border-hairline flex items-center justify-center text-body-mid group-hover:text-white group-hover:border-white/30 transition-all">
+                <div className="w-12 h-12 rounded-sm bg-canvas-soft lg:bg-canvas-card border border-hairline flex items-center justify-center text-body-mid group-hover:text-ink group-hover:border-white/30 transition-all">
                   <Mail size={20} />
                 </div>
                 <div>
@@ -171,7 +171,7 @@ export default function Contact() {
                         }`}
                       >
                         <div className={`w-8 h-8 rounded-sm flex items-center justify-center shrink-0 ${formData.type === type.id ? 'bg-canvas-soft' : 'bg-canvas-soft'}`}>
-                          <type.icon size={16} className={formData.type === type.id ? 'text-black' : 'text-white'} />
+                          <type.icon size={16} className={formData.type === type.id ? 'text-black' : 'text-ink'} />
                         </div>
                         {type.label}
                       </button>

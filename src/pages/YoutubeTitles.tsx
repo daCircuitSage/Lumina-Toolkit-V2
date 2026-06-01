@@ -61,7 +61,7 @@ export default function YoutubeTitles() {
           {/* Controls Side */}
           <div className="lg:w-1/3">
              <header className="mb-8 md:mb-10 text-center lg:text-left">
-                <div className="w-14 h-14 bg-white/10 text-white rounded-sm flex items-center justify-center mb-4 md:mb-6 mx-auto lg:mx-0">
+                <div className="w-14 h-14 bg-white/10 text-ink rounded-sm flex items-center justify-center mb-4 md:mb-6 mx-auto lg:mx-0">
                    <Youtube size={28} />
                 </div>
                 <h1 className="text-2xl md:text-3xl font-normal text-ink mb-2 md:mb-3 tracking-tight">AI Title Engine</h1>
@@ -121,13 +121,13 @@ export default function YoutubeTitles() {
                   onClick={generate}
                   className="w-full h-14 bg-white text-black rounded-sm font-normal flex items-center justify-center gap-3 hover:bg-gray-100 active:scale-95 transition-all disabled:opacity-50 mt-4 border-2 border-white cursor-pointer shadow-md hover:shadow-lg"
                 >
-                  {isGenerating ? <Loader2 className="animate-spin text-white" /> : <Sparkles size={20} />}
+                  {isGenerating ? <Loader2 className="animate-spin text-black" /> : <Sparkles size={20} />}
                   Generate Titles
                 </button>
 
                 <div className="p-4 md:p-5 bg-canvas-soft rounded-sm border border-hairline hidden sm:block transition-colors">
                    <h5 className="text-[10px] font-normal text-body-mid uppercase mb-2 md:mb-3 flex items-center gap-2">
-                     <Lightbulb size={12} className="text-white" /> Pro Insight
+                     <Lightbulb size={12} className="text-ink" /> Pro Insight
                    </h5>
                    <p className="text-[11px] text-body-mid leading-relaxed italic">
                      "The first 3 seconds of your title decide 90% of your CTR. Always front-load your most important keyword."
@@ -161,7 +161,7 @@ export default function YoutubeTitles() {
                            <span className="text-ink font-normal text-xs md:text-sm lg:text-base leading-snug flex-1">{title}</span>
                            <button
                              onClick={() => copyToClipboard(title, idx)}
-                             className="p-2 ml-3 md:ml-4 text-body-mid hover:text-white hover:bg-canvas-soft rounded-sm transition-all shrink-0 border border-transparent hover:border-hairline cursor-pointer active:scale-95"
+                             className="p-2 ml-3 md:ml-4 text-body-mid hover:text-ink hover:bg-canvas-soft rounded-sm transition-all shrink-0 border border-transparent hover:border-hairline cursor-pointer active:scale-95"
                            >
                              {copiedIndex === idx ? <Check size={18} /> : <Copy size={16} />}
                            </button>

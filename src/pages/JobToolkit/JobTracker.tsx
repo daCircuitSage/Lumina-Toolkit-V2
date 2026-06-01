@@ -44,10 +44,10 @@ interface Job {
 }
 
 const STATUS_CONFIG: Record<JobStatus, { label: string, icon: any, colors: string }> = {
-  applied: { label: 'Applied', icon: Clock, colors: 'bg-white/10 text-white' },
-  interview: { label: 'Interviewing', icon: Plus, colors: 'bg-white/20 text-white font-normal' },
+  applied: { label: 'Applied', icon: Clock, colors: 'bg-white/10 text-ink' },
+  interview: { label: 'Interviewing', icon: Plus, colors: 'bg-white/20 text-ink font-normal' },
   rejected: { label: 'Declined', icon: XCircle, colors: 'bg-red-500/10 text-red-400 opacity-70' },
-  offer: { label: 'Offer Received', icon: Trophy, colors: 'bg-white/20 text-white' }
+  offer: { label: 'Offer Received', icon: Trophy, colors: 'bg-white/20 text-ink' }
 };
 
 export default function JobTracker() {
@@ -256,7 +256,7 @@ export default function JobTracker() {
       <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
         <div className="max-w-md w-full bg-canvas-card border border-hairline rounded-sm p-6 sm:p-8 text-center">
           <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-sm flex items-center justify-center mx-auto mb-4 sm:mb-6">
-            <User className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+            <User className="w-7 h-7 sm:w-8 sm:h-8 text-ink" />
           </div>
           <h2 className="text-xl sm:text-2xl font-normal text-ink mb-3 sm:mb-4">
             Sign In to Job Tracker
@@ -285,8 +285,8 @@ export default function JobTracker() {
     return (
       <div className="min-h-screen bg-canvas flex items-center justify-center">
         <div className="relative">
-          <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-0 w-8 h-8 border-2 border-white/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="w-8 h-8 border-2 border-ink border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-8 h-8 border-2 border-ink/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
         </div>
       </div>
     );
@@ -303,7 +303,7 @@ export default function JobTracker() {
                 {user?.photoURL ? (
                   <img src={user.photoURL} alt="Profile" className="w-6 h-6 sm:w-8 sm:h-8 rounded-sm" />
                 ) : (
-                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  <User className="w-4 h-4 sm:w-5 sm:h-5 text-ink" />
                 )}
               </div>
               <div className="min-w-0 flex-1">
@@ -397,7 +397,7 @@ export default function JobTracker() {
           {sortedJobs.length === 0 ? (
             <div className="bg-canvas-card border border-hairline rounded-sm p-6 sm:p-8 lg:p-12 text-center">
               <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/10 rounded-sm flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                <Briefcase className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-ink" />
               </div>
               <h3 className="text-lg sm:text-xl font-normal text-ink mb-2 sm:mb-3">
                 No job applications yet
@@ -472,7 +472,7 @@ export default function JobTracker() {
                     <div className="flex items-center gap-2 sm:gap-2 ml-0 sm:ml-4">
                       <button
                         onClick={() => handleEditJob(job)}
-                        className="p-2 text-body-mid hover:text-white transition-colors rounded-sm hover:bg-canvas-soft"
+                        className="p-2 text-body-mid hover:text-ink transition-colors rounded-sm hover:bg-canvas-soft"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>

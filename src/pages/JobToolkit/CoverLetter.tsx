@@ -135,10 +135,10 @@ export default function CoverLetter() {
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
       <header className="mb-8">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-sm text-xs font-normal mb-4"
+          className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-ink rounded-sm text-xs font-normal mb-4"
         >
           <Mail size={14} />
           AI-Powered Cover Letters
@@ -202,10 +202,10 @@ export default function CoverLetter() {
                        <div className="hidden sm:block text-[10px] font-normal uppercase tracking-widest text-body-mid">Intelligent Preview</div>
                        {letter && <div className="h-4 w-px bg-hairline mx-1"></div>}
                        {letter && (
-                         <button 
+                         <button
                           onClick={handleExportPdf}
                           disabled={isExporting}
-                          className="flex items-center gap-2 text-[10px] font-normal uppercase tracking-widest text-white hover:opacity-70 transition-all disabled:opacity-30"
+                          className="flex items-center gap-2 text-[10px] font-normal uppercase tracking-widest text-ink hover:opacity-70 transition-all disabled:opacity-30"
                          >
                            {isExporting ? <Loader2 size={12} className="animate-spin" /> : <Download size={14} />}
                            <span className="hidden xs:inline">Save PDF</span>

@@ -532,10 +532,10 @@ Do not include any markdown formatting, explanations, or additional text. Only t
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto">
       <header className="mb-8">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-white rounded-sm text-xs font-normal mb-4"
+          className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-ink rounded-sm text-xs font-normal mb-4"
         >
           <BrainCircuit size={14} />
           AI-Powered Interview Coaching
@@ -703,19 +703,19 @@ Do not include any markdown formatting, explanations, or additional text. Only t
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="p-4 bg-canvas-soft rounded-sm">
-                <div className="text-2xl font-normal text-white">{sessionStats.averageRating.toFixed(1)}</div>
+                <div className="text-2xl font-normal text-ink">{sessionStats.averageRating.toFixed(1)}</div>
                 <div className="text-xs font-normal text-body-mid uppercase">Avg Rating</div>
               </div>
               <div className="p-4 bg-canvas-soft rounded-sm">
-                <div className="text-2xl font-normal text-white">{Math.floor(sessionStats.totalTime / 60)}m</div>
+                <div className="text-2xl font-normal text-ink">{Math.floor(sessionStats.totalTime / 60)}m</div>
                 <div className="text-xs font-normal text-body-mid uppercase">Total Time</div>
               </div>
               <div className="p-4 bg-canvas-soft rounded-sm">
-                <div className="text-2xl font-normal text-white">{questions.filter(q => q.isBookmarked).length}</div>
+                <div className="text-2xl font-normal text-ink">{questions.filter(q => q.isBookmarked).length}</div>
                 <div className="text-xs font-normal text-body-mid uppercase">Bookmarked</div>
               </div>
               <div className="p-4 bg-canvas-soft rounded-sm">
-                <div className="text-2xl font-normal text-white">{difficulty}</div>
+                <div className="text-2xl font-normal text-ink">{difficulty}</div>
                 <div className="text-xs font-normal text-body-mid uppercase">Difficulty</div>
               </div>
             </div>
@@ -788,21 +788,21 @@ Do not include any markdown formatting, explanations, or additional text. Only t
                    <div className="flex items-center gap-2">
                      {practiceMode === 'timed' && (
                        <div className="flex items-center gap-2 px-4 py-2 bg-canvas-card border border-hairline rounded-sm">
-                         <Clock size={16} className="text-white" />
+                         <Clock size={16} className="text-ink" />
                          <span className="text-sm font-normal text-ink">
                            {Math.floor(timerSeconds / 60)}:{(timerSeconds % 60).toString().padStart(2, '0')}
                          </span>
                          {!showTimer ? (
                            <button onClick={startTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer active:scale-95">
-                             <Play size={14} className="text-white" />
+                             <Play size={14} className="text-ink" />
                            </button>
                          ) : (
                            <div className="flex gap-1">
                              <button onClick={stopTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer active:scale-95">
-                               <Pause size={14} className="text-white" />
+                               <Pause size={14} className="text-ink" />
                              </button>
                              <button onClick={resetTimer} className="p-1 hover:bg-canvas-soft rounded-sm transition-colors cursor-pointer active:scale-95">
-                               <RotateCcw size={14} className="text-white" />
+                               <RotateCcw size={14} className="text-ink" />
                              </button>
                            </div>
                          )}
@@ -1003,7 +1003,7 @@ function TabButton({ active, onClick, icon: Icon, title, desc, count }: any) {
       {count > 0 && (
         <div className={cn(
           "w-6 h-6 rounded-full flex items-center justify-center text-xs font-normal",
-          active ? "bg-white/10 text-white" : "bg-canvas-soft text-body-mid"
+          active ? "bg-white/10 text-ink" : "bg-canvas-soft text-body-mid"
         )}>
           {count}
         </div>
@@ -1044,7 +1044,7 @@ function QaCard({
         <div className="flex gap-3 md:gap-4 items-start flex-1 min-w-0">
            <div className={cn(
              "w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center shrink-0 font-normal text-[10px] md:text-xs mt-0.5",
-             q.isCompleted ? "bg-green-500/20 text-green-400" : "bg-white/10 text-white"
+             q.isCompleted ? "bg-green-500/20 text-green-400" : "bg-white/10 text-ink"
            )}>
              {q.isCompleted ? <CheckCircle2 size={12} /> : (q.type === 'technical' ? 'T' : q.type === 'behavioral' ? 'B' : 'G')}
            </div>
@@ -1100,7 +1100,7 @@ function QaCard({
           >
             <Bookmark size={16} className={q.isBookmarked ? "fill-current" : ""} />
           </button>
-          <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-body-mid transition-all shrink-0", isExpanded ? "rotate-90 bg-white/10 text-white" : "")}>
+          <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-body-mid transition-all shrink-0", isExpanded ? "rotate-90 bg-white/10 text-ink" : "")}>
              <ChevronRight size={20} />
           </div>
         </div>
@@ -1161,11 +1161,11 @@ function QaCard({
                </div>
                
                <div className="flex items-start gap-3 md:gap-4 p-4 md:p-6 bg-canvas-card rounded-sm border border-hairline">
-                  <div className="p-2 bg-white/10 text-white rounded-sm shrink-0">
+                  <div className="p-2 bg-white/10 text-ink rounded-sm shrink-0">
                     <Trophy size={14} className="md:w-5 md:h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h5 className="text-[9px] md:text-[10px] font-normal uppercase tracking-widest text-white mb-3">Strategy & Model Answer</h5>
+                    <h5 className="text-[9px] md:text-[10px] font-normal uppercase tracking-widest text-ink mb-3">Strategy & Model Answer</h5>
                     <div className="text-xs md:text-sm font-normal text-body-mid leading-relaxed prose prose-sm dark:prose-invert max-w-none">
                       <ReactMarkdown 
                         components={{

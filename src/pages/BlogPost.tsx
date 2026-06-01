@@ -27,7 +27,7 @@ export default function BlogPost() {
         <div className="text-center">
           <BookOpen size={64} className="text-body-mid mx-auto mb-4" />
           <h1 className="text-2xl font-normal text-ink mb-2">Article not found</h1>
-          <Link to="/blog" className="text-white hover:underline">Back to Blog</Link>
+          <Link to="/blog" className="text-ink hover:underline">Back to Blog</Link>
         </div>
       </div>
     );
@@ -120,7 +120,7 @@ export default function BlogPost() {
             className="mb-8"
           >
             <div className="flex flex-wrap items-center gap-4 mb-6">
-              <span className="px-4 py-2 bg-white/10 text-white rounded-sm text-xs font-normal uppercase tracking-wider">
+              <span className="px-4 py-2 bg-white/10 text-ink rounded-sm text-xs font-normal uppercase tracking-wider">
                 {post.category}
               </span>
               <div className="flex items-center gap-2 text-sm font-normal text-body-mid">
