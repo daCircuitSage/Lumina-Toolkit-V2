@@ -41,6 +41,23 @@ import CustomCursor from '../components/CustomCursor';
 import ToolPreviewCard from '../components/ToolPreviewCard';
 import { TOOLS } from '../constants';
 import { useDatabase } from '../contexts/DatabaseContext';
+import lockImage from '../assets/wise_images/imgi_143_lock-large@2x.webp';
+import globeImage from '../assets/wise_images/imgi_144_globe-large@2x.webp';
+import usFlag from '../assets/wise_images/imgi_133_us.svg';
+import gbFlag from '../assets/wise_images/imgi_132_gb.svg';
+import deFlag from '../assets/wise_images/imgi_65_de.svg';
+import auFlag from '../assets/wise_images/imgi_40_au.svg';
+import inFlag from '../assets/wise_images/imgi_73_in.svg';
+import jpFlag from '../assets/wise_images/imgi_79_jp.svg';
+
+const countryFlagMap: Record<string, string> = {
+  us: usFlag,
+  gb: gbFlag,
+  de: deFlag,
+  au: auFlag,
+  in: inFlag,
+  jp: jpFlag,
+};
 
 export default function Homepage() {
   const navigate = useNavigate();
@@ -466,7 +483,7 @@ export default function Homepage() {
               transition={{ duration: 0.8 }}
             >
               <motion.img
-                src="/src/assets/wise_images/imgi_143_lock-large@2x.webp"
+                src={lockImage}
                 alt="Secure and trusted"
                 className="w-full max-w-md mx-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
@@ -542,7 +559,7 @@ export default function Homepage() {
                     className="w-12 h-12 bg-canvas rounded-xl flex items-center justify-center"
                   >
                     <img
-                      src={`/src/assets/wise_images/imgi_${country.toLowerCase()}.svg`}
+                      src={countryFlagMap[country.toLowerCase()]}
                       alt={country}
                       className="w-8 h-8"
                     />
@@ -558,7 +575,7 @@ export default function Homepage() {
               className="order-1 md:order-2"
             >
               <motion.img
-                src="/src/assets/wise_images/imgi_144_globe-large@2x.webp"
+                src={globeImage}
                 alt="Global reach"
                 className="w-full max-w-md mx-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
