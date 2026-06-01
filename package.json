@@ -26,6 +26,10 @@
 
     "@emailjs/browser": "^4.4.1",
 
+    "@react-three/drei": "^10.7.7",
+
+    "@react-three/fiber": "^9.6.1",
+
     "@supabase/supabase-js": "^2.105.3",
 
     "@tailwindcss/vite": "^4.1.14",
@@ -79,6 +83,8 @@
     "shaders": "^2.5.127",
 
     "tailwind-merge": "^3.5.0",
+
+    "three": "^0.184.0",
 
     "vite": "^6.2.3"
 

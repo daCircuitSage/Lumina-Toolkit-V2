@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'motion/react';
+import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'motion/react';
 import { 
   FaStar as Sparkles, 
   FaTerminal as Terminal, 
@@ -38,13 +38,33 @@ import {
 } from 'react-icons/fa';
 import TerminalBackground from '../components/TerminalBackground';
 import CustomCursor from '../components/CustomCursor';
+import ToolPreviewCard from '../components/ToolPreviewCard';
 import { TOOLS } from '../constants';
 import { useDatabase } from '../contexts/DatabaseContext';
 
 export default function Homepage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, signIn, signOut } = useDatabase();
+  const { scrollY } = useScroll();
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const toolsSectionRef = useRef<HTMLElement>(null);
 
+  // Hero exit animation based on scroll
+  const heroScale = useTransform(scrollY, [0, 300], [1, 0.95]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const heroY = useTransform(scrollY, [0, 300], [0, -50]);
+
+  // Parallax for tools section
+  const toolsY = useTransform(scrollY, [300, 600], [0, 30]);
+
+  // Get featured tools for the bento grid
+  const featuredTools = [
+    TOOLS.find(t => t.id === 'chat')!,
+    TOOLS.find(t => t.id === 'resume')!,
+    TOOLS.find(t => t.id === 'ats')!,
+    TOOLS.find(t => t.id === 'interview')!,
+    TOOLS.find(t => t.id === 'pdf')!,
+  ];
 
   return (
     <div className="relative bg-canvas text-ink selection:bg-white/10 overflow-x-hidden">
@@ -139,10 +159,15 @@ export default function Homepage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-12">
+      <section ref={heroSectionRef} className="relative min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-12">
         <div className="max-w-7xl mx-auto w-full">
           <motion.div 
             className="text-center space-y-8 md:space-y-12"
+            style={{
+              scale: heroScale,
+              opacity: heroOpacity,
+              y: heroY
+            }}
           >
             {/* Badge */}
             <motion.div
@@ -279,141 +304,82 @@ export default function Homepage() {
       </section>
 
       {/* Bento Grid Tools Section */}
-      <section className="py-20 md:py-32 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section ref={toolsSectionRef} className="py-20 md:py-32 relative">
+        <motion.div 
+          style={{ y: toolsY }}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-normal mb-4">
-              Everything You Need
-            </h2>
-            <p className="text-body-mid text-lg max-w-2xl mx-auto">
+            <motion.h2 
+              className="text-4xl md:text-5xl font-normal mb-4"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: 0.2 }}
+            >
+              {["Everything You Need"].map((word, wordIndex) => (
+                <span key={wordIndex} className="inline-block">
+                  {word.split("").map((letter, letterIndex) => (
+                    <motion.span
+                      key={letterIndex}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        delay: 0.2 + letterIndex * 0.03,
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15
+                      }}
+                      className="inline-block"
+                    >
+                      {letter}
+                    </motion.span>
+                  ))}
+                  <span className="inline-block w-2" />
+                </span>
+              ))}
+            </motion.h2>
+            <motion.p 
+              className="text-body-mid text-lg max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
               A complete toolkit for productivity, career growth, and content creation
-            </p>
+            </motion.p>
           </motion.div>
 
           {/* Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {/* Large Featured Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => navigate('/ai-assistant')}
-              className="group relative md:col-span-2 bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative">
-                <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Bot className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-normal mb-2">AI Assistant</h3>
-                <p className="text-body-mid mb-4 max-w-md">
-                  Your intelligent companion for writing, brainstorming, coding help, and productivity tasks. Get instant answers and boost your workflow.
-                </p>
-                <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
-                  <span className="font-normal">Start Chatting</span>
-                  <ArrowRight className="w-5 h-5" />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Resume Builder Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => navigate('/resume-builder')}
-              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
-            >
-              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <FileText className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-normal mb-2">Resume Builder</h3>
-              <p className="text-body-mid mb-4">
-                Create professional resumes in minutes with multiple templates and AI-powered suggestions.
-              </p>
-              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
-                <span className="font-normal">Build Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            </motion.div>
-
-            {/* ATS Checker Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => navigate('/ats-resume-checker')}
-              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
-            >
-              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BarChart3 className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-normal mb-2">ATS Checker</h3>
-              <p className="text-body-mid mb-4">
-                Optimize your resume for Applicant Tracking Systems and increase interview chances.
-              </p>
-              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
-                <span className="font-normal">Check Now</span>
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            </motion.div>
-
-            {/* Interview Prep Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => navigate('/interview-prep')}
-              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
-            >
-              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <BrainCircuit className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-normal mb-2">Interview Prep</h3>
-              <p className="text-body-mid mb-4">
-                Practice with AI-powered mock interviews and master the STAR method.
-              </p>
-              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
-                <span className="font-normal">Practice</span>
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            </motion.div>
-
-            {/* PDF Converter Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => navigate('/pdf-converter')}
-              className="group bg-canvas-card border border-hairline rounded-sm p-8 cursor-pointer hover:border-white/30 transition-all duration-300"
-            >
-              <div className="w-14 h-14 bg-transparent rounded-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <FileUp className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-normal mb-2">PDF Converter</h3>
-              <p className="text-body-mid mb-4">
-                Convert images and documents to high-quality PDF files instantly.
-              </p>
-              <div className="flex items-center gap-2 text-white group-hover:gap-3 transition-all">
-                <span className="font-normal">Convert</span>
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            </motion.div>
+            {featuredTools.map((tool, index) => (
+              <ToolPreviewCard
+                key={tool.id}
+                title={tool.name}
+                description={tool.description}
+                icon={tool.icon}
+                videoPreview={tool.videoPreview || '/videos/placeholder.mp4'}
+                onClick={() => {
+                  const routeMap: Record<string, string> = {
+                    'chat': '/ai-assistant',
+                    'resume': '/resume-builder',
+                    'ats': '/ats-resume-checker',
+                    'interview': '/interview-prep',
+                    'pdf': '/pdf-converter',
+                  };
+                  navigate(routeMap[tool.id] || '/all-tools');
+                }}
+                isLarge={index === 0}
+                delay={0.1 + index * 0.1}
+              />
+            ))}
           </div>
 
           <motion.div
@@ -433,7 +399,7 @@ export default function Homepage() {
               <ArrowRight className="w-5 h-5" />
             </motion.button>
           </motion.div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Features Section */}
@@ -442,7 +408,7 @@ export default function Homepage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '-100px' }}
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-normal mb-4">
@@ -462,16 +428,25 @@ export default function Homepage() {
             ].map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ 
+                  delay: index * 0.15,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 15
+                }}
+                whileHover={{ y: -8, scale: 1.02 }}
                 className="bg-canvas-card border border-hairline rounded-sm p-6 hover:border-white/30 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-white/10 rounded-sm flex items-center justify-center mb-4">
+                <motion.div 
+                  className="w-12 h-12 bg-white/10 rounded-sm flex items-center justify-center mb-4"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
                   <feature.icon className="w-6 h-6 text-white" />
-                </div>
+                </motion.div>
                 <h3 className="font-normal text-lg mb-2">{feature.title}</h3>
                 <p className="text-body-mid text-sm">{feature.description}</p>
               </motion.div>

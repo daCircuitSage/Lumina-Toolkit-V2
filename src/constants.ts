@@ -40,7 +40,9 @@ export const TOOLS = [
 
     icon: LayoutDashboard,
 
-    description: 'Welcome to Lumina Toolkit'
+    description: 'Welcome to Lumina Toolkit',
+
+    videoPreview: '/videos/homepage.mp4'
 
   },
 
@@ -52,7 +54,9 @@ export const TOOLS = [
 
     icon: LayoutDashboard,
 
-    description: 'View all available tools'
+    description: 'View all available tools',
+
+    videoPreview: '/videos/all-tools.mp4'
 
   },
 
@@ -64,7 +68,9 @@ export const TOOLS = [
 
     icon: Bot,
 
-    description: 'Chat with your personal AI productivity companion'
+    description: 'Chat with your personal AI productivity companion',
+
+    videoPreview: '/videos/ai-assistant.mp4'
 
   },
 
@@ -76,7 +82,9 @@ export const TOOLS = [
 
     icon: FileText,
 
-    description: 'Create professional resumes in minutes'
+    description: 'Create professional resumes in minutes',
+
+    videoPreview: '/videos/resume-builder.mp4'
 
   },
 
@@ -88,7 +96,9 @@ export const TOOLS = [
 
     icon: FileUp,
 
-    description: 'Convert images to high-quality PDF'
+    description: 'Convert images to high-quality PDF',
+
+    videoPreview: '/videos/pdf-converter.mp4'
 
   },
 
@@ -100,7 +110,9 @@ export const TOOLS = [
 
     icon: Calendar,
 
-    description: 'Calculate exact age and next birthday'
+    description: 'Calculate exact age and next birthday',
+
+    videoPreview: '/videos/age-calculator.mp4'
 
   },
 
@@ -112,7 +124,9 @@ export const TOOLS = [
 
     icon: Calculator,
 
-    description: 'Check your academic performance'
+    description: 'Check your academic performance',
+
+    videoPreview: '/videos/gpa-calculator.mp4'
 
   },
 
@@ -124,7 +138,9 @@ export const TOOLS = [
 
     icon: MessageSquare,
 
-    description: 'Engaging captions for social media'
+    description: 'Engaging captions for social media',
+
+    videoPreview: '/videos/caption-generator.mp4'
 
   },
 
@@ -136,7 +152,9 @@ export const TOOLS = [
 
     icon: Youtube,
 
-    description: 'Optimize your videos for high CTR'
+    description: 'Optimize your videos for high CTR',
+
+    videoPreview: '/videos/youtube-titles.mp4'
 
   },
 
@@ -148,7 +166,9 @@ export const TOOLS = [
 
     icon: BookOpen,
 
-    description: 'Career tips, interview advice & job search strategies'
+    description: 'Career tips, interview advice & job search strategies',
+
+    videoPreview: '/videos/blog.mp4'
 
   },
 
@@ -164,7 +184,9 @@ export const TOOLS = [
 
     description: 'Optimize your resume for machine parsers',
 
-    category: 'Job Toolkit'
+    category: 'Job Toolkit',
+
+    videoPreview: '/videos/ats-checker.mp4'
 
   },
 
@@ -178,7 +200,9 @@ export const TOOLS = [
 
     description: 'Track your applications from sent to signed',
 
-    category: 'Job Toolkit'
+    category: 'Job Toolkit',
+
+    videoPreview: '/videos/job-tracker.mp4'
 
   },
 
@@ -192,7 +216,9 @@ export const TOOLS = [
 
     description: 'Personalized coaching and Q&A drills',
 
-    category: 'Job Toolkit'
+    category: 'Job Toolkit',
+
+    videoPreview: '/videos/interview-prep.mp4'
 
   },
 
@@ -206,7 +232,9 @@ export const TOOLS = [
 
     description: 'Tailored letters that grab attention',
 
-    category: 'Job Toolkit'
+    category: 'Job Toolkit',
+
+    videoPreview: '/videos/cover-letter.mp4'
 
   },
 
@@ -220,7 +248,9 @@ export const TOOLS = [
 
     description: 'Help us improve your toolkit suite',
 
-    category: 'System'
+    category: 'System',
+
+    videoPreview: '/videos/contact.mp4'
 
   }
 
