@@ -22,7 +22,8 @@ export default function ToolPreviewCard({
   delay = 0
 }: ToolPreviewCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(true);
+  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   
@@ -38,26 +39,6 @@ export default function ToolPreviewCard({
     stiffness: 300,
     damping: 20
   });
-
-  // Lazy load video when card is near viewport
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isVideoLoaded) {
-            setIsVideoLoaded(true);
-          }
-        });
-      },
-      { rootMargin: '200px' }
-    );
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [isVideoLoaded]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -81,8 +62,9 @@ export default function ToolPreviewCard({
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current) {
-      videoRef.current.play().catch(() => {
-        // Video might not be loaded yet, that's okay
+      videoRef.current.play().catch((error) => {
+        console.error('Video play error:', error);
+        setVideoError(true);
       });
     }
   };
@@ -157,7 +139,11 @@ export default function ToolPreviewCard({
             muted
             loop
             playsInline
-            preload="none"
+            preload="metadata"
+            onError={() => {
+              console.error('Video load error:', videoPreview);
+              setVideoError(true);
+            }}
             className="w-full h-full object-cover opacity-35"
           />
         </motion.div>
