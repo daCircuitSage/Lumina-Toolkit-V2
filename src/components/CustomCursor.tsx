@@ -5,10 +5,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
+import cursorImage from '../assets/customcursore/cusore.png';
 
 export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
-  const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLImageElement>(null);
   
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -68,42 +69,23 @@ export default function CustomCursor() {
   }, []);
 
   return (
-    <>
-      {/* Outer ring */}
-      <motion.div
-        ref={cursorRef}
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-white/30 pointer-events-none z-[9999] hidden md:block"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-        animate={{
-          scale: isHovering ? 1.5 : 1,
-          borderColor: isHovering ? 'rgba(62, 207, 142, 0.8)' : 'rgba(255, 255, 255, 0.3)',
-        }}
-        transition={{
-          duration: 0.2,
-        }}
-      />
-      
-      {/* Inner dot */}
-      <motion.div
-        className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[9999] hidden md:block"
-        style={{
-          x: dotX,
-          y: dotY,
-          translateX: '-50%',
-          translateY: '-50%',
-        }}
-        animate={{
-          scale: isHovering ? 0 : 1,
-        }}
-        transition={{
-          duration: 0.2,
-        }}
-      />
-    </>
+    <motion.img
+      ref={cursorRef}
+      src={cursorImage}
+      alt="Custom Cursor"
+      className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] hidden md:block"
+      style={{
+        x: cursorX,
+        y: cursorY,
+        translateX: '-50%',
+        translateY: '-50%',
+      }}
+      animate={{
+        scale: isHovering ? 1.5 : 1,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
+    />
   );
 }

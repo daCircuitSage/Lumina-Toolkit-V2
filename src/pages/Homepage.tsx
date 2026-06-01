@@ -39,10 +39,12 @@ import {
 import TerminalBackground from '../components/TerminalBackground';
 import CustomCursor from '../components/CustomCursor';
 import ToolPreviewCard from '../components/ToolPreviewCard';
+import HeroTitleBurst from '../components/HeroTitleBurst';
 import { TOOLS } from '../constants';
 import { useDatabase } from '../contexts/DatabaseContext';
 import lockImage from '../assets/wise_images/imgi_143_lock-large@2x.webp';
 import globeImage from '../assets/wise_images/imgi_144_globe-large@2x.webp';
+import newLogo from '../assets/logo/newlogo.png';
 import usFlag from '../assets/wise_images/imgi_133_us.svg';
 import gbFlag from '../assets/wise_images/imgi_132_gb.svg';
 import deFlag from '../assets/wise_images/imgi_65_de.svg';
@@ -93,21 +95,16 @@ export default function Homepage() {
       <nav className="relative z-50 px-4 py-6 md:px-8 md:py-8">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
           <motion.div 
-            className="flex items-center gap-3 group cursor-pointer"
+            className="flex items-center cursor-pointer"
             onClick={() => navigate('/')}
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <div className="relative">
-              {/* Wise design: primary green square with rounded-xl */}
-              <div className="relative w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                <Terminal className="w-5 h-5 text-on-primary" />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-normal text-lg md:text-xl tracking-tight">Lumina</span>
-              <span className="text-xs body-sm hidden md:block">Toolkit</span>
-            </div>
+            <img 
+              src={newLogo} 
+              alt="Lumina Toolkit Logo"
+              className="h-20 w-auto object-contain"
+            />
           </motion.div>
           
           <div className="flex items-center gap-3">
@@ -179,19 +176,24 @@ export default function Homepage() {
       <section ref={heroSectionRef} className="relative min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-8 pb-12 bg-canvas-soft">
         <div className="max-w-7xl mx-auto w-full">
           <motion.div 
-            className="text-center space-y-8 md:space-y-12"
+            className="text-center space-y-8 md:space-y-12 relative"
             style={{
               scale: heroScale,
               opacity: heroOpacity,
               y: heroY
             }}
           >
+            {/* Hero Title Burst Animation */}
+            <div className="absolute inset-0 flex items-center justify-center z-0">
+              <HeroTitleBurst />
+            </div>
+
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-pale border border-primary rounded-full"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-pale border border-primary rounded-full relative z-0"
             >
               <Sparkles className="w-4 h-4 text-positive-deep" />
               <span className="text-sm body-sm-strong text-positive-deep">14+ Free AI Tools</span>
@@ -202,7 +204,7 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight leading-tight"
+              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight leading-tight relative z-10"
             >
               <span className="block mb-2">
                 <span className="text-ink">
@@ -221,7 +223,7 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl body-md max-w-3xl mx-auto leading-relaxed"
+              className="text-lg md:text-xl body-md max-w-3xl mx-auto leading-relaxed relative z-10"
             >
               AI-powered tools for resume building, job search, PDF conversion, and more. 
               <span className="text-ink font-normal"> Free forever. No registration required.</span>
@@ -232,7 +234,7 @@ export default function Homepage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-3 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-3 justify-center items-center relative z-10"
             >
               <motion.button
                 onClick={() => navigate('/all-tools')}
@@ -265,7 +267,7 @@ export default function Homepage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1 }}
-              className="flex flex-col items-center gap-2 mt-16"
+              className="flex flex-col items-center gap-2 mt-16 relative z-10"
             >
               <span className="text-sm body-sm">Scroll to explore</span>
               <motion.div
