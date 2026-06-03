@@ -6,6 +6,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 import cursorImage from '../assets/customcursore/cusore.png';
+import clickImage from '../assets/customcursore/click.png';
 
 export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
@@ -31,10 +32,18 @@ export default function CustomCursor() {
       if (
         target.tagName === 'BUTTON' ||
         target.tagName === 'A' ||
+        target.tagName === 'INPUT' ||
+        target.tagName === 'SELECT' ||
+        target.tagName === 'TEXTAREA' ||
         target.closest('button') ||
         target.closest('a') ||
         target.closest('[role="button"]') ||
-        target.classList.contains('cursor-pointer')
+        target.closest('[role="link"]') ||
+        target.closest('[role="checkbox"]') ||
+        target.closest('[role="radio"]') ||
+        target.classList.contains('cursor-pointer') ||
+        target.classList.contains('clickable') ||
+        target.onclick !== null
       ) {
         setIsHovering(true);
       }
@@ -71,7 +80,7 @@ export default function CustomCursor() {
   return (
     <motion.img
       ref={cursorRef}
-      src={cursorImage}
+      src={isHovering ? clickImage : cursorImage}
       alt="Custom Cursor"
       className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] hidden md:block"
       style={{
@@ -81,10 +90,10 @@ export default function CustomCursor() {
         translateY: '-50%',
       }}
       animate={{
-        scale: isHovering ? 1.5 : 1,
+        scale: isHovering ? 1.2 : 1,
       }}
       transition={{
-        duration: 0.2,
+        duration: 0.15,
       }}
     />
   );
