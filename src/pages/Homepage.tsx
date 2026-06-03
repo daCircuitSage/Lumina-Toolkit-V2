@@ -1,22 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'motion/react';
-import { 
-  FaStar as Sparkles, 
-  FaTerminal as Terminal, 
-  FaMicrochip as Cpu, 
-  FaSearch as Search, 
-  FaFileAlt as FileText, 
-  FaChevronRight as ChevronRight,
-  FaRobot as Bot,
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'motion/react';
+import {
+  FaStar as Sparkles,
+  FaFileAlt as FileText,
   FaFileUpload as FileUp,
-  FaCalendar as Calendar,
   FaCalculator as Calculator,
   FaComment as MessageSquare,
   FaYoutube as Youtube,
-  FaChartBar as BarChart3,
-  FaTasks as ListTodo,
-  FaBrain as BrainCircuit,
   FaEnvelope as Mail,
   FaCheckCircle as CheckCircle,
   FaUsers as Users,
@@ -24,20 +15,16 @@ import {
   FaArrowRight as ArrowRight,
   FaShieldAlt as Shield,
   FaBolt as Zap,
-  FaClock as Clock,
   FaUser as User,
   FaSignOutAlt as LogOut,
   FaTerminal as Command,
   FaGlobe as Globe,
-  FaChartLine as TrendingUp,
   FaLayerGroup as Layers,
-  FaPuzzlePiece as Puzzle,
   FaRocket as Rocket,
   FaFire as Flame,
   FaInfinity as Infinity
 } from 'react-icons/fa';
 import TerminalBackground from '../components/TerminalBackground';
-import CustomCursor from '../components/CustomCursor';
 import ToolPreviewCard from '../components/ToolPreviewCard';
 import HeroTitleBurst from '../components/HeroTitleBurst';
 import { TOOLS } from '../constants';
@@ -62,7 +49,7 @@ const countryFlagMap: Record<string, string> = {
   jp: jpFlag,
 };
 
-export default function Homepage() {
+function Homepage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, signIn, signOut } = useDatabase();
   const { scrollY } = useScroll();
@@ -78,18 +65,17 @@ export default function Homepage() {
   // Parallax for tools section
   const toolsY = useTransform(scrollY, [300, 600], [0, 30]);
 
-  // Get featured tools for the bento grid
-  const featuredTools = [
+  // Get featured tools for the bento grid (memoized)
+  const featuredTools = useMemo(() => [
     TOOLS.find(t => t.id === 'chat')!,
     TOOLS.find(t => t.id === 'resume')!,
     TOOLS.find(t => t.id === 'ats')!,
     TOOLS.find(t => t.id === 'interview')!,
     TOOLS.find(t => t.id === 'pdf')!,
-  ];
+  ], []);
 
   return (
     <div className="relative bg-canvas text-ink selection:bg-primary/20 overflow-x-hidden">
-      <CustomCursor />
       {/* Wise design: canvas background */}
       <div className="fixed inset-0 pointer-events-none bg-canvas" />
 
@@ -105,6 +91,7 @@ export default function Homepage() {
             <img 
               src={newLogo} 
               alt="Lumina Toolkit Logo"
+              loading="eager"
               className="h-20 w-auto object-contain"
             />
           </motion.div>
@@ -398,6 +385,7 @@ export default function Homepage() {
         <img
           src={cornerBackgroundImage}
           alt=""
+          loading="lazy"
           className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 object-contain opacity-60 pointer-events-none"
         />
         <motion.div 
@@ -563,6 +551,7 @@ export default function Homepage() {
               <motion.img
                 src={lockImage}
                 alt="Secure and trusted"
+                loading="lazy"
                 className="w-full max-w-md mx-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
@@ -639,6 +628,7 @@ export default function Homepage() {
                     <img
                       src={countryFlagMap[country.toLowerCase()]}
                       alt={country}
+                      loading="lazy"
                       className="w-8 h-8"
                     />
                   </motion.div>
@@ -655,6 +645,7 @@ export default function Homepage() {
               <motion.img
                 src={globeImage}
                 alt="Global reach"
+                loading="lazy"
                 className="w-full max-w-md mx-auto"
                 initial={{ scale: 0.9, opacity: 0 }}
                 whileInView={{ scale: 1, opacity: 1 }}
@@ -718,3 +709,5 @@ export default function Homepage() {
     </div>
   );
 }
+
+export default memo(Homepage);

@@ -50,8 +50,9 @@ const HeroTitleBurst: React.FC = () => {
     };
 
     updateBreakpoint();
-    window.addEventListener('resize', updateBreakpoint);
-    return () => window.removeEventListener('resize', updateBreakpoint);
+    const resizeHandler = () => requestAnimationFrame(updateBreakpoint);
+    window.addEventListener('resize', resizeHandler);
+    return () => window.removeEventListener('resize', resizeHandler);
   }, []);
 
   const icons = useMemo<IconConfig[]>(() => {
@@ -204,7 +205,7 @@ const HeroTitleBurst: React.FC = () => {
             style={{
               width: icon.size,
               height: icon.size,
-              willChange: 'transform, opacity, filter',
+              willChange: 'transform, opacity',
               zIndex: icon.zIndex,
               transformStyle: 'preserve-3d',
             }}
@@ -215,7 +216,6 @@ const HeroTitleBurst: React.FC = () => {
               opacity: 0,
               scale: 0.2,
               rotate: 0,
-              filter: 'blur(8px)',
             }}
             animate={{
               x: endX,
@@ -224,28 +224,26 @@ const HeroTitleBurst: React.FC = () => {
               opacity: icon.opacity,
               scale: [0.2, 1.1, 1],
               rotate: 0,
-              filter: 'blur(0px)',
             }}
             transition={{
-              duration: 1.2,
+              duration: 1.0,
               delay: icon.delay,
               ease: [0.16, 1, 0.3, 1],
               scale: {
-                duration: 1.2,
+                duration: 1.0,
                 delay: icon.delay,
                 ease: [0.16, 1, 0.3, 1],
               },
             }}
             whileHover={isDesktop ? {
-              scale: 1.15,
-              filter: 'brightness(1.1) blur(0px)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-              transition: { duration: 0.3 }
+              scale: 1.1,
+              transition: { duration: 0.2 }
             } : undefined}
           >
             <motion.img
               src={icon.src}
               alt=""
+              loading="lazy"
               className="w-full h-full object-contain"
               style={{ willChange: 'transform' }}
               animate={{

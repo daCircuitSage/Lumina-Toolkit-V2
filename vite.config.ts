@@ -92,23 +92,55 @@ export default defineConfig(({mode}) => {
 
         output: {
 
-          manualChunks: {
-
-            vendor: ['react', 'react-dom'],
-
-            router: ['react-router-dom'],
-
-            ui: ['lucide-react', 'motion', 'clsx', 'tailwind-merge'],
-
-            utils: ['date-fns', 'fuse.js', 'html-to-image', 'html2canvas', 'jspdf', 'mammoth', 'pdfjs-dist', 'react-to-print']
-
-          }
-
+          manualChunks(id) {
+            // React core
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
+            // Router
+            if (id.includes('react-router')) {
+              return 'router';
+            }
+            // UI libraries
+            if (id.includes('lucide-react') || id.includes('motion') || id.includes('clsx') || id.includes('tailwind-merge')) {
+              return 'ui';
+            }
+            // Firebase
+            if (id.includes('firebase')) {
+              return 'firebase';
+            }
+            // Supabase
+            if (id.includes('supabase')) {
+              return 'supabase';
+            }
+            // Three.js (heavy - separate chunk)
+            if (id.includes('three') || id.includes('@react-three')) {
+              return 'three';
+            }
+            // PDF libraries (heavy - separate chunk)
+            if (id.includes('pdfjs-dist') || id.includes('jspdf') || id.includes('html2canvas') || id.includes('html-to-image')) {
+              return 'pdf';
+            }
+            // Other utilities
+            if (id.includes('date-fns') || id.includes('fuse.js') || id.includes('mammoth') || id.includes('react-to-print')) {
+              return 'utils';
+            }
+            // EmailJS
+            if (id.includes('emailjs')) {
+              return 'emailjs';
+            }
+            // React icons
+            if (id.includes('react-icons')) {
+              return 'icons';
+            }
+          },
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
         }
-
       },
 
-      chunkSizeWarningLimit: 1000,
+      chunkSizeWarningLimit: 500,
 
       sourcemap: isProduction ? false : true,
 
@@ -118,13 +150,25 @@ export default defineConfig(({mode}) => {
 
         compress: {
 
-          drop_console: false,
+          drop_console: isProduction,
 
-          drop_debugger: isProduction
+          drop_debugger: isProduction,
+
+          pure_funcs: isProduction ? ['console.log', 'console.info', 'console.debug'] : []
+
+        },
+
+        mangle: {
+
+          safari10: true
 
         }
 
-      }
+      },
+
+      reportCompressedSize: true,
+
+      cssCodeSplit: true
 
     },
 

@@ -18,6 +18,8 @@ import { DatabaseProvider } from './contexts/DatabaseContext';
 
 import AppRoutes from './routes/AppRoutes';
 
+import CustomCursor from './components/CustomCursor';
+
 
 
 export default function App() {
@@ -30,6 +32,7 @@ export default function App() {
 
         <DatabaseProvider>
 
+          <CustomCursor />
           <AppRoutes />
 
         </DatabaseProvider>

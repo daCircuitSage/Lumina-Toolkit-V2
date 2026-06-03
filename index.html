@@ -26,6 +26,14 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://www.google.com" crossorigin />
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firebaseio.com" crossorigin />
+    
+    <!-- DNS prefetch for likely navigation -->
+    <link rel="dns-prefetch" href="https://lumintoolkit.com" />
+    
     <!-- Theme Flash Prevention Script -->
     <script>
       (function() {
@@ -86,6 +94,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Critical CSS inline for above-the-fold content -->
+    <style>
+      /* Prevent layout shift */
+      #root { min-height: 100vh; }
+      /* Smooth scrolling */
+      html { scroll-behavior: smooth; }
+      /* Text rendering optimization */
+      body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+    </style>
   </body>
 </html>
 

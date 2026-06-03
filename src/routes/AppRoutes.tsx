@@ -154,9 +154,11 @@ const AnimatedPage = ({ children }: { children: React.ReactNode }) => (
 
     exit={{ opacity: 0, y: -10 }}
 
-    transition={{ duration: 0.2, ease: "easeOut" }}
+    transition={{ duration: 0.15, ease: "easeOut" }}
 
     className="w-full h-full"
+
+    style={{ willChange: 'opacity, transform' }}
 
   >
 
