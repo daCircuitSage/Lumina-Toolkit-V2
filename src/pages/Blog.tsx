@@ -42,7 +42,7 @@ export default function Blog() {
   const regularPosts = filteredPosts.filter(post => post.id !== featuredPost?.id);
   
   return (
-    <div className="min-h-screen">
+    <div className="overflow-x-hidden">
       <SeoHead
         title="Blog - Career Tips, Interview Advice & Job Search Strategies"
         description="Expert career advice, interview tips, resume writing guides, and job search strategies. Stay updated with the latest trends in career development and job hunting."

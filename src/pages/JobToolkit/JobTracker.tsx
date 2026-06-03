@@ -242,7 +242,7 @@ export default function JobTracker() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-canvas flex items-center justify-center">
+      <div className="flex items-center justify-center h-full">
         <div className="relative">
           <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
           <div className="absolute inset-0 w-8 h-8 border-2 border-white/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
@@ -253,7 +253,7 @@ export default function JobTracker() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
+      <div className="flex items-center justify-center px-4 h-full">
         <div className="max-w-md w-full bg-canvas-card border border-hairline rounded-sm p-6 sm:p-8 text-center">
           <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-sm flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <User className="w-7 h-7 sm:w-8 sm:h-8 text-ink" />
@@ -283,7 +283,7 @@ export default function JobTracker() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-canvas flex items-center justify-center">
+      <div className="flex items-center justify-center h-full">
         <div className="relative">
           <div className="w-8 h-8 border-2 border-ink border-t-transparent rounded-full animate-spin"></div>
           <div className="absolute inset-0 w-8 h-8 border-2 border-ink/30 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
@@ -293,7 +293,7 @@ export default function JobTracker() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="overflow-x-hidden">
       {/* User info and sign-out */}
       <div className="border-b border-hairline bg-canvas-card">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4">

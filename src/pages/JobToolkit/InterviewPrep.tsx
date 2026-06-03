@@ -530,7 +530,7 @@ Do not include any markdown formatting, explanations, or additional text. Only t
   }, []);
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto overflow-x-hidden">
       <header className="mb-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}

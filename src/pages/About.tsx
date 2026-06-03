@@ -14,7 +14,7 @@ export default function About() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-canvas text-ink">
+    <div className="overflow-x-hidden">
       {/* Navigation */}
       <nav className="relative z-50 px-4 py-6 md:px-8 md:py-8 bg-canvas border-b border-hairline">
         <div className="flex justify-between items-center max-w-7xl mx-auto">

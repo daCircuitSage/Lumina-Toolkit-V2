@@ -321,9 +321,8 @@ export default function AtsChecker() {
   };
 
   return (
-    <div className="min-h-screen bg-canvas">
-      <div className="max-w-6xl mx-auto px-4 py-6 md:py-10">
-        <header className="mb-8 md:mb-10 text-center lg:text-left">
+    <div className="max-w-6xl mx-auto px-4 py-6 md:py-10 overflow-x-hidden">
+      <header className="mb-8 md:mb-10 text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-white/10 text-ink text-[10px] font-normal uppercase tracking-widest mb-4">
             <Brain size={12} /> AI-Powered Analysis
           </div>
@@ -733,6 +732,5 @@ export default function AtsChecker() {
           <InternalLinks currentToolId="ats" title="Related Job Search Tools" />
         </div>
       </div>
-    </div>
   );
 }

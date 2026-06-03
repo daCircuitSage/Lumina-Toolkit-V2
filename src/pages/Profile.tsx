@@ -154,7 +154,7 @@ export default function Profile() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-canvas flex items-center justify-center">
+      <div className="flex items-center justify-center h-full">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-body">Loading profile...</p>
@@ -164,8 +164,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8 overflow-x-hidden">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -519,6 +518,5 @@ export default function Profile() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
