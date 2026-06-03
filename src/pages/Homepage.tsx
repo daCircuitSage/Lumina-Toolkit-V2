@@ -51,6 +51,7 @@ import deFlag from '../assets/wise_images/imgi_65_de.svg';
 import auFlag from '../assets/wise_images/imgi_40_au.svg';
 import inFlag from '../assets/wise_images/imgi_73_in.svg';
 import jpFlag from '../assets/wise_images/imgi_79_jp.svg';
+import cornerBackgroundImage from '../assets/herotitleicons/Gemini_Generated_Image_k9q2hyk9q2hyk9q2.png';
 
 const countryFlagMap: Record<string, string> = {
   us: usFlag,
@@ -392,10 +393,16 @@ export default function Homepage() {
       </section>
 
       {/* Bento Grid Tools Section */}
-      <section ref={toolsSectionRef} className="py-20 md:py-32 relative">
+      <section ref={toolsSectionRef} className="py-20 md:py-32 relative overflow-hidden">
+        {/* Corner Background Image */}
+        <img
+          src={cornerBackgroundImage}
+          alt=""
+          className="absolute top-0 right-0 w-64 h-64 md:w-96 md:h-96 object-contain opacity-60 pointer-events-none"
+        />
         <motion.div 
           style={{ y: toolsY }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
