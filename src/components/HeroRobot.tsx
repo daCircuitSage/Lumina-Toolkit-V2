@@ -74,22 +74,33 @@ function Scene({ mousePosition }: { mousePosition: { x: number; y: number } }) {
       />
       
       {/* Lighting */}
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.35} />
+      <hemisphereLight skyColor={0xffffff} groundColor={0x202030} intensity={0.35} />
       <directionalLight
         position={[5, 5, 5]}
-        intensity={1}
+        intensity={1.2}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-bias={-0.0025}
+      />
+      <directionalLight
+        position={[-4, 3, -5]}
+        intensity={0.6}
+      />
+      <spotLight
+        position={[0, 6, 5]}
+        angle={0.35}
+        intensity={0.8}
+        penumbra={0.4}
         castShadow
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
       />
-      <directionalLight
-        position={[-5, 5, -5]}
-        intensity={0.5}
-      />
-      <pointLight position={[0, 5, 0]} intensity={0.3} />
+      <pointLight position={[1, 2, -4]} intensity={0.4} />
       
       {/* Environment for realistic reflections */}
-      <Environment preset="city" />
+      <Environment preset="studio" background={false} resolution={512} />
       
       {/* Contact shadows for grounding */}
       <ContactShadows
@@ -160,6 +171,7 @@ export default function HeroRobot({ className = '' }: HeroRobotProps) {
       style={{ pointerEvents: 'auto' }}
     >
       <Canvas
+        shadows
         dpr={[1, 1.5]} // Further limit pixel ratio for faster load
         gl={{
           antialias: false, // Disable antialiasing for performance
@@ -168,7 +180,11 @@ export default function HeroRobot({ className = '' }: HeroRobotProps) {
         }}
         performance={{ min: 0.5 }}
         frameloop="always"
-        onCreated={() => setIsLoading(false)}
+        onCreated={(state) => {
+          state.gl.shadowMap.enabled = true;
+          state.gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          setIsLoading(false);
+        }}
       >
         <Suspense fallback={null}>
           <Scene mousePosition={mousePosition} />
