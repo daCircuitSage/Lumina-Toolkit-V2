@@ -39,20 +39,26 @@
       (function() {
         try {
           // Get saved theme or system preference
-          const savedTheme = localStorage.getItem('theme');
+          const savedTheme = localStorage.getItem('lumina-theme');
           const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          const theme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
           
-          // Apply theme to HTML root before any rendering
-          if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
+          // Determine theme
+          let theme;
+          if (savedTheme === 'light' || savedTheme === 'dark') {
+            theme = savedTheme;
+          } else if (savedTheme === 'system') {
+            theme = systemPrefersDark ? 'dark' : 'light';
           } else {
-            document.documentElement.classList.add('light');
+            theme = systemPrefersDark ? 'dark' : 'light';
           }
           
-          // Set initial background to prevent flash
-          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#f9fafb';
-          document.documentElement.style.color = theme === 'dark' ? '#f1f5f9' : '#111827';
+          // Apply theme to HTML root before any rendering
+          document.documentElement.classList.remove('light', 'dark');
+          document.documentElement.classList.add(theme);
+          
+          // Set initial background to prevent flash using our design system colors
+          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0a0a0a' : '#ffffff';
+          document.documentElement.style.color = theme === 'dark' ? '#f5f5f5' : '#0e0f0c';
           
           // Store theme for React context
           window.__THEME_INITIALIZED = theme;
@@ -60,9 +66,10 @@
           // Fallback to system preference if localStorage fails
           const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           const theme = systemPrefersDark ? 'dark' : 'light';
+          document.documentElement.classList.remove('light', 'dark');
           document.documentElement.classList.add(theme);
-          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#f9fafb';
-          document.documentElement.style.color = theme === 'dark' ? '#f1f5f9' : '#111827';
+          document.documentElement.style.backgroundColor = theme === 'dark' ? '#0a0a0a' : '#ffffff';
+          document.documentElement.style.color = theme === 'dark' ? '#f5f5f5' : '#0e0f0c';
           window.__THEME_INITIALIZED = theme;
         }
       })();

@@ -292,7 +292,7 @@ function QuickActionLink({ tool, getRoute, onClick, isMobile }: any) {
       to={getRoute(tool.id)}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-lg hover:shadow-indigo-500/5 transition-all text-left group",
+        "flex items-center gap-3 rounded-2xl bg-canvas border border-hairline hover:border-primary/60 hover:shadow-lg hover:shadow-primary/5 transition-all text-left group",
         isMobile ? "p-4 w-full" : "p-3"
       )}
     >

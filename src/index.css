@@ -7,7 +7,7 @@
   --font-heading: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
   
-  /* Wise Design System - Colors */
+  /* Wise Design System - Colors - Light Mode */
   --color-primary: #9fe870;
   --color-on-primary: #0e0f0c;
   --color-primary-active: #cdffad;
@@ -31,8 +31,37 @@
   --color-accent-orange: #ffc091;
   --color-accent-cyan: #38c8ff;
   --color-hairline: #0e0f0c;
-  
-  /* Wise Design System - Spacing */
+}
+
+/* Dark Mode Color Variables */
+.dark {
+  --color-primary: #9fe870;
+  --color-on-primary: #0e0f0c;
+  --color-primary-active: #cdffad;
+  --color-primary-neutral: #c5edab;
+  --color-primary-pale: #1a2e1a;
+  --color-ink: #f5f5f5;
+  --color-ink-deep: #e8e8e8;
+  --color-body: #a0a0a0;
+  --color-mute: #6b7280;
+  --color-canvas: #0a0a0a;
+  --color-canvas-soft: #1a1a1a;
+  --color-positive: #4ade80;
+  --color-positive-deep: #166534;
+  --color-warning: #fbbf24;
+  --color-warning-deep: #92400e;
+  --color-warning-content: #78350f;
+  --color-negative: #f87171;
+  --color-negative-deep: #991b1b;
+  --color-negative-darkest: #7f1d1d;
+  --color-negative-bg: #450a0a;
+  --color-accent-orange: #fb923c;
+  --color-accent-cyan: #22d3ee;
+  --color-hairline: #2a2a2a;
+}
+
+/* Wise Design System - Spacing */
+@theme {
   --spacing-xxs: 2px;
   --spacing-xs: 4px;
   --spacing-sm: 8px;

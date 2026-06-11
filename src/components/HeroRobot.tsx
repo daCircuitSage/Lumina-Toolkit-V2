@@ -4,8 +4,8 @@ import { PerspectiveCamera, Environment, ContactShadows, Float } from '@react-th
 import * as THREE from 'three';
 import RobotModel from './RobotModel';
 
-// Model path - use optimized GLB file
-const MODEL_PATH = new URL('../assets/3dmodel/base_basic_pbr_optimized.glb', import.meta.url).href;
+// Model path - use optimized shaded model (544 KB, 94% smaller)
+const MODEL_PATH = new URL('../assets/3dmodel/base_basic_shaded_optimized.glb', import.meta.url).href;
 
 interface RobotProps {
   mousePosition: { x: number; y: number };
@@ -159,15 +159,10 @@ export default function HeroRobot({ className = '' }: HeroRobotProps) {
       className={`absolute inset-0 z-0 ${className}`}
       style={{ pointerEvents: 'auto' }}
     >
-      {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
       <Canvas
-        dpr={[1, 2]} // Limit pixel ratio for performance
+        dpr={[1, 1.5]} // Further limit pixel ratio for faster load
         gl={{
-          antialias: true,
+          antialias: false, // Disable antialiasing for performance
           alpha: true, // Transparent background
           powerPreference: 'high-performance',
         }}

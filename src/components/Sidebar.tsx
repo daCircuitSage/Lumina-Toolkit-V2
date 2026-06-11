@@ -28,7 +28,11 @@ interface SidebarProps {
 export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteForTool }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+  };
 
   // Close mobile sidebar on navigation
   const handleSelect = (id: string) => {
@@ -62,7 +66,8 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
       'tracker': '/job-tracker',
       'interview': '/interview-prep',
       'cover-letter': '/cover-letter-generator',
-      'contact': '/contact'
+      'contact': '/contact',
+      'settings': '/settings'
     };
     return routeMap[toolId] || '/';
   };
@@ -156,8 +161,8 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
                           isActive 
-                            ? "bg-lumina-blue/10 text-lumina-blue font-medium" 
-                            : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                            ? "bg-primary/10 text-ink font-medium" 
+                            : "text-body hover:bg-canvas-soft"
                         )}
                       >
                         <Icon size={20} />
@@ -184,8 +189,8 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
                           isActive 
-                            ? "bg-lumina-blue/10 text-lumina-blue font-medium" 
-                            : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                            ? "bg-primary/10 text-ink font-medium" 
+                            : "text-body hover:bg-canvas-soft"
                         )}
                       >
                         <Icon size={20} />
@@ -212,8 +217,8 @@ export default function Sidebar({ activeTool, onSelect, onSearchOpen, getRouteFo
                         className={cn(
                           "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all",
                           isActive 
-                            ? "bg-lumina-blue/10 text-lumina-blue font-medium" 
-                            : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                            ? "bg-primary/10 text-ink font-medium" 
+                            : "text-body hover:bg-canvas-soft"
                         )}
                       >
                         <Icon size={20} />

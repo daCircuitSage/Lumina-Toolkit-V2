@@ -57,6 +57,8 @@ const CoverLetter = React.lazy(() => import('../pages/JobToolkit/CoverLetter'));
 
 const Contact = React.lazy(() => import('../pages/Contact'));
 
+const Settings = React.lazy(() => import('../pages/Settings'));
+
 const Profile = React.lazy(() => import('../pages/Profile'));
 
 const Blog = React.lazy(() => import('../pages/Blog'));
@@ -553,6 +555,34 @@ const AppRoutes = () => {
             <LazyLoadWrapper>
 
               <Contact />
+
+            </LazyLoadWrapper>
+
+          </Layout>
+
+        </AnimatedPage>
+
+      } />
+
+      
+
+      <Route path="/settings" element={
+
+        <AnimatedPage>
+
+          <Layout>
+
+            <SeoHead
+
+              title="Settings - Customize Your Experience | Lumina Toolkit"
+
+              description="Manage your theme preferences and customize your Lumina Toolkit experience."
+
+            />
+
+            <LazyLoadWrapper>
+
+              <Settings />
 
             </LazyLoadWrapper>
 

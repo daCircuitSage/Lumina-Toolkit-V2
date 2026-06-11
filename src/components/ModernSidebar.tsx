@@ -47,7 +47,8 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
       'tracker': '/job-tracker',
       'interview': '/interview-prep',
       'cover-letter': '/cover-letter-generator',
-      'contact': '/contact'
+      'contact': '/contact',
+      'settings': '/settings'
     };
     return routeMap[toolId] || '/';
   };
@@ -55,7 +56,7 @@ export default function ModernSidebar({ activeTool, onSelect, onSearchOpen }: Mo
   const iconBarItems = [
     { id: 'home', icon: Home, label: 'Home', toolId: 'homepage' },
     { id: 'auth', icon: User, label: 'Account', toolId: 'profile' },
-    { id: 'settings', icon: Settings, label: 'Settings', toolId: 'contact' }
+    { id: 'settings', icon: Settings, label: 'Settings', toolId: 'settings' }
   ];
 
   const navigationSections = [

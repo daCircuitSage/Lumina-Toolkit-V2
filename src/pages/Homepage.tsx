@@ -54,11 +54,15 @@ import TerminalBackground from '../components/TerminalBackground';
 
 import ToolPreviewCard from '../components/ToolPreviewCard';
 
-import HeroRobot from '../components/HeroRobot';
+import { lazy, Suspense } from 'react';
+
+const HeroRobot = lazy(() => import('../components/HeroRobot'));
 
 import { TOOLS } from '../constants';
 
 import { useDatabase } from '../contexts/DatabaseContext';
+
+import { useTheme } from '../contexts/ThemeContext';
 
 import lockImage from '../assets/wise_images/imgi_143_lock-large@2x.webp';
 
@@ -105,6 +109,8 @@ function Homepage() {
   const navigate = useNavigate();
 
   const { user, loading: authLoading, signIn, signOut } = useDatabase();
+
+  const { resolvedTheme, setTheme } = useTheme();
 
   const { scrollY } = useScroll();
 
@@ -195,6 +201,25 @@ function Homepage() {
           
 
           <div className="flex items-center gap-3">
+
+            {/* Theme Toggle Button */}
+            <motion.button
+              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-3 py-2 text-sm body-sm-strong text-ink hover:text-primary transition-colors cursor-pointer"
+              title="Toggle theme"
+            >
+              {resolvedTheme === 'dark' ? (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </motion.button>
 
             {/* Mobile Menu Button */}
 
@@ -465,7 +490,9 @@ function Homepage() {
       <section ref={heroSectionRef} className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-12 pb-16 bg-canvas-soft overflow-hidden">
 
         {/* 3D Robot Head Background */}
-        <HeroRobot className="absolute inset-0" />
+        <Suspense fallback={null}>
+          <HeroRobot className="absolute inset-0" />
+        </Suspense>
 
         <div className="max-w-7xl mx-auto w-full">
 

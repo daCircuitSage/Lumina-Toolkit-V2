@@ -62,10 +62,10 @@ export default function SeoContent({
                 <div className="space-y-4">
                   {steps.map((s, i) => (
                     <div key={i} className="flex gap-4">
-                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-white text-black text-[10px] font-black flex items-center justify-center">
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-canvas text-ink text-[10px] font-black flex items-center justify-center">
                         {i + 1}
                       </span>
-                      <p className="text-sm font-bold text-[#A0A0A0]">{s}</p>
+                      <p className="text-sm font-bold text-body">{s}</p>
                     </div>
                   ))}
                 </div>

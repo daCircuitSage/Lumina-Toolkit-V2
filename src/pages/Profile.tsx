@@ -248,7 +248,7 @@ export default function Profile() {
                 {/* Profile Picture Section */}
                 <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
                   <div className="relative">
-                    <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center overflow-hidden">
+                    <div className="w-32 h-32 rounded-full bg-canvas-soft flex items-center justify-center overflow-hidden">
                       {profileImage || user?.photoURL ? (
                         <img 
                           src={profileImage || user.photoURL} 
@@ -268,13 +268,13 @@ export default function Profile() {
                     />
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute bottom-2 right-2 w-10 h-10 bg-white rounded-full flex items-center justify-center border-2 border-canvas hover:bg-canvas-soft transition-colors cursor-pointer active:scale-95 shadow-md hover:shadow-lg"
+                      className="absolute bottom-2 right-2 w-10 h-10 bg-primary rounded-full flex items-center justify-center border-2 border-primary hover:bg-primary-active transition-colors cursor-pointer active:scale-95 shadow-md hover:shadow-lg"
                       disabled={isUploading}
                     >
                       {isUploading ? (
                         <div className="w-4 h-4 border-2 border-ink border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        <Camera size={18} className="text-black" />
+                        <Camera size={18} className="text-ink" />
                       )}
                     </button>
                   </div>
@@ -379,7 +379,7 @@ export default function Profile() {
                   
                   <button
                     onClick={handleSaveProfile}
-                    className="w-full px-6 py-3 bg-white hover:bg-canvas-soft text-black font-normal rounded-sm transition-colors cursor-pointer active:scale-95 border-2 border-white shadow-md hover:shadow-lg"
+                    className="w-full px-6 py-3 bg-primary hover:bg-primary-active text-on-primary font-normal rounded-sm transition-colors cursor-pointer active:scale-95 border-2 border-primary shadow-md hover:shadow-lg"
                   >
                     Save Changes
                   </button>

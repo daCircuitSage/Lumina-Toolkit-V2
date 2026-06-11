@@ -61,7 +61,7 @@ export default function YoutubeTitles() {
           {/* Controls Side */}
           <div className="lg:w-1/3">
              <header className="mb-8 md:mb-10 text-center lg:text-left">
-                <div className="w-14 h-14 bg-white/10 text-ink rounded-sm flex items-center justify-center mb-4 md:mb-6 mx-auto lg:mx-0">
+                <div className="w-14 h-14 bg-canvas-soft text-ink rounded-sm flex items-center justify-center mb-4 md:mb-6 mx-auto lg:mx-0">
                    <Youtube size={28} />
                 </div>
                 <h1 className="text-2xl md:text-3xl font-normal text-ink mb-2 md:mb-3 tracking-tight">AI Title Engine</h1>
@@ -91,8 +91,8 @@ export default function YoutubeTitles() {
                         className={cn(
                           "px-3 py-2 text-[11px] font-normal rounded-sm border transition-all cursor-pointer active:scale-95",
                           audience === a
-                            ? "bg-white border-white text-black"
-                            : "bg-canvas border-hairline text-body-mid hover:border-white/50 hover:text-ink hover:bg-canvas-soft"
+                            ? "bg-primary border-primary text-on-primary"
+                            : "bg-canvas border-hairline text-body hover:border-primary/50 hover:text-ink hover:bg-canvas-soft"
                         )}
                       >
                         {a}
@@ -119,9 +119,9 @@ export default function YoutubeTitles() {
                  <button
                   disabled={!topic || isGenerating}
                   onClick={generate}
-                  className="w-full h-14 bg-white text-black rounded-sm font-normal flex items-center justify-center gap-3 hover:bg-gray-100 active:scale-95 transition-all disabled:opacity-50 mt-4 border-2 border-white cursor-pointer shadow-md hover:shadow-lg"
+                  className="w-full h-14 bg-primary text-on-primary rounded-sm font-normal flex items-center justify-center gap-3 hover:bg-primary-active active:scale-95 transition-all disabled:opacity-50 mt-4 border-2 border-primary cursor-pointer shadow-md hover:shadow-lg"
                 >
-                  {isGenerating ? <Loader2 className="animate-spin text-black" /> : <Sparkles size={20} />}
+                  {isGenerating ? <Loader2 className="animate-spin text-on-primary" /> : <Sparkles size={20} />}
                   Generate Titles
                 </button>
 

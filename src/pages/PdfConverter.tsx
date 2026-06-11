@@ -120,7 +120,7 @@ export default function PdfConverter() {
               onChange={handleFileChange}
               className="hidden" 
             />
-            <div className="w-14 h-14 md:w-16 md:h-16 rounded-sm bg-white/10 flex items-center justify-center text-ink mb-4 md:mb-6 group-hover:scale-110 transition-transform text-center flex-col">
+            <div className="w-14 h-14 md:w-16 md:h-16 rounded-sm bg-canvas-soft flex items-center justify-center text-ink mb-4 md:mb-6 group-hover:scale-110 transition-transform text-center flex-col">
                <FileUp size={32} />
             </div>
             <h3 className="text-base md:text-lg font-normal text-ink mb-2">Choose Images</h3>
@@ -192,8 +192,8 @@ export default function PdfConverter() {
                            className={cn(
                              "px-3 md:px-4 py-2 text-[10px] md:text-xs font-normal rounded-sm border transition-all uppercase tracking-wider",
                              pageSize === p 
-                               ? "bg-white text-black" 
-                               : "border-hairline text-body-mid hover:border-white/30"
+                               ? "bg-primary text-on-primary" 
+                               : "border-hairline text-body hover:border-primary/30"
                            )}
                          >
                            {p}
@@ -211,10 +211,10 @@ export default function PdfConverter() {
                        <span className="text-xs md:text-sm font-normal text-body-mid">No Margins</span>
                        <div className={cn(
                           "w-10 h-5 rounded-sm relative transition-all duration-300",
-                          noMargins ? "bg-white" : "bg-canvas"
+                          noMargins ? "bg-primary" : "bg-canvas"
                        )}>
                           <div className={cn(
-                            "absolute top-1 w-3 h-3 bg-black rounded-sm transition-all duration-300",
+                            "absolute top-1 w-3 h-3 bg-on-primary rounded-sm transition-all duration-300",
                             noMargins ? "right-1" : "left-1"
                           )} />
                        </div>
@@ -226,15 +226,15 @@ export default function PdfConverter() {
                  <button 
                     disabled={images.length === 0 || isProcessing}
                     onClick={generatePdf}
-                    className="w-full bg-white hover:bg-gray-100 text-black h-14 rounded-sm font-normal flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
+                    className="w-full bg-primary hover:bg-primary-active text-on-primary h-14 rounded-sm font-normal flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
                  >
-                    {isProcessing ? <Loader2 className="animate-spin text-black" /> : <Download size={20} />}
+                    {isProcessing ? <Loader2 className="animate-spin text-on-primary" /> : <Download size={20} />}
                     {isProcessing ? 'Processing...' : 'Generate PDF'}
                  </button>
               </div>
            </div>
 
-           <div className="bg-white/10 rounded-sm p-8 border border-hairline">
+           <div className="bg-canvas-soft rounded-sm p-8 border border-hairline">
               <h4 className="text-sm font-normal text-ink mb-4 flex items-center gap-2">
                 <ArrowRightLeft size={16} /> Other Tools coming soon
               </h4>

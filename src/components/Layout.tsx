@@ -69,7 +69,9 @@ export default function Layout({ children }: LayoutProps) {
 
       'cover-letter': '/cover-letter-generator',
 
-      'contact': '/contact'
+      'contact': '/contact',
+
+      'settings': '/settings'
 
     };
 
@@ -111,7 +113,9 @@ export default function Layout({ children }: LayoutProps) {
 
       '/cover-letter-generator': 'cover-letter',
 
-      '/contact': 'contact'
+      '/contact': 'contact',
+
+      '/settings': 'settings'
 
     };
 
