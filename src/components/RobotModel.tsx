@@ -48,6 +48,15 @@ export default function RobotModel({ modelPath }: RobotModelProps) {
     });
   }, [scene]);
 
+  useEffect(() => {
+    const defaultAction = Object.values(actions)[0] as THREE.AnimationAction | undefined;
+    if (!defaultAction) return;
+
+    defaultAction.reset();
+    defaultAction.play();
+    defaultAction.setLoop(THREE.LoopRepeat, Infinity);
+  }, [actions]);
+
   return (
     <group ref={group}>
       <primitive object={scene} />

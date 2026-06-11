@@ -132,21 +132,25 @@ export default function HeroRobot({ className = '' }: HeroRobotProps) {
       const rect = containerRef.current.getBoundingClientRect();
       
       // Calculate normalized mouse position (-1 to 1)
-      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+      const rawX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const rawY = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+      const x = THREE.MathUtils.clamp(rawX, -1, 1);
+      const y = THREE.MathUtils.clamp(rawY, -1, 1);
       
       setMousePosition({ x, y });
     };
 
     const handleTouchMove = (event: TouchEvent) => {
-      if (!containerRef.current) return;
+      if (!containerRef.current || event.touches.length === 0) return;
 
       const rect = containerRef.current.getBoundingClientRect();
       const touch = event.touches[0];
       
       // Calculate normalized touch position (-1 to 1)
-      const x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
+      const rawX = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+      const rawY = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
+      const x = THREE.MathUtils.clamp(rawX, -1, 1);
+      const y = THREE.MathUtils.clamp(rawY, -1, 1);
       
       setMousePosition({ x, y });
     };
